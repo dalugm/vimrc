@@ -33,27 +33,28 @@ call plug#begin('~/.vim/plugged')
 " Unmanaged plugin (manually installed and updated)
 "Plug '~/my-prototype-plugin'
 
-"托管在Github上的插件 
+"托管在Github上的插件
 " 格式为 Plug '用户名/插件仓库名'
-"Plug 'tpope/vim-fugitive'
-Plug 'flazz/vim-colorschemes'
-"Plug 'Valloric/YouCompleteMe'
-"Plug 'w0rp/ale'
 Plug 'junegunn/vim-plug'
-"Plug 'Raimondi/delimitMate'
-"Plug 'universal-ctags/ctags'
-"Plug 'ludovicchabant/vim-gutentags'
+Plug 'mhinz/vim-signify'
+Plug 'tpope/vim-fugitive'
+Plug 'Yggdroot/indentLine'
 Plug 'kana/vim-textobj-user'
+Plug 'flazz/vim-colorschemes'
+Plug 'airblade/vim-gitgutter'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-syntax'
+Plug 'vim-syntastic/syntastic'
 Plug 'sgur/vim-textobj-parameter'
-Plug 'mhinz/vim-signify'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+"Plug 'w0rp/ale'
+"Plug 'Raimondi/delimitMate'
+"Plug 'universal-ctags/ctags'
+"Plug 'Valloric/YouCompleteMe'
 "Plug 'scrooloose/nerdcommenter'
-Plug 'Yggdroot/indentLine'
-Plug 'vim-syntastic/syntastic'
+"Plug 'ludovicchabant/vim-gutentags'
 
 
 " 由Git支持但不在github上的插件仓库 Plug 'git clone 后面的地址'
@@ -171,6 +172,9 @@ let g:syntastic_check_on_wq = 0
 let g:gitgutter_enabled=0
 nnoremap <silent> <leader>d :GitGutterToggle<cr>
 
+let g:gitgutter_max_signs = 500  " default value
+nmap [c <Plug>GitGutterPrevHunk
+nmap ]c <Plug>GitGutterNextHunk
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                    => Nerdcomment <=                     "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -221,21 +225,21 @@ nnoremap <silent> <leader>d :GitGutterToggle<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                   => YouCompleteMe <=                    "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
-  
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 "let g:ycm_key_list_previous_completion=['<Down>']
-"let g:ycm_key_list_previous_completion=['<Up>']  
-"let g:ycm_seed_identifiers_with_syntax=1  
+"let g:ycm_key_list_previous_completion=['<Up>']
+"let g:ycm_seed_identifiers_with_syntax=1
 "
 "let g:ycm_add_preview_to_completeopt = 0
 "let g:ycm_show_diagnostics_ui = 0
 "let g:ycm_server_log_level = 'info'
 "let g:ycm_min_num_identifier_candidate_chars = 2
-"let g:ycm_min_num_of_chars_for_completion=2  
+"let g:ycm_min_num_of_chars_for_completion=2
 "let g:ycm_collect_identifiers_from_comments_and_strings = 1
-"let g:ycm_collect_identifiers_from_tags_files=1   
+"let g:ycm_collect_identifiers_from_tags_files=1
 "let g:ycm_complete_in_strings=1
-"let g:ycm_complete_in_comments=1  
+"let g:ycm_complete_in_comments=1
 "let g:ycm_key_invoke_completion = '<c-z>'
 "set completeopt=menu,menuone
 "
@@ -245,9 +249,9 @@ nnoremap <silent> <leader>d :GitGutterToggle<cr>
 "           \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
 "           \ 'cs,lua,javascript': ['re!\w{2}'],
 "           \ }
-"let g:ycm_filetype_whitelist = { 
+"let g:ycm_filetype_whitelist = {
 "			\ "c":1,
-"			\ "cpp":1, 
+"			\ "cpp":1,
 "			\ "objc":1,
 "			\ "sh":1,
 "			\ "zsh":1,
