@@ -53,6 +53,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 "Plug 'scrooloose/nerdcommenter'
 Plug 'Yggdroot/indentLine'
+Plug 'vim-syntastic/syntastic'
 
 
 " 由Git支持但不在github上的插件仓库 Plug 'git clone 后面的地址'
@@ -86,16 +87,20 @@ call plug#end()            " required
 "              => airline configurations <=                "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:airline_theme='luna'
+let g:airline_powerline_fonts = 1
 "let g:airline_solarized_bg='dark' " enable this when use solarized theme
 
-"let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+
 "let g:airline#extensions#tagbar#enabled = 1
 "let g:airline#extensions#tagbar#flags = 'f'
+"
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#branch#empty_message = ''
 let g:airline#extensions#branch#displayed_head_limit = 10
-let g:airline_powerline_fonts = 1
 let g:airline#extensions#virtualenv#enabled = 1
+
 "let g:airline#extensions#ale#enabled = 1
 "let g:airline_left_sep = '▶'
 "let g:airline_left_alt_sep = '❯'
@@ -150,6 +155,15 @@ let g:ale_set_highlights = 0
 " Only run linting when saving the file
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_enter = 0
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "             => Git gutter (Git diff) <=                  "
