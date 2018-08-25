@@ -11,8 +11,13 @@ elseif has("gui_gtk2")
 elseif has("linux")
     set gfn=:Hack\ 14,IBM\ Plex\ Mono:h14,Source\ Code\ Pro\ 12,Bitstream\ Vera\ Sans\ Mono\ 11
 elseif has("unix")
-    set gfn=Monospace\ 11
+    set gfn=Monospace\ 14
 endif
+
+set guitablabel=%M\ %t
+set guicursor=n-v-r:block-blinkon0
+set guicursor=i:ver20-blinkon0
+set guicursor=c-ci:ver20-blinkon0
 
 " Disable scrollbars (real hackers don't use scrollbars for navigation!)
 set guioptions-=r
@@ -21,6 +26,7 @@ set guioptions-=l
 set guioptions-=L
 
 " Colorscheme
+set t_Co=256
 set background=dark
 let g:solarized_termtrans=1
 let g:solarized_termcolors=256
