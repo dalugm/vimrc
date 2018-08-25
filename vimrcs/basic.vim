@@ -148,6 +148,7 @@ endif
 set foldcolumn=1
 
 " Show line numbers when open a file
+set number
 set relativenumber
 
 " 用空格键来开关折叠
@@ -184,11 +185,13 @@ if has("gui_running")
     set guioptions-=e
     set t_Co=256
     set guitablabel=%M\ %t
-    set guifont=Hack:h14
+    set guifont=Iosevka:h14
+	set guicursor=i:ver-blinkon0
     set guicursor=n:block-blinkon0
     set guicursor=v:block-blinkon0
     set guicursor=r:block-blinkon0
-		set guicursor=i:ver-blinkon0
+    set guicursor=c:ver-blinkon0
+    set guicursor=ci:ver-blinkon0
 endif
 
 " Set utf8 as standard encoding and en_US as the standard language
