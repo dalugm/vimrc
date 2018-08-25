@@ -35,6 +35,7 @@ call plug#begin('~/.vim/plugged')
 
 "托管在Github上的插件
 " 格式为 Plug '用户名/插件仓库名'
+Plug 'w0rp/ale'
 Plug 'junegunn/vim-plug'
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-fugitive'
@@ -49,7 +50,6 @@ Plug 'sgur/vim-textobj-parameter'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-"Plug 'w0rp/ale'
 "Plug 'Raimondi/delimitMate'
 "Plug 'universal-ctags/ctags'
 "Plug 'Valloric/YouCompleteMe'
@@ -130,7 +130,6 @@ let g:NERDTreeWinSize=35
 map <leader>nn :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark<Space>
 map <leader>nf :NERDTreeFind<cr>
-
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                    => IndentLine <=                      "
