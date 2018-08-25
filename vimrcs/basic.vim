@@ -187,11 +187,8 @@ if has("gui_running")
     set guitablabel=%M\ %t
     set guifont=Iosevka:h14
 	set guicursor=i:ver-blinkon0
-    set guicursor=n:block-blinkon0
-    set guicursor=v:block-blinkon0
-    set guicursor=r:block-blinkon0
+    set guicursor=n-v-r:block-blinkon0
     set guicursor=c:ver-blinkon0
-    set guicursor=ci:ver-blinkon0
 endif
 
 " Set utf8 as standard encoding and en_US as the standard language
