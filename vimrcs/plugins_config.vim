@@ -191,7 +191,7 @@ nmap <Leader>d :ALEDetail<CR>
 "             => Git gutter (Git diff) <=                  "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:gitgutter_enabled=0
-nnoremap <silent> <leader>d :GitGutterToggle<cr>
+nnoremap <silent> <leader>gt :GitGutterToggle<cr>
 
 let g:gitgutter_max_signs = 500  " default value
 nmap [c <Plug>GitGutterPrevHunk
