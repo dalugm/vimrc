@@ -3,16 +3,15 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Set font according to system
 if has("mac") || has("macunix")
-    set gfn=DejaVu\ Sans\ Mono\ for\ Powerline:h14,Monaco:h14
+    set gfn=DejaVu\ Sans\ Mono\ for\ Powerline:h14,Monaco\ for\ Powerline:h14
 elseif has("win16") || has("win32")
-    set gfn=DejaVu\ Sans\ Mono\ for\ Powerline:h14,IBM\ Plex\ Mono:h14
+    set gfn=Ubuntu\ Mono\ derivative\ Powerline:h14,DejaVu\ Sans\ Mono\ for\ Powerline:h14
 elseif has("gui_gtk2")
-    set gfn=Courier\ New:h14,IBM\ Plex\ Mono:h14,Source\ Code\ Pro:h14
+    set gfn=Ubuntu\ Mono\ derivative\ Powerline:h14,Courier\ New:h14
 elseif has("linux")
-    set gfn=DejaVu\ Sans\ Mono\ for\ Powerline:h14,Source\ Code\ Pro:h14
-
+    set gfn=DejaVu\ Sans\ Mono\ for\ Powerline:h14,Ubuntu\ Mono\ derivative\ Powerline:h14
 elseif has("unix")
-    set gfn=Monospace\ 14
+    set gfn=Ubuntu\ Mono\ derivative\ Powerline:h14,DejaVu\ Sans\ Mono\ for\ Pwerline:h14
 endif
 
 set guitablabel=%M\ %t
