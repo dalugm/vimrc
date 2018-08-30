@@ -2,7 +2,6 @@
 " Sections:
 "    -> General
 "    -> VIM user interface
-"    -> Colors and Fonts
 "    -> Files and backups
 "    -> Text, tab and indent related
 "    -> Visual mode related
@@ -156,34 +155,15 @@ set foldenable
 set foldmethod=manual
 nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc':'zo')<CR>
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Colors and Fonts
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
 syntax enable
 syntax on
-
-" Enable 256 colors palette in Gnome Terminal
-if $COLORTERM == 'gnome-terminal'
-    set t_Co=256
-endif
-
-try
-    let g:solarized_termtrans=1
-    let g:solarized_termcolors=256
-    colorscheme solarized
-catch
-endtry
-
-set background=dark
 
 " Set utf8 as standard encoding and en_US as the standard language
 set encoding=utf8
 
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backups and undo

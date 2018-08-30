@@ -26,16 +26,23 @@ set guioptions-=l
 set guioptions-=L
 
 " Colorscheme
-set t_Co=256
-set background=dark
-let g:solarized_termtrans=1
-let g:solarized_termcolors=256
-colorscheme solarized
+if has("gui_running")
+    set t_Co=256
+    set background=dark
+    colorscheme base16-monokai
+else
+    set t_Co=256
+    set background=dark
+    let base16colorspace=256  " Access colors present in 256 colorspace
+    let g:solarized_termtrans=1
+    let g:solarized_termcolors=256
+    colorscheme solarized
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Fast editing and reloading of vimrc configs
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>e :e! ~/.vim/my_configs.vim<cr>
+map <leader>em :e! ~/.vim/my_configs.vim<cr>
 autocmd! bufwritepost ~/.vim/my_configs.vim source ~/.vim/my_configs.vim
 
 

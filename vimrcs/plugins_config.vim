@@ -49,6 +49,7 @@ Plug 'sgur/vim-textobj-parameter'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'chriskempson/base16-vim'
 "Plug 'Raimondi/delimitMate'
 "Plug 'universal-ctags/ctags'
 "Plug 'Valloric/YouCompleteMe'
@@ -86,7 +87,7 @@ call plug#end()            " required
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "              => airline configurations <=                "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline_theme='luna'
+let g:airline_theme='molokai'
 let g:airline_powerline_fonts = 1
 "let g:airline_solarized_bg='dark' " enable this when use solarized theme
 
