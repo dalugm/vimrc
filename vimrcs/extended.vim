@@ -29,6 +29,7 @@ set guioptions-=L
 if has("gui_running")
     set t_Co=256
     set background=dark
+    set transparency=8
     colorscheme base16-monokai
 else
     set t_Co=256
