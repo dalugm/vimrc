@@ -63,6 +63,7 @@ Plug 'chriskempson/base16-vim'
 " 延迟按需加载，使用到命令的时候再加载或者打开对应文件类型才加载
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin', { 'on':  'NERDTreeToggle' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java'] }
 
@@ -124,12 +125,26 @@ let g:autopep8_disable_show_diff=1
 "                    => Nerd Tree <=                       "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:NERDTreeWinPos = "right"
-let NERDTreeShowHidden=0
-let NERDTreeIgnore = ['\.pyc$', '__pycache__']
+let NERDTreeShowHidden=1
+let NERDTreeIgnore = ['\.pyc','__pycache__','\~$','\.swp']
 let g:NERDTreeWinSize=35
+
 map <leader>nn :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark<Space>
 map <leader>nf :NERDTreeFind<cr>
+
+" nerd-tree-git-plugin
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ "Unknown"   : "?"
+    \ }
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                    => IndentLine <=                      "

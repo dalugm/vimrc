@@ -45,9 +45,9 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <leader>em :e! ~/.vim/my_configs.vim<cr>
 map <leader>eb :e! ~/.vim/vimrcs/basic.vim<cr>
-map <leader>em :e! ~/.vim/vimrcs/extended.vim<cr>
-map <leader>em :e! ~/.vim/vimrcs/filetypes.vim<cr>
-map <leader>em :e! ~/.vim/vimrcs/plugins_config.vim<cr>
+map <leader>ee :e! ~/.vim/vimrcs/extended.vim<cr>
+map <leader>ef :e! ~/.vim/vimrcs/filetypes.vim<cr>
+map <leader>ep :e! ~/.vim/vimrcs/plugins_config.vim<cr>
 autocmd! bufwritepost ~/.vim/my_configs.vim source ~/.vim/my_configs.vim
 
 
