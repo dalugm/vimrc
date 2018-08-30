@@ -29,7 +29,7 @@ set guioptions-=L
 if has("gui_running")
     set t_Co=256
     set background=dark
-    set transparency=8
+    set transparency=10
     colorscheme base16-monokai
 else
     set t_Co=256
@@ -44,6 +44,10 @@ endif
 " => Fast editing and reloading of vimrc configs
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <leader>em :e! ~/.vim/my_configs.vim<cr>
+map <leader>eb :e! ~/.vim/vimrcs/basic.vim<cr>
+map <leader>em :e! ~/.vim/vimrcs/extended.vim<cr>
+map <leader>em :e! ~/.vim/vimrcs/filetypes.vim<cr>
+map <leader>em :e! ~/.vim/vimrcs/plugins_config.vim<cr>
 autocmd! bufwritepost ~/.vim/my_configs.vim source ~/.vim/my_configs.vim
 
 
