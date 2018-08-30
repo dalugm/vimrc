@@ -35,21 +35,27 @@ call plug#begin('~/.vim/plugged')
 
 "托管在Github上的插件
 " 格式为 Plug '用户名/插件仓库名'
-Plug 'w0rp/ale'
 Plug 'junegunn/vim-plug'
+
+Plug 'w0rp/ale'
 Plug 'mhinz/vim-signify'
+Plug 'octol/vim-cpp-enhanced-highlight'
+
 Plug 'tpope/vim-fugitive'
 Plug 'Yggdroot/indentLine'
-Plug 'kana/vim-textobj-user'
-Plug 'flazz/vim-colorschemes'
 Plug 'airblade/vim-gitgutter'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
 Plug 'kana/vim-textobj-syntax'
 Plug 'sgur/vim-textobj-parameter'
-Plug 'octol/vim-cpp-enhanced-highlight'
+
+Plug 'flazz/vim-colorschemes'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'chriskempson/base16-vim'
+
 "Plug 'Raimondi/delimitMate'
 "Plug 'universal-ctags/ctags'
 "Plug 'Valloric/YouCompleteMe'
@@ -63,7 +69,6 @@ Plug 'chriskempson/base16-vim'
 " 延迟按需加载，使用到命令的时候再加载或者打开对应文件类型才加载
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'Xuyuanp/nerdtree-git-plugin', { 'on':  'NERDTreeToggle' }
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java'] }
 
@@ -124,16 +129,21 @@ let g:autopep8_disable_show_diff=1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                    => Nerd Tree <=                       "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" [shift + i] to hide/show the hidden files
 let g:NERDTreeWinPos = "right"
-let NERDTreeShowHidden=1
-let NERDTreeIgnore = ['\.pyc','__pycache__','\~$','\.swp']
 let g:NERDTreeWinSize=35
+let NERDChristmasTree=1 " Make nerd tree look better
+
+let NERDTreeCaseSensitiveSort=1 " Make file sorted by case
+let NERDTreeIgnore = ['\.pyc','__pycache__','\~$','\.swp']
+
+let NERDTreeShowHidden=1
 
 map <leader>nn :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark<Space>
 map <leader>nf :NERDTreeFind<cr>
 
-" nerd-tree-git-plugin
+" nerd-tree-git-plugin {{{
 let g:NERDTreeIndicatorMapCustom = {
     \ "Modified"  : "✹",
     \ "Staged"    : "✚",
@@ -143,8 +153,10 @@ let g:NERDTreeIndicatorMapCustom = {
     \ "Deleted"   : "✖",
     \ "Dirty"     : "✗",
     \ "Clean"     : "✔︎",
+    \ 'Ignored'   : '☒',
     \ "Unknown"   : "?"
     \ }
+""" }}}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                    => IndentLine <=                      "
