@@ -1,6 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =4
-let g:netrw_dirhist_1='/Users/mou/.vim'
-let g:netrw_dirhist_2='/Users/mou/.vim/vimrcs'
-let g:netrw_dirhist_3='/Users/mou/code/Python/Stuff/Update pip packages'
-let g:netrw_dirhist_4='/Users/mou/.vim/.git'
