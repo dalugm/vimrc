@@ -30,13 +30,15 @@ if has("gui_running")
     set t_Co=256
     set background=dark
     set transparency=10
-    colorscheme base16-monokai
+    colorscheme base16-dracula
 else
     set t_Co=256
     set background=dark
     let base16colorspace=256  " Access colors present in 256 colorspace
     let g:solarized_termtrans=1
     let g:solarized_termcolors=256
+    let g:solarized_contrast="high" 
+    let g:solarized_visibility="high"
     colorscheme solarized
 endif
 

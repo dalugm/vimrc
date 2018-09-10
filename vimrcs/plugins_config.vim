@@ -94,7 +94,7 @@ call plug#end()            " required
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "              => airline configurations <=                "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline_theme='molokai'
+let g:airline_theme='base16'
 let g:airline_powerline_fonts = 1
 "let g:airline_solarized_bg='dark' " enable this when use solarized theme
 
