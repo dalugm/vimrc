@@ -30,7 +30,7 @@ if has("gui_running")
     set t_Co=256
     set background=dark
     set transparency=10
-    colorscheme base16-dracula
+    colorscheme base16-solarized-dark
 else
     set t_Co=256
     set background=dark
