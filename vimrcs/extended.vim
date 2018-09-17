@@ -15,7 +15,8 @@ elseif has("unix")
 endif
 
 set guitablabel=%M\ %t
-set guicursor=n-v-r:block-blinkon0
+set guicursor=n:block-blinkon0
+set guicursor=v-r:hor20-blinkon0
 set guicursor=i:ver20-blinkon0
 set guicursor=c-ci:ver20-blinkon0
 
