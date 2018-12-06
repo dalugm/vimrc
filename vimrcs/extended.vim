@@ -30,7 +30,7 @@ set guioptions-=L
 if has("gui_running")
     set t_Co=256
     set background=dark
-    set transparency=10
+    set transparency=50
     colorscheme base16-solarized-dark
 else
     set t_Co=256
