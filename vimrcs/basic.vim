@@ -51,7 +51,7 @@ command W w !sudo tee % > /dev/null
 " 在处理未保存或只读文件的时候，弹出确认
 set confirm
 
-" 与mac, windows共享剪贴板
+" 与电脑共享剪贴板
 set clipboard+=unnamed
 
 " 保存全局变量

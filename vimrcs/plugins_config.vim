@@ -39,6 +39,7 @@ Plug 'junegunn/vim-plug'
 
 Plug 'w0rp/ale'
 Plug 'mhinz/vim-signify'
+"Plug 'Valloric/YouCompleteMe'
 Plug 'octol/vim-cpp-enhanced-highlight'
 
 Plug 'tpope/vim-fugitive'
@@ -59,7 +60,6 @@ Plug 'luochen1990/rainbow'
 
 "Plug 'Raimondi/delimitMate'
 "Plug 'universal-ctags/ctags'
-"Plug 'Valloric/YouCompleteMe'
 "Plug 'scrooloose/nerdcommenter'
 "Plug 'ludovicchabant/vim-gutentags'
 
@@ -79,11 +79,11 @@ call plug#end()            " required
 "
 " 以下是常用命令
 " :PlugInstall [name ...] [#threads] - Install plugins
-" :PlugUpdate [name ...] [#threads]	 - Install or update plugins
+" :PlugUpdate [name ...] [#threads]  - Install or update plugins
 " :PlugClean[!]   - Remove unused directories (bang version will clean without prompt)
-" :PlugUpgrade	  - Upgrade vim-plug itself
-" :PlugStatus	  - Check the status of plugins
-" :PlugDiff	      - Examine changes from the previous update and the pending changes
+" :PlugUpgrade    - Upgrade vim-plug itself
+" :PlugStatus     - Check the status of plugins
+" :PlugDiff       - Examine changes from the previous update and the pending changes
 " :PlugSnapshot[!] [output path]     - Generate script for restoring the current snapshot of the plugins
 "
 " 在该行后添加自己的配置信息
@@ -131,28 +131,28 @@ let g:autopep8_disable_show_diff=1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
  "0 if you want to enable it later via :RainbowToggle
 let g:rainbow_active = 1
-	let g:rainbow_conf = {
-	\	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
-	\	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
-	\	'operators': '_,_',
-	\	'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-	\	'separately': {
-	\		'*': {},
-	\		'tex': {
-	\			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
-	\		},
-	\		'lisp': {
-	\			'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
-	\		},
-	\		'vim': {
-	\			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
-	\		},
-	\		'html': {
-	\			'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
-	\		},
-	\		'css': 0,
-	\	}
-	\}
+    let g:rainbow_conf = {
+    \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+    \   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+    \   'operators': '_,_',
+    \   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+    \   'separately': {
+    \       '*': {},
+    \       'tex': {
+    \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+    \       },
+    \       'lisp': {
+    \           'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+    \       },
+    \       'vim': {
+    \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+    \       },
+    \       'html': {
+    \           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+    \       },
+    \       'css': 0,
+    \   }
+    \}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                    => Nerd Tree <=                       "
@@ -304,36 +304,36 @@ nmap ]c <Plug>GitGutterNextHunk
 "                   => YouCompleteMe <=                    "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"let g:ycm_key_list_previous_completion=['<Down>']
-"let g:ycm_key_list_previous_completion=['<Up>']
-"let g:ycm_seed_identifiers_with_syntax=1
-"
-"let g:ycm_add_preview_to_completeopt = 0
-"let g:ycm_show_diagnostics_ui = 0
-"let g:ycm_server_log_level = 'info'
-"let g:ycm_min_num_identifier_candidate_chars = 2
-"let g:ycm_min_num_of_chars_for_completion=2
-"let g:ycm_collect_identifiers_from_comments_and_strings = 1
-"let g:ycm_collect_identifiers_from_tags_files=1
-"let g:ycm_complete_in_strings=1
-"let g:ycm_complete_in_comments=1
-"let g:ycm_key_invoke_completion = '<c-z>'
-"set completeopt=menu,menuone
-"
-"noremap <c-z> <NOP>
-"
-"let g:ycm_semantic_triggers =  {
-"           \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
-"           \ 'cs,lua,javascript': ['re!\w{2}'],
-"           \ }
-"let g:ycm_filetype_whitelist = {
-"			\ "c":1,
-"			\ "cpp":1,
-"			\ "objc":1,
-"			\ "sh":1,
-"			\ "zsh":1,
-"			\ "zimbu":1,
-"			\ }
+let g:ycm_key_list_previous_completion=['<Down>']
+let g:ycm_key_list_previous_completion=['<Up>']
+let g:ycm_seed_identifiers_with_syntax=1
+
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_server_log_level = 'info'
+let g:ycm_min_num_identifier_candidate_chars = 2
+let g:ycm_min_num_of_chars_for_completion=2
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_collect_identifiers_from_tags_files=1
+let g:ycm_complete_in_strings=1
+let g:ycm_complete_in_comments=1
+let g:ycm_key_invoke_completion = '<c-z>'
+set completeopt=menu,menuone
+
+noremap <c-z> <NOP>
+
+let g:ycm_semantic_triggers =  {
+           \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+           \ 'cs,lua,javascript': ['re!\w{2}'],
+           \ }
+let g:ycm_filetype_whitelist = {
+           \ "c":1,
+           \ "cpp":1,
+           \ "objc":1,
+           \ "sh":1,
+           \ "zsh":1,
+           \ "zimbu":1,
+           \ }
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
