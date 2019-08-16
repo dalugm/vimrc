@@ -389,88 +389,30 @@ function! VisualSelection(direction, extra_filter) range
     let @" = l:saved_reg
 endfunction
 
-" Compile file in one key
-func! CompileGcc()
+" Compile
+map <F5> :call CompileRunGcc()<CR>
+func! CompileRunGcc()
     exec "w"
-    let compilecmd="!gcc "
-    let compileflag="-o %< "
-    if search("mpi\.h") != 0
-        let compilecmd = "!mpicc "
+    if &filetype == 'c'		
+        exec "!gcc % -o %<"		
+        exec "!time ./%<"	
+    elseif &filetype == 'cpp'
+        exec "!g++ % -o %<"	
+        exec "!time ./%<"	
+    elseif &filetype == 'java'	
+        exec "!javac %"		
+        exec "!time java %<"	
+    elseif &filetype == 'sh'	
+        :!time bash %	
+    elseif &filetype == 'python'	
+        exec "!time python %"  
+    elseif &filetype == 'html'  
+        exec "!firefox % &"  
+    elseif &filetype == 'go' 
+        exec "!go build %<"  
+        exec "!time go run %" 
+    elseif &filetype == 'mkd' 
+        exec "!~/.vim/markdown.pl % > %.html &"  
+        exec "!firefox %.html &"	
     endif
-    if search("glut\.h") != 0
-        let compileflag .= " -lglut -lGLU -lGL "
-    endif
-    if search("cv\.h") != 0
-        let compileflag .= " -lcv -lhighgui -lcvaux "
-    endif
-    if search("omp\.h") != 0
-        let compileflag .= " -fopenmp "
-    endif
-    if search("math\.h") != 0
-        let compileflag .= " -lm "
-    endif
-    exec compilecmd." % ".compileflag
 endfunc
-func! CompileGpp()
-    exec "w"
-    let compilecmd="!g++ "
-    let compileflag="-o %< "
-    if search("mpi\.h") != 0
-        let compilecmd = "!mpic++ "
-    endif
-    if search("glut\.h") != 0
-        let compileflag .= " -lglut -lGLU -lGL "
-    endif
-    if search("cv\.h") != 0
-        let compileflag .= " -lcv -lhighgui -lcvaux "
-    endif
-    if search("omp\.h") != 0
-        let compileflag .= " -fopenmp "
-    endif
-    if search("math\.h") != 0
-        let compileflag .= " -lm "
-    endif
-    exec compilecmd." % ".compileflag
-endfunc
-
-func! RunPython()
-        exec "!python %"
-endfunc
-func! CompileJava()
-    exec "!javac %"
-endfunc
-
-
-func! CompileCode()
-        exec "w"
-        if &filetype == "cpp"
-                exec "call CompileGpp()"
-        elseif &filetype == "c"
-                exec "call CompileGcc()"
-        elseif &filetype == "python"
-                exec "call RunPython()"
-        elseif &filetype == "java"
-                exec "call CompileJava()"
-        endif
-endfunc
-
-func! RunResult()
-        exec "w"
-        if search("mpi\.h") != 0
-            exec "!mpirun -np 4 ./%<"
-        elseif &filetype == "cpp"
-            exec "! ./%<"
-        elseif &filetype == "c"
-            exec "! ./%<"
-        elseif &filetype == "python"
-            exec "call RunPython"
-        elseif &filetype == "java"
-            exec "!java %<"
-        endif
-endfunc
-
-map <F5> :call CompileCode()<CR>
-imap <F5> <ESC>:call CompileCode()<CR>
-vmap <F5> <ESC>:call CompileCode()<CR>
-
-map <F6> :call RunResult()<CR>
