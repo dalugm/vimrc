@@ -3,7 +3,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Set font according to system
 if has("mac") || has("macunix")
-    set gfn=Monaco\ for\ Powerline:h14,DejaVu\ Sans\ Mono\ for\ Powerline:h14
+    set gfn=Fira\ Code:h14,DejaVu\ Sans\ Mono\ for\ Powerline:h14
 elseif has("win16") || has("win32")
     set gfn=Ubuntu\ Mono\ derivative\ Powerline:h14,DejaVu\ Sans\ Mono\ for\ Powerline:h14
 elseif has("gui_gtk2")
