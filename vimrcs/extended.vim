@@ -3,15 +3,15 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Set font according to system
 if has("mac") || has("macunix")
-    set gfn=Droid\ Sans\ Mono\ Nerd\ Font\ Complete:h12
+    set gfn=Fira\ Code:h12
 elseif has("win16") || has("win32")
-    set gfn=Droid\ Sans\ Mono\ Nerd\ Font\ Complete:h12
+    set gfn=Fira\ Code:h12
 elseif has("gui_gtk2")
-    set gfn=Droid\ Sans\ Mono\ Nerd\ Font\ Complete:h12
+    set gfn=Fira\ Code:h12
 elseif has("linux")
-    set gfn=Droid\ Sans\ Mono\ Nerd\ Font\ Complete:h12
+    set gfn=Fira\ Code:h12
 elseif has("unix")
-    set gfn=Droid\ Sans\ Mono\ Nerd\ Font\ Complete:h12
+    set gfn=Fira\ Code:h12
 endif
 
 set guitablabel=%M\ %t
