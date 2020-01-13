@@ -184,3 +184,80 @@ endfunc
 func! CurrentFileDir(cmd)
     return a:cmd . " " . expand("%:p:h") . "/"
 endfunc
+
+" Auto insert when create a new file
+"autocmd BufNewFile *.sh,*.py,*.c,*.cpp, exec ":call Title()"
+"autocmd BufWritePre *.sh,*.py,*.c,*.cpp, exec ":call Title()"
+"
+map <F7> :call Title()<CR>
+
+function AddTitle()
+    if &filetype == 'c'
+        call append(0,"/***********************************************************")
+        call append(1,"# File Name     : ".expand("%:t"))
+        call append(2,"# Author        : ".$author_name)
+        call append(3,"# Email         : ".$author_email)
+        call append(4,"# Created Time  : ".strftime("%Y-%m-%d %H:%M"))
+        call append(5,"# Last Modified : ".strftime("%Y-%m-%d %H:%M"))
+        call append(6,"# By            : ")
+        call append(7,"# Description   : ")
+        call append(8,"***********************************************************/")
+    elseif &filetype == 'cpp'
+        call append(0,"/***********************************************************")
+        call append(1,"# File Name     : ".expand("%:t"))
+        call append(2,"# Author        : ".$author_name)
+        call append(3,"# Email         : ".$author_email)
+        call append(4,"# Created Time  : ".strftime("%Y-%m-%d %H:%M"))
+        call append(5,"# Last Modified : ".strftime("%Y-%m-%d %H:%M"))
+        call append(6,"# By            : ")
+        call append(7,"# Description   : ")
+        call append(8,"***********************************************************/")
+    elseif &filetype == 'python'
+        call append(0,"#!/usr/bin/env python")
+        call append(1,"# -*- coding:utf-8 -*-")
+        call append(2,"############################################################")
+        call append(3,"# File Name     : ".expand("%:t"))
+        call append(4,"# Author        : ".$author_name)
+        call append(5,"# Email         : ".$author_email)
+        call append(6,"# Created Time  : ".strftime("%Y-%m-%d %H:%M"))
+        call append(7,"# Last Modified : ".strftime("%Y-%m-%d %H:%M"))
+        call append(8,"# By            : ")
+        call append(9,"# Description   : ")
+        call append(10,"############################################################")
+    else
+        call append(0,"############################################################")
+        call append(1,"# File Name     : ".expand("%:t"))
+        call append(2,"# Author        : ".$author_name)
+        call append(3,"# Email         : ".$author_email)
+        call append(4,"# Created Time  : ".strftime("%Y-%m-%d %H:%M"))
+        call append(5,"# Last Modified : ".strftime("%Y-%m-%d %H:%M"))
+        call append(6,"# By            : ")
+        call append(7,"# Description   : ")
+        call append(8,"############################################################")
+    endif
+    echohl WarningMsg | echo "Add the copyright." | echohl None
+endfunction
+ 
+function UpdateTitle()
+    normal m'
+    execute '/# Last Modified/s@:.*$@\=strftime(": %Y-%m-%d %H:%M")@'
+    normal ''
+    normal mk
+    execute '/# File Name/s@:.*$@\=": ".expand("%:t")@'
+    execute "noh"
+    normal 'k
+    echohl WarningMsg | echo "Update the copyright." | echohl None
+endfunction
+
+function Title()
+    let n = 1
+    while n < 11
+        let line = getline(n)
+        if line =~ '^\#\s*\S*Last\sModified\s*\S*.*$'
+            call UpdateTitle()
+            return
+        endif
+        let n = n + 1
+    endwhile
+    call AddTitle()
+endfunction

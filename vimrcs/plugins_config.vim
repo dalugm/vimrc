@@ -39,6 +39,8 @@ Plug 'junegunn/vim-plug'
 
 Plug 'w0rp/ale'
 Plug 'mhinz/vim-signify'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 "Plug 'Valloric/YouCompleteMe'
 Plug 'octol/vim-cpp-enhanced-highlight'
 
@@ -337,7 +339,7 @@ nmap ]c <Plug>GitGutterNextHunk
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                    => CTags的设定 <=                     "
+"                    => Ctags Config <=                    "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 按照名称排序
 "let Tlist_Sort_Type = "name"
@@ -356,3 +358,21 @@ nmap ]c <Plug>GitGutterNextHunk
 "
 "" 不要显示折叠树
 "let Tlist_Enable_Fold_Column = 0
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                  => UltiSnip Config <=                   "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsListSnippets="<c-tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+"UltiSnips will search each 'runtimepath' directory for the subdirectory names
+"defined in g:UltiSnipsSnippetDirectories in the order they are defined. For
+"example, if you keep your snippets in `~/.vim/mysnippets` and you want to
+"make use of the UltiSnips snippets that come with other plugins, add the
+"following to your vimrc file.
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]

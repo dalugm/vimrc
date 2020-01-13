@@ -68,7 +68,8 @@ set selectmode=mouse,key
 " 在被分割的窗口间显示空白，便于阅读
 set fillchars=vert:\ ,stl:\ ,stlnc:\
 
-" 打开时默认全屏
+let $author_name = "Mou Tong"
+let $author_email = "mou.tong@qq.com"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
