@@ -48,6 +48,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'Yggdroot/indentLine'
 Plug 'airblade/vim-gitgutter'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'terryma/vim-multiple-cursors'
 
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
@@ -359,7 +360,7 @@ nmap ]c <Plug>GitGutterNextHunk
 "" 不要显示折叠树
 "let Tlist_Enable_Fold_Column = 0
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                  => UltiSnip Config <=                   "
+"                   => UltiSnip Config <=                  "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -372,7 +373,21 @@ let g:UltiSnipsEditSplit="vertical"
 
 "UltiSnips will search each 'runtimepath' directory for the subdirectory names
 "defined in g:UltiSnipsSnippetDirectories in the order they are defined. For
-"example, if you keep your snippets in `~/.vim/mysnippets` and you want to
+"example, if you keep your snippets in `~/.vim/mycoolsnippets` and you want to
 "make use of the UltiSnips snippets that come with other plugins, add the
 "following to your vimrc file.
 let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                      => Multi Cursor<=                   "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:multi_cursor_use_default_mapping=0
+
+" Default mapping
+let g:multi_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_select_all_word_key = '<M-n>'
+let g:multi_cursor_start_key           = 'g<C-n>'
+let g:multi_cursor_select_all_key      = 'g<A-n>'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_quit_key            = '<Esc>'
