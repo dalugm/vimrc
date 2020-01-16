@@ -1,4 +1,7 @@
 .DS_Store
 */.DS_Store
 plugged/
+undotree/
+swapfiles/
 .netrwhist
+.last.session

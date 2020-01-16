@@ -1,138 +1,30 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Sections:
-"    -> General
-"    -> VIM user interface
-"    -> Files and backups
-"    -> Text, tab and indent related
-"    -> Visual mode related
-"    -> Moving around, tabs and buffers
-"    -> Status line
-"    -> Editing mappings
-"    -> vimgrep searching and cope displaying
-"    -> Spell checking
-"    -> Misc
-"    -> Helper functions
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" ###########################################################
+" # File Name     : basic.vim
+" # Author        : Mou Tong
+" # Email         : mou.tong@qq.com
+" # Created Time  : 2018-01-26 08:00
+" # Last Modified : 2020-01-16 16:16
+" # By            : Mou Tong
+" # Description   : basic config for vim
+" ###########################################################
 
+" General {{{ "
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => General
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 关闭兼容模式
-set nocompatible
+" Environment - Encoding, Indent, Fold {{{ "
 
-" 设定默认解码
-set fenc=utf-8
-set fencs=utf-8,usc-bom,euc-jp,gb18030,gbk,gb2312,cp936
+set nocompatible " be iMproved required
 
-" Sets how many lines of history VIM has to remember
-set history=500
-
-" Enable filetype plugins
-filetype on
-filetype plugin on
-filetype indent on
-
-" Set to auto read when a file is changed from the outside
-set autoread
-
-" With a map leader it's possible to do extra key combinations
-" like <leader>w saves the current file
-let mapleader = ","
-
-" Fast saving
-nmap <leader>w :w!<cr>
-
-" :W sudo saves the file
-" (useful for handling the permission-denied error)
-command W w !sudo tee % > /dev/null
-
-" 在处理未保存或只读文件的时候，弹出确认
-set confirm
-
-" 与电脑共享剪贴板
-set clipboard+=unnamed
-
-" 保存全局变量
-set viminfo+=!
-
-" 带有如下符号的单词不要被换行分割
-set iskeyword+=_,$,@,%,#,-
-
-" 可以在buffer的任何地方使用鼠标
-set mouse=a
-set selection=exclusive
-set selectmode=mouse,key
-
-" 在被分割的窗口间显示空白，便于阅读
-set fillchars=vert:\ ,stl:\ ,stlnc:\
-
-let $author_name = "Mou Tong"
-let $author_email = "mou.tong@qq.com"
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => VIM user interface
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Set 7 lines to the cursor - when moving vertically using j/k
-set scrolloff=7
-
-" Avoid garbled characters in Chinese language windows OS
-let $LANG='en'
-set langmenu=en
-source $VIMRUNTIME/delmenu.vim
-source $VIMRUNTIME/menu.vim
-
-" Turn on the Wild menu
-set wildmenu
-
-" Ignore compiled files
-set wildignore=*.o,*~,*.pyc
-if has("win16") || has("win32")
-    set wildignore+=.git\*,.hg\*,.svn\*
-else
-    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+if !isdirectory(expand("~/.vim/"))
+    call mkdir($HOME . "/.vim")
 endif
 
-" Always show current position
-set ruler
-set cursorline
+set runtimepath+=$HOME/.vim
 
-" Don't show mode on the corner
-set noshowmode
-
-" Height of the command bar
-set cmdheight=2
-
-" A buffer becomes hidden when it is abandoned
-set hid
-
-" Configure backspace so it acts as it should act
-set backspace=eol,start,indent
-set whichwrap+=<,>,h,l
-
-" Ignore case when searching
-set ignorecase
-
-" When searching try to be smart about cases
-set smartcase
-
-" Don't highlight search results
-set nohlsearch
-
-" Makes search act like search in modern browsers
-set incsearch
+set title
+set ttyfast " Improves smoothness of redrawing
 
 " Don't redraw while executing macros (good performance config)
 set lazyredraw
-
-" For regular expressions turn magic on
-set magic
-
-" Show matching brackets when text indicator is over them
-set showmatch
-" How many tenths of a second to blink when matching brackets
-set mat=2
 
 " No annoying sound on errors
 set noerrorbells
@@ -140,282 +32,451 @@ set novisualbell
 set t_vb=
 set tm=500
 
-" Properly disable sound on errors on MacVim
-if has("gui_macvim")
-    autocmd GUIEnter * set vb t_vb=
-endif
+set t_Co=256 " Using 256 colors
+set t_ti= t_te = " put terminal in 'termcap' mode
 
+" Configure backspace so it acts as it should act
+set backspace=eol,start,indent
 
-" Add a bit extra margin to the left
-set foldcolumn=1
+let $author_name = "Mou Tong"
+let $author_email = "mou.tong@qq.com"
 
-" Show line numbers when open a file
-set number
-set relativenumber
-
-" 用空格键来开关折叠
-set foldenable
-set foldmethod=manual
-nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc':'zo')<CR>
-
-" Enable syntax highlighting
-syntax enable
-syntax on
-
-" Set utf8 as standard encoding and en_US as the standard language
-set encoding=utf8
+" Set utf8 as standard encoding
+set encoding=utf-8
+set fileencodings=utf-8,usc-bom,default,cp936,big5,latin1
 
 " Use Unix as the standard file type
-set ffs=unix,dos,mac
+set fileformats=unix,mac,dos
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Files, backups and undo
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Turn backup off, since most stuff is in SVN, git et.c anyway...
-set nobackup
-set nowb
-set noswapfile
-set bufhidden=hide
+set ambiwidth=double
 
+" Also break at a multi-byte character above 255
+set formatoptions+=m
+" When joining lines, don't insert a space between two multi-byte characters
+set formatoptions+=B
+" Where it makes sense, remove a comment leader when joining lines
+set formatoptions+=j
+" When formatting text, recognize numbered lists
+set formatoptions+=n
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Text, tab and indent related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Use spaces instead of tabs
-set expandtab
+set autoindent " Auto indent
+set smartindent " Smart indent
 
-" Be smart when using tabs ;)
-set smarttab
+" Enable filetype plugins
+filetype on
+filetype plugin on
+filetype plugin indent on
 
 " 1 tab == 4 spaces
 set shiftwidth=4
 set tabstop=4
 set softtabstop=4
+set smarttab
 
-" Linebreak on 500 characters
-set lbr
-set tw=500
+set expandtab " Use space instead of tabs
+set wrap " Wrap lines
 
-set ai "Auto indent
-set si "Smart indent
-set wrap "Wrap lines
+" Popup confirm when edit unsave or readonly files
+set confirm
 
-" 超过80列后高亮字符
+" Enable clipboard if possible
+if has('clipboard')
+    if has('unnameplus') " When possible use + register for copy-paste
+        set clipboard=unnamed,unnamedplus
+    else " On macOS and Windows, use * register for copy-paste
+        set clipboard=unnamed
+    endif
+endif
+
+" Enable to continue where you left
+" `'` means to save mark for how many files
+" `f` means to if to save global variables
+" `<` means to save how many text lines in viminfo
+set viminfo='1000,f1,<500
+
+" set iskeyword+=-
+set whichwrap+=<,>,h,l,[,]
+
+" Enable mouse in terminal
+set mouse=a
+set selection=exclusive
+set selectmode=mouse,key
+
+" Clear vert split and empty line fillchar
+set fillchars=vert:\ ,stl:\ ,stlnc:\
+
+" Use these symbols for invisible chars
+set listchars=tab:¦\ ,eol:¬,trail:⋅,extends:»,precedes:«
+
+" }}} Environment - Encoding, Indent, Fold "
+
+" Appearence - Scrollbar, Highlight, Numberline {{{ "
+
+" Enable syntax highlighting
+syntax enable
+syntax on
+
+" Abbrev of prompt
+set shortmess=aoOtT
+
+" Highlight current line
+set cursorline
+
+" Hide mouse pointer when type
+set mousehide
+
+" Always show current position
+set ruler
+
+" Add a bit extra margin to the left
+set foldcolumn=1
+
+" Highlight chars when over 80 rows
 augroup vimrc_autocmds
-    autocmd BufEnter * highlight OverLength ctermbg=red ctermfg=white  guibg=red guifg=white
+    autocmd BufEnter * highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
     autocmd BufEnter * match OverLength /\%81v.*/
 
-""""""""""""""""""""""""""""""
-" => Visual mode related
-""""""""""""""""""""""""""""""
-" Visual mode pressing * or # searches for the current selection
-" Super useful! From an idea by Michael Naumann
-vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
-vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
+" Show line number by default
+if !exists('g:rc_show_line_number')
+    let g:rc_show_line_number = 1
+else
+    " If show_line_number is explicitly set to false,
+    " events-driving UseAbsOrRelNum will be stopped.
+    if g:rc_show_line_number == 0 | augroup! rc_line_number | endif
+endif
+
+" Toggle showing line number
+let g:rc_linenr_switch = g:rc_show_line_number
+nnoremap <silent> <Leader>ln :call RCToggleLineNumber(g:rc_linenr_switch)<CR>
+
+function! RCToggleLineNumber(switch)
+    if a:switch
+        set number relativenumber
+        let g:rc_linenr_switch = 0
+    else
+        set nonumber norelativenumber
+        let g:rc_linenr_switch = 1
+    endif
+endfunction
+
+" Run once to show initial linenum
+call RCToggleLineNumber(g:rc_show_line_number)
+
+" Use absolute linenum in insert mode; relative linenum in normal mode
+augroup rc_line_number
+    autocmd!
+    autocmd FocusLost,InsertEnter * call RCUseAbsOrRelNum(1)
+    autocmd FocusGained,InsertLeave * call RCUseAbsOrRelNum(0)
+augroup END
+
+function! RCUseAbsOrRelNum(switch)
+    if g:rc_show_line_number == 0 || exists('#goyo')
+        set nonumber norelativenumber
+    else
+        if a:switch
+            set number norelativenumber
+        else
+            set number relativenumber
+        endif
+    endif
+endfunction
+
+" Pressing ,sc will toggle and untoggle spell checking
+map <Leader>sc :setlocal spell!<cr>
+
+" Height of the command bar
+set cmdheight=1
+
+" Turn on the Wild menu
+set wildmenu
+set wildmode=list:longest,full
+
+" Ignore compiled files
+set wildignore=*.so,*.swp,*.pyc,*.pyo,*.exe,*.7z
+
+if has("win16") || has("win32")
+    set wildignore+=.git\*,.hg\*,.svn\*,*\desktop.ini
+else
+    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+endif
+
+" Set 7 lines to the cursor - when moving vertically using j/k
+"set scrolloff=7
+
+" Use space to open and fold code
+set foldenable
+set foldmethod=manual
+nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc':'zo')<CR>
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Moving around, tabs, windows and buffers
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Disable highlight when <leader><cr> is pressed
-map <silent> <leader><cr> :noh<cr>
+" }}} Appearance - Scrollbar, Highlight, Numberline "
 
-" Smart way to move between windows
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
+" Edit - Navigation, History, Search {{{ "
 
-" Close the current buffer
-map <leader>bd :bdelete<cr>
+" Make cursor always on center of screen by default
+if !exists('g:rc_always_center')
+    let g:rc_always_center = 1
+else
+    if g:rc_always_center == 0 | augroup! rc_always_center | endif
+endif
 
-" Close all the buffers
-map <leader>ba :bufdo bd<cr>
+augroup rc_always_center
+    autocmd!
+    autocmd VimEnter,WinEnter,VimResized * call RCAlwaysCenterOrNot()
+augroup END
 
-map <leader>l :bnext<cr>
-map <leader>h :bprevious<cr>
+function! RCAlwaysCenterOrNot()
+    if g:rc_always_center
+        " Use <Enter> to keep center in insert mode, need proper scrolloff
+        let &scrolloff = float2nr(floor(winheight(0) / 2) + 1)
+        inoremap <CR> <CR><C-o>zz
+    else
+        let &scrolloff = 0
+        silent! iunmap <CR>
+    endif
+endfunction
 
-" Useful mappings for managing tabs
-map <leader>tn :tabnew<cr>
-map <leader>to :tabonly<cr>
-map <leader>tc :tabclose<cr>
-map <leader>tm :tabmove
-map <leader>t<leader> :tabnext<cr>
+set sessionoptions-=options " Don't restore all options and mappings
 
-" Let 'tl' toggle between this and the last accessed tab
-let g:lasttab = 1
-nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
-au TabLeave * let g:lasttab = tabpagenr()
+" Restore last session automatically (default off)
+if !exists('g:rc_restore_last_session') | let g:rc_restore_last_session = 0 | endif
 
+" Always save the last session
+augroup save_session
+    autocmd!
+    autocmd VimLeave * exe ":mksession! ~/.vim/.last.session"
+augroup END
 
-" Opens a new tab with the current buffer's path
-" Super useful when editing files in the same directory
-map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+" Try to restore last session
+augroup restore_session
+    autocmd!
+    autocmd VimEnter * call RCRestoreLastSession()
+augroup END
 
-" Switch CWD to the directory of the open buffer
-map <leader>cd :cd %:p:h<cr>:pwd<cr>
+function! RCRestoreLastSession()
+    if g:rc_restore_last_session
+        if filereadable(expand("~/.vim/.last.session"))
+           exe ":source ~/.vim/.last.session"
+       endif
+   endif
+endfunction
 
-" Specify the behavior when switching between buffers
-try
-  set switchbuf=useopen,usetab,newtab
-  set stal=2
-catch
-endtry
+" Restore the last session manually
+if filereadable(expand("~/.vim/.last.session"))
+    nmap <silent> <Leader>r :source ~/.vim/.last.session<CR>
+endif
+
+set completeopt=menu,preview,longest
+set pumheight=10
+
+" Automatically close the preview window when popup menu is invisible
+if !exists('g:rc_auto_close_pw')
+    let g:rc_auto_close_pw = 1
+else
+    if g:rc_auto_close_pw == 0 | augroup! rc_close_pw | end
+endif
+
+augroup rc_close_pw
+    autocmd!
+    autocmd CursorMovedI,InsertLeave * call RCClosePWOrNot()
+augroup END
+
+function! RCClosePWOrNot()
+    if g:rc_auto_close_pw
+        if !pumvisible() && (!exists('*getcmdwintype') || empty(getcmdwintype()))
+            silent! pclose
+        endif
+    endif
+endfunction
 
 " Return to last edit position when opening files
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+autocmd BufReadPost *
+    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+    \ |   exe "normal! g`\""
+    \ | endif
 
+" Set to auto read when a file is changed from the outside
+set autoread
 
-""""""""""""""""""""""""""""""
-" => Status line
-""""""""""""""""""""""""""""""
-" Always show the status line
+" Automatically write a file when leaving a modified buffer
+" set autowrite
+
+" Automatically write a file after milliseconds nothing is typed
+set updatetime=4000 " milliseconds
+
+" Sets how many lines of history VIM has to remember
+set history=500 " command line history
+
+" Turn backup off, since most stuff is in SVN, git et.c anyway...
+set nobackup
+set nowritebackup
+
+" Swap files are necessary when crash recovery
+call mkdir($HOME . "/.vim/swapfiles", "p")
+set dir=$HOME/.vim/swapfiles//
+
+" Turn persistent undo on,
+" means that you can undo even when you close a buffer/VIM
+set undofile
+set undolevels=1000
+
+call mkdir($HOME . "/.vim/undotree", "p")
+set undodir=$HOME/.vim/undotree//
+
+" For regular expressions turn magic on
+set magic
+
+" Ignore case when searching
+set ignorecase
+
+" When searching try to be smart about cases
+set smartcase
+
+" Highlight search results
+set hlsearch
+
+" Makes search act like search in modern browsers
+set incsearch
+
+" Don't wrap around when junping between search result
+" set nowrapscan
+
+" }}} Edit - Navigation, History, Search "
+
+" Buffer - BufferSwitch, FileExplorer, Statusline {{{ "
+
+" A buffer becomes hidden when it's abandoned
+set hidden
+
+" Change current working directory automatically
+set autochdir
+
+let g:netrw_liststyle = 3
+let g:netrw_winsize = 30
+nnoremap <silent> <Leader>ve :Vexplore <C-r>=expand("%:p:h")<CR><CR>
+autocmd FileType netrw setlocal bufhidden=delete
+
+" Specify the behavior when switching between buffers
+set switchbuf=useopen
+set showtabline=1
+
+set splitright " Puts new vsplit windows to the right of the current
+set splitbelow " Puts new split windows to the bottom of the current
+
+" Split management
+nnoremap <silent> [b :bprevious<cr>
+nnoremap <silent> ]b :bnext<cr>
+nmap <silent> <C-k> :exe "resize " . (winheight(0) * 3/2)<CR>
+nmap <silent> <C-j> :exe "resize " . (winheight(0) * 2/3)<CR>
+nmap <silent> <C-h> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
+nmap <silent> <C-l> :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
+
+" Always show status line
 set laststatus=2
-set t_Co=256
+set statusline=%<%f\ " filename
+set statusline+=%w%h%m%r " option
+set statusline+=\ [%{&ff}]/%y " fileformat/filetype
+set statusline+=\ [%{getcwd()}] " current dir
+set statusline+=\ [%{&encoding}] " encoding
+set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
 
-" Format the status line
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
+" }}} Buffer - BufferSwitch, FileExplorer, StatusLine "
 
+" GUI Related {{{ "
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Editing mappings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Remap VIM 0 to first non-blank character
-map 0 ^
-
-" Move a line of text using ALT+[jk] or Command+[jk] on mac
-nmap <M-j> mz:m+<cr>`z
-nmap <M-k> mz:m-2<cr>`z
-vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
-vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
-
+" Set font according to system
 if has("mac") || has("macunix")
-  nmap <D-j> <M-j>
-  nmap <D-k> <M-k>
-  vmap <D-j> <M-j>
-  vmap <D-k> <M-k>
+    set gfn=Fira\ Code:h12
+elseif has("win16") || has("win32")
+    set gfn=Fira\ Code:h12
+elseif has("gui_gtk2")
+    set gfn=Fira\ Code:h12
+elseif has("linux")
+    set gfn=Fira\ Code:h12
+elseif has("unix")
+    set gfn=Fira\ Code:h12
 endif
 
-" Delete trailing white space on save, useful for some filetypes ;)
-fun! CleanExtraSpaces()
-    let save_cursor = getpos(".")
-    let old_query = getreg('/')
-    silent! %s/\s\+$//e
-    call setpos('.', save_cursor)
-    call setreg('/', old_query)
-endfun
+set guitablabel=%M\ %t
+set guicursor=n:block-blinkon0
+set guicursor=v-r:hor20-blinkon0
+set guicursor=i:ver20-blinkon0
+set guicursor=c-ci:ver20-blinkon0
+" set guicursor+=a:blinkon0 " no cursor blink
 
-if has("autocmd")
-    autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
+" Disable scrollbars
+set guioptions-=r
+set guioptions-=R
+set guioptions-=l
+set guioptions-=L
+set guioptions-=T " Also disable toolbar
+
+" Properly disable sound on errors on MacVim
+if has("gui_macvim")
+    autocmd GUIEnter * set vb t_vb=
 endif
 
+" }}} GUI Releated "
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Spell checking
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Pressing ,ss will toggle and untoggle spell checking
-map <leader>ss :setlocal spell!<cr>
+" Misc {{{ "
 
-" Shortcuts using <leader>
-map <leader>sn ]s
-map <leader>sp [s
-map <leader>sa zg
-map <leader>s? z=
+set noshowcmd
 
+" vertical diffsplit
+set diffopt+=vertical
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Misc
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Remove the Windows ^M - when the encodings gets messed up
-noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+" Show matching brackets when text indicator is over them
+set showmatch
+" How many tenths of a second to blink when matching brackets
+set matchtime=2
 
-" Quickly open a buffer for scribble
-map <leader>q :e ~/buffer<cr>
+" Define how to use the CTRL-A and CTRL-X commands for adding to and subtracting from a number respectively
+set nrformats=alpha,octal,hex
 
-" Quickly open a markdown buffer for scribble
-map <leader>x :e ~/buffer.md<cr>
+augroup rc_color_warning
+    autocmd!
+    autocmd ColorScheme * call matchadd('Todo', '\W\zs\(NOTICE\|WARNING\|DANGER\)')
+augroup END
 
-" Toggle paste mode on and off
-map <leader>pp :setlocal paste!<cr>
+" Find out to which highlight-group a particular keyword/symbol belongs
+command! Wcolor echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") .
+            \ "> trans<" . synIDattr(synID(line("."),col("."),0),"name") .
+            \ "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") .
+            \ "> fg:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")
 
+augroup rc_ft_settings
+    autocmd!
+    autocmd FileType python setlocal foldmethod=indent textwidth=80
+    autocmd BufNewFile,BufRead *.org setlocal filetype=org commentstring=#%s
+    autocmd BufNewFile,BufRead *.tex setlocal filetype=tex
+    autocmd FileType qf setlocal nowrap
+augroup END
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Helper functions
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Returns true if paste mode is enabled
-function! HasPaste()
-    if &paste
-        return 'PASTE MODE  '
-    endif
-    return ''
+" Strip trailing spaces and blank lines of EOF when saving files
+if !exists('g:rc_strip_wsbl')
+    let g:rc_strip_wsbl = 1
+else
+    if g:rc_strip_wsbl == 0 | augroup! rc_strip_wsbl | endif
+endif
+
+augroup rc_strip_wsbl
+    autocmd!
+    autocmd BufWritePre * call RCStripWSBL()
+augroup END
+
+nnoremap <silent> <Leader>s :call RCStripWSBL()<CR>
+function! RCStripWSBL()
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//ge
+    %s/\(\n\)\+\%$//ge
+    call cursor(l, c)
 endfunction
 
-" Don't close window, when deleting a buffer
-command! Bclose call <SID>BufcloseCloseIt()
-function! <SID>BufcloseCloseIt()
-    let l:currentBufNum = bufnr("%")
-    let l:alternateBufNum = bufnr("#")
+" Make TOhtml behavior better
+let g:html_dynamic_folds = 1
+let g:html_prevent_copy = "fntd"
 
-    if buflisted(l:alternateBufNum)
-        buffer #
-    else
-        bnext
-    endif
+" }}} Misc "
 
-    if bufnr("%") == l:currentBufNum
-        new
-    endif
-
-    if buflisted(l:currentBufNum)
-        execute("bdelete! ".l:currentBufNum)
-    endif
-endfunction
-
-function! CmdLine(str)
-    call feedkeys(":" . a:str)
-endfunction
-
-function! VisualSelection(direction, extra_filter) range
-    let l:saved_reg = @"
-    execute "normal! vgvy"
-
-    let l:pattern = escape(@", "\\/.*'$^~[]")
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
-
-    if a:direction == 'gv'
-        call CmdLine("Ack '" . l:pattern . "' " )
-    elseif a:direction == 'replace'
-        call CmdLine("%s" . '/'. l:pattern . '/')
-    endif
-
-    let @/ = l:pattern
-    let @" = l:saved_reg
-endfunction
-
-" Compile
-map <F5> :call CompileRunGcc()<CR>
-func! CompileRunGcc()
-    exec "w"
-    if &filetype == 'c'		
-        exec "!gcc % -o %<"		
-        exec "!time ./%<"	
-    elseif &filetype == 'cpp'
-        exec "!g++ % -o %<"	
-        exec "!time ./%<"	
-    elseif &filetype == 'java'	
-        exec "!javac %"		
-        exec "!time java %<"	
-    elseif &filetype == 'sh'	
-        :!time bash %	
-    elseif &filetype == 'python'	
-        exec "!time python %"  
-    elseif &filetype == 'html'  
-        exec "!firefox % &"  
-    elseif &filetype == 'go' 
-        exec "!go build %<"  
-        exec "!time go run %" 
-    elseif &filetype == 'mkd' 
-        exec "!~/.vim/markdown.pl % > %.html &"  
-        exec "!firefox %.html &"	
-    endif
-endfunc
+" }}} General "

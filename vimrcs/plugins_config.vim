@@ -1,393 +1,408 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                   => vim-plug的配置信息 <=
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" ###########################################################
+" # File Name     : plugins_config.vim
+" # Author        : Mou Tong
+" # Email         : mou.tong@qq.com
+" # Created Time  : 2018-01-26 08:00
+" # Last Modified : 2020-01-16 14:48
+" # By            : Mou Tong
+" # Description   : plugins config for vim
+" ###########################################################
 
-call plug#begin('~/.vim/plugged')
+" Plugins List & Config {{{ "
 
-" 以下范例用来支持不同格式的插件安装.
-" 请将安装插件的命令放在plug#begin和plug#end之间.
+" Plugin List {{{ "
 
+" Specify a directory for plugins
+" - Avoid using standard Vim directory names like 'plugin'
 " Make sure you use single quotes
 
-" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
-"Plug 'junegunn/vim-easy-align'
+" Use plug.vim by default
+if !exists('g:rc_use_plug_manager') | let g:rc_use_plug_manager = 1 | endif
+if g:rc_use_plug_manager
+    if filereadable(expand("~/.vim/autoload/plug.vim"))
+        call plug#begin('~/.vim/plugged')
 
-" Any valid git URL is allowed
-"Plug 'https://github.com/junegunn/vim-github-dashboard.git'
+        Plug 'vim-airline/vim-airline'
+        Plug 'vim-airline/vim-airline-themes'
+        if version >= 704 || version ==703 && has('patch005')
+            Plug 'mbbill/undotree'
+        endif
+        Plug 'mattn/emmet-vim'
+        Plug 'dhruvasagar/vim-table-mode'
+        Plug 'machakann/vim-sandwich'
+        Plug 'wellle/targets.vim'
+        Plug 'kshenoy/vim-signature'
+        Plug 'scrooloose/nerdcommenter'
+        Plug 'Raimondi/delimitMate'
+        Plug 'terryma/vim-multiple-cursors'
+        Plug 'Yggdroot/indentLine'
+        if version >= 704
+            Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+        endif
+        Plug 'junegunn/vim-easy-align'
+        Plug 'junegunn/goyo.vim'
+        Plug 'junegunn/limelight.vim'
+        Plug 'ctrlpvim/ctrlp.vim'
+        "Plug 'ycm-core/YouCompleteMe'
+        if version >= 704
+            Plug 'tpope/vim-fugitive'
+        endif
+        if version >= 800
+            Plug 'skywind3000/asyncrun.vim'
+        endif
+        if executable('latexmk')
+            Plug 'lervag/vimtex'
+        endif
+        if !has('win32')
+            Plug 'metakirby5/codi.vim'
+        endif
+        Plug 'luochen1990/rainbow'
+        Plug 'flazz/vim-colorschemes'
+        " On-demand loading
+        Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
-" Multiple Plug commands can be written in a single line using | separators
-"Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+        if filereadable(expand("~/.vim/vimrc.plug"))
+            source $HOME/.vim/vimrc.plug
+        endif
 
-" Using a non-master branch
-"Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+        call plug#end()
+    else
+        if executable('git')
+            call mkdir($HOME . "/.vim/autoload", "p")
+            if has('python')
+                echo "Downloading plug.vim, please wait a second..."
+                exe 'py import os,urllib2; f = urllib2.urlopen("https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"); g = os.path.join(os.path.expanduser("~"), ".vim/autoload/plug.vim"); open(g, "wb").write(f.read())'
+            else
+                if has('python3')
+                    echo "Downloading plug.vim, please wait a second..."
+                    exe 'py3 import os,urllib.request; f = urllib.request.urlopen("https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"); g = os.path.join(os.path.expanduser("~"), ".vim/autoload/plug.vim"); open(g, "wb").write(f.read())'
+                else
+                    exe "silent !echo 'let g:rc_use_plug_manager = 0' > ~/.vim/vimrc.before"
+                    echo "WARNING: plug.vim has been disabled due to the absence of 'python' or 'python3' features.\nIf you solve the problem and want to use it, you should delete the line with 'let g:rc_use_plug_manager = 0' in '~/.vim/vimrc.before' file.\nIf you don't take any action, that's OK. This message won't appear again. If you have any trouble contact me."
+                endif
+            endif
+            if filereadable(expand("~/.vim/autoload/plug.vim"))
+                echo "PluginManager - plug.vim just installed! vim will quit now.\nYou should relaunch vim, use PlugInstall to install plugins OR do nothing just use the basic config."
+                exe 'qall!'
+            endif
+        else
+            exe "silent !echo 'let g:rc_use_plug_manager = 0' > ~/.vim/vimrc.before"
+            echo "WARNING: plug.vim has been disabled due to the absence of 'git'.\nIf you solve the problem and want to use it, you should delete the line with 'let g:rc_use_plug_manager = 0' in '~/.vim/vimrc.before' file.\nIf you don't take any action, that's OK. This message won't appear again. If you have any trouble contact me."
+        endif
+    endif
+endif
 
-" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
-"Plug 'fatih/vim-go', { 'tag': '*' }
+" }}} Plugin List "
 
-" Plugin options
-"Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
+" Plugin Config {{{ "
 
-" Plugin outside ~/.vim/plugged with post-update hook
-"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
-" Unmanaged plugin (manually installed and updated)
-"Plug '~/my-prototype-plugin'
+    " Plugin Config - vim-colorschemes {{{ "
 
-"托管在Github上的插件
-" 格式为 Plug '用户名/插件仓库名'
-Plug 'junegunn/vim-plug'
+        if has("gui_running")
+            set background=dark
+            set transparency=10
+            colorscheme solarized
+        else
+            set background=dark
+            let g:solarized_termtrans=1
+            let g:solarized_termcolors=256
+            let g:solarized_contrast="normal"
+            colorscheme solarized
+        endif
 
-Plug 'w0rp/ale'
-Plug 'mhinz/vim-signify'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-"Plug 'Valloric/YouCompleteMe'
-Plug 'octol/vim-cpp-enhanced-highlight'
+    " }}} Plugin Config - vim-colorschemes "
 
-Plug 'tpope/vim-fugitive'
-Plug 'Yggdroot/indentLine'
-Plug 'airblade/vim-gitgutter'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'terryma/vim-multiple-cursors'
+   " Plugin Config - undotree {{{ "
 
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-indent'
-Plug 'kana/vim-textobj-syntax'
-Plug 'sgur/vim-textobj-parameter'
+    if filereadable(expand("~/.vim/plugged/undotree/plugin/undotree.vim"))
+        let g:undotree_SplitWidth         = 40
+        let g:undotree_SetFocusWhenToggle = 1
+        nmap <silent> <Leader>u :UndotreeToggle<CR>
+    endif
 
-Plug 'flazz/vim-colorschemes'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'chriskempson/base16-vim'
-Plug 'luochen1990/rainbow'
+    " }}} Plugin Config - undotree "
 
-"Plug 'Raimondi/delimitMate'
-"Plug 'universal-ctags/ctags'
-"Plug 'scrooloose/nerdcommenter'
-"Plug 'ludovicchabant/vim-gutentags'
+    " Plugin Config - ultisnips {{{ "
 
+    if filereadable(expand("~/.vim/plugged/ultisnips/plugin/UltiSnips.vim"))
+        " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+        let g:UltiSnipsExpandTrigger="<tab>"
+        let g:UltiSnipsListSnippets="<C-tab>"
+        let g:UltiSnipsJumpForwardTrigger="<C-f>"
+        let g:UltiSnipsJumpBackwardTrigger="<C-b>"
 
-" 由Git支持但不在github上的插件仓库 Plug 'git clone 后面的地址'
+        " If you want :UltiSnipsEdit to split your window.
+        let g:UltiSnipsEditSplit="vertical"
 
+        "UltiSnips will search each 'runtimepath' directory for the subdirectory names
+        "defined in g:UltiSnipsSnippetDirectories in the order they are defined. For
+        "example, if you keep your snippets in `~/.vim/mycoolsnippets` and you want to
+        "make use of the UltiSnips snippets that come with other plugins, add the
+        "following to your vimrc file.
+        let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
+    endif
 
-" 延迟按需加载，使用到命令的时候再加载或者打开对应文件类型才加载
-" On-demand loading
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-Plug 'kana/vim-textobj-function', { 'for':['c', 'cpp', 'vim', 'java'] }
+    " }}} Plugin Config - ultisnips "
 
-" 在这行前添加你的插件
-call plug#end()            " required
+    " Plugin Config - emmet-vim {{{ "
 
-"
-" 以下是常用命令
-" :PlugInstall [name ...] [#threads] - Install plugins
-" :PlugUpdate [name ...] [#threads]  - Install or update plugins
-" :PlugClean[!]   - Remove unused directories (bang version will clean without prompt)
-" :PlugUpgrade    - Upgrade vim-plug itself
-" :PlugStatus     - Check the status of plugins
-" :PlugDiff       - Examine changes from the previous update and the pending changes
-" :PlugSnapshot[!] [output path]     - Generate script for restoring the current snapshot of the plugins
-"
-" 在该行后添加自己的配置信息
+    if filereadable(expand("~/.vim/plugged/emmet-vim/plugin/emmet.vim"))
+        let g:user_emmet_install_global = 0
+        autocmd FileType html,xhtml,xml,css,scss,sass,less EmmetInstall
+        let g:user_emmet_leader_key = ','
+    endif
 
+    " }}} Plugin Config - emmet-vim "
 
+    " Plugin Config - vim-table-mode {{{ "
 
+    if filereadable(expand("~/.vim/plugged/vim-table-mode/autoload/tablemode.vim"))
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"              => airline configurations <=                "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline_theme='base16'
-let g:airline_powerline_fonts = 1
-"let g:airline_solarized_bg='dark' " enable this when use solarized theme
+        let g:table_mode_auto_align = 0
+        autocmd FileType markdown,rst,org :silent TableModeEnable
 
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail'
+        autocmd FileType markdown
+                    \ let g:table_mode_corner = "|" |
+                    \ let g:table_mode_corner_corner = "|" |
+                    \ let g:table_mode_header_fillchar = "-" |
+                    \ let g:table_mode_align_char = ":"
+        autocmd FileType rst
+                    \ let g:table_mode_corner = "+" |
+                    \ let g:table_mode_corner_corner = "+" |
+                    \ let g:table_mode_header_fillchar = "="
+        autocmd FileType org
+                    \ let g:table_mode_corner = "+" |
+                    \ let g:table_mode_corner_corner = "|" |
+                    \ let g:table_mode_header_fillchar = "-"
+    endif
 
-"let g:airline#extensions#tagbar#enabled = 1
-"let g:airline#extensions#tagbar#flags = 'f'
-"
-let g:airline#extensions#branch#enabled = 1
-let g:airline#extensions#branch#empty_message = ''
-let g:airline#extensions#branch#displayed_head_limit = 10
-let g:airline#extensions#virtualenv#enabled = 1
-let g:airline#extensions#ale#enabled = 1
+    " }}} Plugin Config - vim-table-mode "
 
-"let g:airline_left_sep = '▶'
-"let g:airline_left_alt_sep = '❯'
-"let g:airline_right_sep = '◀'
-"let g:airline_right_alt_sep = '❮'
+    " Plugin Config - nerdcommenter {{{ "
 
- "设置切换Buffer快捷键"
-" nnoremap <C-N> :bn<CR>
-" nnoremap <C-P> :bp<CR>
+    if filereadable(expand("~/.vim/plugged/nerdcommenter/plugin/NERD_commenter.vim"))
+        " Always leave a space between the comment character and the comment
+        let NERDSpaceDelims = 1
+        map <Bslash> <plug>NERDCommenterInvert
+        vmap <C-Bslash> <plug>NERDCommenterSexy
+    endif
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"            => autoindent configuration <=                "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:indentLine_char = "│"
-let g:indentLine_enabled = 1
-let g:autopep8_disable_show_diff=1
+    " }}} Plugin Config - nerdcommenter "
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                 => rainbow delimiters <=                 "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
- "0 if you want to enable it later via :RainbowToggle
-let g:rainbow_active = 1
-    let g:rainbow_conf = {
-    \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
-    \   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
-    \   'operators': '_,_',
-    \   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-    \   'separately': {
-    \       '*': {},
-    \       'tex': {
-    \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
-    \       },
-    \       'lisp': {
-    \           'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
-    \       },
-    \       'vim': {
-    \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
-    \       },
-    \       'html': {
-    \           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
-    \       },
-    \       'css': 0,
-    \   }
-    \}
+    " Plugin Config - Goyo {{{ "
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                    => Nerd Tree <=                       "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" [shift + i] to hide/show the hidden files
-let g:NERDTreeWinPos = "right"
-let g:NERDTreeWinSize=35
-let NERDChristmasTree=1 " Make nerd tree look better
+    if filereadable(expand("~/.vim/plugged/goyo.vim/plugin/goyo.vim"))
+        nmap <silent> <C-w><Space> :Goyo<CR>
+        function! s:goyo_enter()
+            let b:fcstatus = &foldcolumn
+            setlocal foldcolumn=0
+        endfunction
 
-let NERDTreeCaseSensitiveSort=1 " Make file sorted by case
-let NERDTreeIgnore = ['\.pyc','__pycache__','\~$','\.swp']
+        function! s:goyo_leave()
+            let &foldcolumn = b:fcstatus
+        endfunction
 
-let NERDTreeShowHidden=1
+        autocmd! User GoyoEnter nested call <SID>goyo_enter()
+        autocmd! User GoyoLeave nested call <SID>goyo_leave()
+    endif
 
-map <leader>nn :NERDTreeToggle<cr>
-map <leader>nb :NERDTreeFromBookmark<Space>
-map <leader>nf :NERDTreeFind<cr>
+    " }}} Plugin Config - Goyo "
 
-" nerd-tree-git-plugin {{{
-let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "✖",
-    \ "Dirty"     : "✗",
-    \ "Clean"     : "✔︎",
-    \ 'Ignored'   : '☒',
-    \ "Unknown"   : "?"
-    \ }
-""" }}}
+    " Plugin Config - Limelight {{{ "
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                    => IndentLine <=                      "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:indentLine_char = "│"
-let g:indentLine_enabled = 1
-let g:autopep8_disable_show_diff=1
+    if filereadable(expand("~/.vim/plugged/limelight.vim/plugin/limelight.vim"))
+        nmap <silent> <C-w><Enter> :Limelight!!<CR>
+        let g:limelight_conceal_ctermfg     = 250
+        let g:limelight_default_coefficient = 0.8
+    endif
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"           => Syntastic (syntax checker) <=               "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"使用clang对c和c++进行语法检查，对python使用pylint进行语法检查
-"以下同理
-let g:ale_linters = {
-\   'c': ['clang'],
-\   'c++': ['clang'],
-\   'python': ['pylint'],
-\   'go': ['go', 'golint', 'errcheck'],
-\   'javascript': ['jshint'],
-\}
+    " }}} Plugin Config - Limelight "
 
-" Disabling highlighting
-let g:ale_set_highlights = 0
+    " Plugin Config - CtrlP {{{ "
 
-" Only run linting when saving the file
-let g:ale_linters_explicit = 1
-let g:ale_completion_delay = 500
-let g:ale_echo_delay = 20
-let g:ale_lint_delay = 500
-let g:ale_lint_on_text_changed = 'normal'
-let g:ale_lint_on_insert_leave = 1
-let g:airline#extensions#ale#enabled = 1
+    if filereadable(expand("~/.vim/plugged/ctrlp.vim/plugin/ctrlp.vim"))
+        let g:ctrlp_map          = '<Leader>o'
+        let g:ctrlp_cmd          = 'CtrlPBuffer'
+        let g:ctrlp_mruf_exclude = '/tmp/.*\|\.w3m/.*\|/var/folders/.*'
+    endif
 
-let g:ale_c_gcc_options = '-Wall -O2 -std=c99'
-let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++14'
-let g:ale_c_cppcheck_options = ''
-let g:ale_cpp_cppcheck_options = ''
+    " }}} Plugin Config - CtrlP "
 
-"自定义error和warning图标
-let g:ale_sign_error = '✗'
-let g:ale_sign_warning = '⚡'
-"在vim自带的状态栏中整合ale
-let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
-"显示Linter名称,出错或警告等相关信息
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%]  %code: %%s [%severity%]'
-"打开文件时不进行检查
-let g:ale_lint_on_enter = 0
+    " Plugin Config - vim-easy-align {{{ "
 
-"普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
-nmap sp <Plug>(ale_previous_wrap)
-nmap sn <Plug>(ale_next_wrap)
-"<Leader>s触发/关闭语法检查
-nmap <Leader>s :ALEToggle<CR>
-"<Leader>d查看错误或警告的详细信息
-nmap <Leader>d :ALEDetail<CR>
+    if filereadable(expand("~/.vim/plugged/vim-easy-align/plugin/easy_align.vim"))
+        map <Leader>g :EasyAlign<Space>
+        xmap ga <Plug>(EasyAlign)
+        nmap ga <Plug>(EasyAlign)
+    endif
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"             => Git gutter (Git diff) <=                  "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:gitgutter_enabled=0
-nnoremap <silent> <leader>gt :GitGutterToggle<cr>
+    " }}} Plugin Config - vim-easy-align "
 
-let g:gitgutter_max_signs = 500  " default value
-nmap [c <Plug>GitGutterPrevHunk
-nmap ]c <Plug>GitGutterNextHunk
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                    => Nerdcomment <=                     "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Add spaces after comment delimiters by default
-"let g:NERDSpaceDelims = 1
-"
-"" Use compact syntax for prettified multi-line comments
-"let g:NERDCompactSexyComs = 1
-"
-"" Align line-wise comment delimiters flush left instead of following code indentation
-"let g:NERDDefaultAlign = 'left'
-"
-"" Set a language to use its alternate delimiters by default
-"let g:NERDAltDelims_java = 1
-"
-"" Add your own custom formats or override the defaults
-"let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
-"
-"" Allow commenting and inverting empty lines (useful when commenting a region)
-"let g:NERDCommentEmptyLines = 1
-"
-"" Enable trimming of trailing whitespace when uncommenting
-"let g:NERDTrimTrailingWhitespace = 1
+    " Plugin Config - airline {{{ "
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                  => vim-gutentags <=                     "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    if filereadable(expand("~/.vim/plugged/vim-airline/plugin/airline.vim"))
+        let g:airline#extensions#tabline#enabled   = 1
+        let g:airline#extensions#tabline#fnamemod  = ':t'
+        let g:airline#extensions#tabline#formatter = 'unique_tail'
 
-"" gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
-"let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
-"
-"" 所生成的数据文件的名称
-"let g:gutentags_ctags_tagfile = '.tags'
-"
-"" 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
-"let s:vim_tags = expand('~/.cache/tags')
-"let g:gutentags_cache_dir = s:vim_tags
-"
-"" 配置 ctags 的参数
-"let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
-"let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
-"let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
-"
-"" 检测 ~/.cache/tags 不存在就新建
-"if !isdirectory(s:vim_tags)
-"   silent! call mkdir(s:vim_tags, 'p')
-"endif
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                   => YouCompleteMe <=                    "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"let g:ycm_key_list_previous_completion=['<Down>']
-"let g:ycm_key_list_previous_completion=['<Up>']
-"let g:ycm_seed_identifiers_with_syntax=1
-"
-"let g:ycm_add_preview_to_completeopt = 0
-"let g:ycm_show_diagnostics_ui = 0
-"let g:ycm_server_log_level = 'info'
-"let g:ycm_min_num_identifier_candidate_chars = 2
-"let g:ycm_min_num_of_chars_for_completion=2
-"let g:ycm_collect_identifiers_from_comments_and_strings = 1
-"let g:ycm_collect_identifiers_from_tags_files=1
-"let g:ycm_complete_in_strings=1
-"let g:ycm_complete_in_comments=1
-"let g:ycm_key_invoke_completion = '<c-z>'
-"set completeopt=menu,menuone
-"
-"noremap <c-z> <NOP>
-"
-"let g:ycm_semantic_triggers =  {
-"           \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
-"           \ 'cs,lua,javascript': ['re!\w{2}'],
-"           \ }
-"let g:ycm_filetype_whitelist = {
-"           \ "c":1,
-"           \ "cpp":1,
-"           \ "objc":1,
-"           \ "sh":1,
-"           \ "zsh":1,
-"           \ "zimbu":1,
-"           \ }
+        let g:airline_theme           = 'solarized'
+        let g:airline_powerline_fonts = 1
+        let g:airline_solarized_bg    = 'dark'
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                    => Ctags Config <=                    "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 按照名称排序
-"let Tlist_Sort_Type = "name"
-"
-"" 在右侧显示窗口
-"let Tlist_Use_Right_Window = 1
-"
-"" 压缩方式
-"let Tlist_Compart_Format = 1
-"
-"" 如果只有一个buffer，kill窗口也kill掉buffer
-"let Tlist_Exist_OnlyWindow = 1
-"
-"" 不要关闭其他文件的tags
-"let Tlist_File_Fold_Auto_Close = 0
-"
-"" 不要显示折叠树
-"let Tlist_Enable_Fold_Column = 0
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                   => UltiSnip Config <=                  "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsListSnippets="<c-tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-f>"
-let g:UltiSnipsJumpBackwardTrigger="<c-b>"
+        "let g:airline#extensions#tagbar#enabled = 1
+        "let g:airline#extensions#tagbar#flags = 'f'
+        "
+        let g:airline#extensions#branch#enabled = 1
+        let g:airline#extensions#branch#empty_message = ''
+        let g:airline#extensions#branch#displayed_head_limit = 10
+        let g:airline#extensions#virtualenv#enabled = 1
+        let g:airline#extensions#ale#enabled = 1
 
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
+        "let g:airline_left_sep = '▶'
+        "let g:airline_left_alt_sep = '❯'
+        "let g:airline_right_sep = '◀'
+        "let g:airline_right_alt_sep = '❮'
 
-"UltiSnips will search each 'runtimepath' directory for the subdirectory names
-"defined in g:UltiSnipsSnippetDirectories in the order they are defined. For
-"example, if you keep your snippets in `~/.vim/mycoolsnippets` and you want to
-"make use of the UltiSnips snippets that come with other plugins, add the
-"following to your vimrc file.
-let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                      => Multi Cursor<=                   "
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:multi_cursor_use_default_mapping=0
+        " Shortkey to change buffer
+        "nnoremap <C-N> :bn<CR>
+        "nnoremap <C-P> :bp<CR>
+    endif
 
-" Default mapping
-let g:multi_cursor_start_word_key      = '<C-n>'
-let g:multi_cursor_select_all_word_key = '<M-n>'
-let g:multi_cursor_start_key           = 'g<C-n>'
-let g:multi_cursor_select_all_key      = 'g<A-n>'
-let g:multi_cursor_next_key            = '<C-n>'
-let g:multi_cursor_prev_key            = '<C-p>'
-let g:multi_cursor_skip_key            = '<C-x>'
-let g:multi_cursor_quit_key            = '<Esc>'
+    " }}} Plugin Config - airline "
+
+    " Plugin Config - vimtex {{{ "
+
+    if filereadable(expand("~/.vim/plugged/vimtex/autoload/vimtex.vim"))
+        let g:vimtex_compiler_latexmk = {
+            \ 'options' : [
+            \   '-xelatex',
+            \   '-shell-escape',
+            \   '-verbose',
+            \   '-file-line-error',
+            \   '-synctex=1',
+            \   '-interaction=nonstopmode',
+            \ ],
+            \}
+        " vimtex configuration for neocomplete
+        if exists('g:loaded_neocomplete')
+            if !exists('g:neocomplete#sources#omni#input_patterns')
+                let g:neocomplete#sources#omni#input_patterns = {}
+            endif
+            let g:neocomplete#sources#omni#input_patterns.tex =
+                \ g:vimtex#re#neocomplete
+        endif
+    endif
+
+    " }}} Plugin Config - vimtex "
+
+    " Plugin Config - rainbow {{{ "
+
+        let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+        let g:rainbow_conf = {
+        \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+        \   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+        \   'operators': '_,_',
+        \   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+        \   'separately': {
+        \       '*': {},
+        \       'tex': {
+        \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+        \       },
+        \       'lisp': {
+        \           'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+        \       },
+        \       'vim': {
+        \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+        \       },
+        \       'html': {
+        \           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+        \       },
+        \       'css': 0,
+        \   }
+        \}
+
+    " }}} Plugin Config - rainbow "
+
+    " Plugin Config - nerdtree {{{ "
+
+    " `S-i` to hide/show the hidden files
+    let g:NERDTreeWinPos = "right"
+    let g:NERDTreeWinSize=35
+    let NERDChristmasTree=1 " Make nerd tree look better
+
+    let NERDTreeCaseSensitiveSort=1 " Make file sorted by case
+    let NERDTreeIgnore = ['\.pyc','__pycache__','\~$','\.swp']
+
+    let NERDTreeShowHidden=1
+
+    map <Leader>tr :NERDTreeToggle<cr>
+    map <Leader>tb :NERDTreeFromBookmark<Space>
+    map <Leader>tf :NERDTreeFind<cr>
+
+    " }}} Plugin Config - nerdtree "
+
+    " Plugin Config - indentline {{{ "
+    let g:indentLine_char_list       = ['|', '¦', '┆', '┊']
+    let g:indentLine_enabled         = 1
+    let g:autopep8_disable_show_diff = 1
+
+    " }}} Plugin Config - indentline "
+
+    " Plugin Config - YouCompleteMe {{{ "
+
+    "let g:ycm_key_list_previous_completion=['<Down>']
+    "let g:ycm_key_list_previous_completion=['<Up>']
+    "let g:ycm_seed_identifiers_with_syntax=1
+    "
+    "let g:ycm_add_preview_to_completeopt = 0
+    "let g:ycm_show_diagnostics_ui = 0
+    "let g:ycm_server_log_level = 'info'
+    "let g:ycm_min_num_identifier_candidate_chars = 2
+    "let g:ycm_min_num_of_chars_for_completion=2
+    "let g:ycm_collect_identifiers_from_comments_and_strings = 1
+    "let g:ycm_collect_identifiers_from_tags_files=1
+    "let g:ycm_complete_in_strings=1
+    "let g:ycm_complete_in_comments=1
+    "let g:ycm_key_invoke_completion = '<c-z>'
+    "set completeopt=menu,menuone
+    "
+    "noremap <c-z> <NOP>
+    "
+    "let g:ycm_semantic_triggers =  {
+    "           \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+    "           \ 'cs,lua,javascript': ['re!\w{2}'],
+    "           \ }
+    "let g:ycm_filetype_whitelist = {
+    "           \ "c":1,
+    "           \ "cpp":1,
+    "           \ "objc":1,
+    "           \ "sh":1,
+    "           \ "zsh":1,
+    "           \ "zimbu":1,
+    "           \ }
+
+    " }}} Plugin Config - YouCompleteMe "
+
+    " Plugin Config - multicursor {{{ "
+
+    let g:multi_cursor_use_default_mapping=0
+    " Default mapping
+    let g:multi_cursor_start_word_key      = '<C-n>'
+    let g:multi_cursor_select_all_word_key = '<M-n>'
+    let g:multi_cursor_start_key           = 'g<C-n>'
+    let g:multi_cursor_select_all_key      = 'g<A-n>'
+    let g:multi_cursor_next_key            = '<C-n>'
+    let g:multi_cursor_prev_key            = '<C-p>'
+    let g:multi_cursor_skip_key            = '<C-x>'
+    let g:multi_cursor_quit_key            = '<Esc>'
+
+    " }}} Plugin Config - multicursor "
+
+endif
+
+" }}} Plugin Config "
+
+" }}} Plugins List & Config "

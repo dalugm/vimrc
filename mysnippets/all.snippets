@@ -4,13 +4,41 @@
 
 priority -55
 
-##snippet chead "name author datetime description..."
-#/***********************************************************
-#`# File Name     : ".expand("%:t"))
-#`# Author        : ".$author_name)
-#`# Email         : ".$author_email)
-#`# Created Time  : ".strftime("%Y-%m-%d %H:%M"))
-#`# Last Modified : ".strftime("%Y-%m-%d %H:%M"))
-#`# By            : ")
-#`# Description   : ")
-#***********************************************************/
+snippet name "user name"
+Mou Tong
+endsnippet
+
+snippet email "user email address"
+mou.tong@qq.com
+endsnippet
+
+snippet head "name author datetime description..."
+# File Name     : ${1:name}
+# Author        : ${2:author}
+# Email         : ${3:email}
+# Created Time  : ${4:time}
+# Last Modified : ${5:time}
+# By            : ${6:author}
+# Description   : ${7:description}
+$0
+endsnippet
+
+snippet ccu "c/cpp comment upside"
+/**********************************************************
+endsnippet
+
+snippet ccd "c/cpp comment downside"
+**********************************************************/
+endsnippet
+
+snippet pc "python comment"
+###########################################################
+endsnippet
+
+snippet vcu "vim comment upside"
+" ${1:description} {{{ "
+endsnippet
+
+snippet vcd "vim comment downside"
+" }}} ${1:description} "
+endsnippet
