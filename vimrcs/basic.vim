@@ -117,7 +117,7 @@ syntax enable
 syntax on
 
 " Abbrev of prompt
-set shortmess=aoOtT
+set shortmess=aoOtTI
 
 " Highlight current line
 set cursorline

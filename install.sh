@@ -15,6 +15,7 @@ cd ~/.vim
 echo 'set runtimepath+=~/.vim
 source ~/.vim/vimrcs/basic.vim
 source ~/.vim/vimrcs/functions.vim
+source ~/.vim/vimrcs/setcolors.vim
 source ~/.vim/vimrcs/keymappings.vim
 source ~/.vim/vimrcs/plugins_config.vim
 
