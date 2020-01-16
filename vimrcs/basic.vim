@@ -302,7 +302,8 @@ set autoread
 " set autowrite
 
 " Automatically write a file after milliseconds nothing is typed
-set updatetime=4000 " milliseconds
+" Will get bad experience for diagnostics when it's default 4000
+set updatetime=300
 
 " Sets how many lines of history VIM has to remember
 set history=500 " command line history

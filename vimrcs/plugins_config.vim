@@ -22,8 +22,6 @@ if g:rc_use_plug_manager
     if filereadable(expand("~/.vim/autoload/plug.vim"))
         call plug#begin('~/.vim/plugged')
 
-        Plug 'vim-airline/vim-airline'
-        Plug 'vim-airline/vim-airline-themes'
         if version >= 704 || version ==703 && has('patch005')
             Plug 'mbbill/undotree'
         endif
@@ -34,21 +32,20 @@ if g:rc_use_plug_manager
         Plug 'kshenoy/vim-signature'
         Plug 'scrooloose/nerdcommenter'
         Plug 'Raimondi/delimitMate'
-        Plug 'terryma/vim-multiple-cursors'
         Plug 'Yggdroot/indentLine'
+        Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
         if version >= 704
             Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
         endif
         Plug 'junegunn/vim-easy-align'
         Plug 'junegunn/goyo.vim'
         Plug 'junegunn/limelight.vim'
-        Plug 'ctrlpvim/ctrlp.vim'
-        "Plug 'ycm-core/YouCompleteMe'
         if version >= 704
             Plug 'tpope/vim-fugitive'
         endif
-        if version >= 800
+        if version >= 800 || has('nvim')
             Plug 'skywind3000/asyncrun.vim'
+            Plug 'mg979/vim-visual-multi'
         endif
         if executable('latexmk')
             Plug 'lervag/vimtex'
@@ -56,10 +53,25 @@ if g:rc_use_plug_manager
         if !has('win32')
             Plug 'metakirby5/codi.vim'
         endif
+
+        " Appearance
         Plug 'luochen1990/rainbow'
         Plug 'flazz/vim-colorschemes'
+        Plug 'vim-airline/vim-airline'
+        Plug 'vim-airline/vim-airline-themes'
+
         " On-demand loading
         Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+
+        " Lsp Support
+        Plug 'dense-analysis/ale'
+        if version >= 800 || has('nvim')
+            Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
+        else
+            if version >= 703 && has('lua')
+                Plug 'Shougo/neocomplete.vim'
+            endif
+        endif
 
         if filereadable(expand("~/.vim/vimrc.plug"))
             source $HOME/.vim/vimrc.plug
@@ -191,6 +203,24 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - nerdcommenter "
 
+    " Plugin Config - nerdtree {{{ "
+
+    " `S-i` to hide/show the hidden files
+    let g:NERDTreeWinPos  = "right"
+    let g:NERDTreeWinSize = 35
+    let NERDChristmasTree = 1 " Make nerd tree look better
+
+    let NERDTreeCaseSensitiveSort=1 " Make file sorted by case
+    let NERDTreeIgnore = ['\.pyc','__pycache__','\~$','\.swp']
+
+    let NERDTreeShowHidden=1
+
+    map <Leader>tr :NERDTreeToggle<cr>
+    map <Leader>tb :NERDTreeFromBookmark<Space>
+    map <Leader>tf :NERDTreeFind<cr>
+
+    " }}} Plugin Config - nerdtree "
+
     " Plugin Config - Goyo {{{ "
 
     if filereadable(expand("~/.vim/plugged/goyo.vim/plugin/goyo.vim"))
@@ -220,15 +250,43 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - Limelight "
 
-    " Plugin Config - CtrlP {{{ "
+    " Plugin Config - LeaderF {{{ "
 
-    if filereadable(expand("~/.vim/plugged/ctrlp.vim/plugin/ctrlp.vim"))
-        let g:ctrlp_map          = '<Leader>o'
-        let g:ctrlp_cmd          = 'CtrlPBuffer'
-        let g:ctrlp_mruf_exclude = '/tmp/.*\|\.w3m/.*\|/var/folders/.*'
+    if filereadable(expand("~/.vim/plugged/LeaderF.vim/plugin/LeaderF.vim"))
+        " don't show the help in normal mode
+        let g:Lf_HideHelp = 1
+        let g:Lf_UseCache = 0
+        let g:Lf_UseVersionControlTool = 0
+        let g:Lf_IgnoreCurrentBufferName = 1
+        " popup mode
+        let g:Lf_WindowPosition = 'popup'
+        let g:Lf_PreviewInPopup = 1
+        let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "DejaVu Sans Mono for Powerline" }
+        let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
+
+        let g:Lf_ShortcutF = "<leader>ff"
+        noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
+        noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
+        noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
+        noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+
+        noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR>
+        noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
+        " search visually selected text literally
+        xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
+        noremap go :<C-U>Leaderf! rg --recall<CR>
+
+        " should use `Leaderf gtags --update` first
+        let g:Lf_GtagsAutoGenerate = 0
+        let g:Lf_Gtagslabel = 'native-pygments'
+        noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+        noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+        noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+        noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+        noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
     endif
 
-    " }}} Plugin Config - CtrlP "
+    " }}} Plugin Config - LeaderF "
 
     " Plugin Config - vim-easy-align {{{ "
 
@@ -243,28 +301,16 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " Plugin Config - airline {{{ "
 
     if filereadable(expand("~/.vim/plugged/vim-airline/plugin/airline.vim"))
-        let g:airline#extensions#tabline#enabled   = 1
-        let g:airline#extensions#tabline#fnamemod  = ':t'
-        let g:airline#extensions#tabline#formatter = 'unique_tail'
+        let g:airline#extensions#tabline#enabled      = 1
+        let g:airline#extensions#tabline#left_sep     = ' '
+        let g:airline#extensions#tabline#left_alt_sep = '|'
+        let g:airline#extensions#tabline#formatter    = 'unique_tail'
 
-        let g:airline_theme           = 'solarized'
+        let g:airline_theme           = 'base16'
         let g:airline_powerline_fonts = 1
         let g:airline_solarized_bg    = 'dark'
 
-
-        "let g:airline#extensions#tagbar#enabled = 1
-        "let g:airline#extensions#tagbar#flags = 'f'
-        "
-        let g:airline#extensions#branch#enabled = 1
-        let g:airline#extensions#branch#empty_message = ''
-        let g:airline#extensions#branch#displayed_head_limit = 10
-        let g:airline#extensions#virtualenv#enabled = 1
-        let g:airline#extensions#ale#enabled = 1
-
-        "let g:airline_left_sep = '▶'
-        "let g:airline_left_alt_sep = '❯'
-        "let g:airline_right_sep = '◀'
-        "let g:airline_right_alt_sep = '❮'
+        let g:airline#extensions#ale#enabled                 = 1
 
         " Shortkey to change buffer
         "nnoremap <C-N> :bn<CR>
@@ -300,106 +346,128 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " Plugin Config - rainbow {{{ "
 
-        let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
-        let g:rainbow_conf = {
-        \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
-        \   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
-        \   'operators': '_,_',
-        \   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-        \   'separately': {
-        \       '*': {},
-        \       'tex': {
-        \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
-        \       },
-        \       'lisp': {
-        \           'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
-        \       },
-        \       'vim': {
-        \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
-        \       },
-        \       'html': {
-        \           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
-        \       },
-        \       'css': 0,
-        \   }
-        \}
+    let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+    let g:rainbow_conf = {
+    \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+    \   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+    \   'operators': '_,_',
+    \   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+    \   'separately': {
+    \       '*': {},
+    \       'tex': {
+    \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+    \       },
+    \       'lisp': {
+    \           'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+    \       },
+    \       'vim': {
+    \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+    \       },
+    \       'html': {
+    \           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+    \       },
+    \       'css': 0,
+    \   }
+    \}
 
     " }}} Plugin Config - rainbow "
 
-    " Plugin Config - nerdtree {{{ "
-
-    " `S-i` to hide/show the hidden files
-    let g:NERDTreeWinPos = "right"
-    let g:NERDTreeWinSize=35
-    let NERDChristmasTree=1 " Make nerd tree look better
-
-    let NERDTreeCaseSensitiveSort=1 " Make file sorted by case
-    let NERDTreeIgnore = ['\.pyc','__pycache__','\~$','\.swp']
-
-    let NERDTreeShowHidden=1
-
-    map <Leader>tr :NERDTreeToggle<cr>
-    map <Leader>tb :NERDTreeFromBookmark<Space>
-    map <Leader>tf :NERDTreeFind<cr>
-
-    " }}} Plugin Config - nerdtree "
-
     " Plugin Config - indentline {{{ "
+
     let g:indentLine_char_list       = ['|', '¦', '┆', '┊']
     let g:indentLine_enabled         = 1
     let g:autopep8_disable_show_diff = 1
 
     " }}} Plugin Config - indentline "
 
-    " Plugin Config - YouCompleteMe {{{ "
+    " Plugin Config - visual-multi {{{ "
 
-    "let g:ycm_key_list_previous_completion=['<Down>']
-    "let g:ycm_key_list_previous_completion=['<Up>']
-    "let g:ycm_seed_identifiers_with_syntax=1
-    "
-    "let g:ycm_add_preview_to_completeopt = 0
-    "let g:ycm_show_diagnostics_ui = 0
-    "let g:ycm_server_log_level = 'info'
-    "let g:ycm_min_num_identifier_candidate_chars = 2
-    "let g:ycm_min_num_of_chars_for_completion=2
-    "let g:ycm_collect_identifiers_from_comments_and_strings = 1
-    "let g:ycm_collect_identifiers_from_tags_files=1
-    "let g:ycm_complete_in_strings=1
-    "let g:ycm_complete_in_comments=1
-    "let g:ycm_key_invoke_completion = '<c-z>'
-    "set completeopt=menu,menuone
-    "
-    "noremap <c-z> <NOP>
-    "
-    "let g:ycm_semantic_triggers =  {
-    "           \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
-    "           \ 'cs,lua,javascript': ['re!\w{2}'],
-    "           \ }
-    "let g:ycm_filetype_whitelist = {
-    "           \ "c":1,
-    "           \ "cpp":1,
-    "           \ "objc":1,
-    "           \ "sh":1,
-    "           \ "zsh":1,
-    "           \ "zimbu":1,
-    "           \ }
+    let g:VM_mouse_mappings   = 1
+    let g:VM_skip_empty_lines = 1
+    let g:VM_silent_exit      = 1
 
-    " }}} Plugin Config - YouCompleteMe "
+    function! VM_Start()
+        if exists(":DelimitMateOff") | exe 'DelimitMateOff' | endif
+    endfunction
 
-    " Plugin Config - multicursor {{{ "
+    function! VM_Exit()
+        if exists(':DelimitMateOn') | exe 'DelimitMateOn' | endif
+    endfunction
 
-    let g:multi_cursor_use_default_mapping=0
-    " Default mapping
-    let g:multi_cursor_start_word_key      = '<C-n>'
-    let g:multi_cursor_select_all_word_key = '<M-n>'
-    let g:multi_cursor_start_key           = 'g<C-n>'
-    let g:multi_cursor_select_all_key      = 'g<A-n>'
-    let g:multi_cursor_next_key            = '<C-n>'
-    let g:multi_cursor_prev_key            = '<C-p>'
-    let g:multi_cursor_skip_key            = '<C-x>'
-    let g:multi_cursor_quit_key            = '<Esc>'
+    let g:VM_leader = {'default': '<Leader>', 'visual': '<Leader>', 'buffer': 'z'}
+    let g:VM_maps                           = {}
+    let g:VM_maps["Get Operator"]           = '<Leader>a'
+    let g:VM_maps["Add Cursor At Pos"]      = '<Leader><Space>'
+    let g:VM_maps["Reselect Last"]          = '<Leader>z'
+    let g:VM_maps["Visual Cursors"]         = '<Leader><Space>'
+    let g:VM_maps["Undo"]                   = 'u'
+    let g:VM_maps["Redo"]                   = '<C-r>'
+    let g:VM_maps["Visual Subtract"]        = 'zs'
+    let g:VM_maps["Visual Reduce"]          = 'zr'
 
-    " }}} Plugin Config - multicursor "
+    " }}} Plugin Config - visual-multi "
+
+    " Plugin Config - coc.nvim {{{ "
+
+    if filereadable(expand("~/.vim/plugged/coc.nvim/plugin/coc.vim"))
+        " Remap keys for gotos
+        nmap <silent> gd <Plug>(coc-definition)
+        nmap <silent> gy <Plug>(coc-type-definition)
+        nmap <silent> gi <Plug>(coc-implementation)
+        nmap <silent> gr <Plug>(coc-references)
+        vmap <silent> gf <Plug>(coc-format-selected)
+        " Remap for rename current word
+        nmap gm <Plug>(coc-rename)
+        " Show documentation in preview window
+        nmap <silent> gh :call CocAction('doHover')<CR>
+        nmap <silent> gc :CocList diagnostics<CR>
+        nmap <silent> go :CocList outline<CR>
+        nmap <silent> gs :CocList -I symbols<CR>
+    endif
+
+    " Use coc-explorer for file browsers
+    " Install by coc.nvim command:
+    " `CocInstall coc-explorer`
+
+    " coc config - explorer {{{ "
+
+        :nmap ge :CocCommand explorer<CR>
+
+    " }}} coc config - explorer "
+
+    " }}} Plugin Config - coc.nvim "
+
+    " Plugin Config - neocomplete {{{ "
+
+    if filereadable(expand("~/.vim/plugged/neocomplete.vim/plugin/neocomplete.vim"))
+        let g:neocomplete#enable_at_startup = 1
+    else
+        set omnifunc=syntaxcomplete#Complete
+    endif
+
+    " }}} Plugin Config - neocomplete "
+
+    " Plugin Config - ale {{{ "
+
+    let g:ale_set_highlights = 0
+    let g:ale_fix_on_save = 1
+    let g:ale_echo_msg_format = '[#%linter%#] %s [%severity%]'
+    let g:ale_statusline_format = ['E•%d', 'W•%d', 'OK']
+
+    let g:ale_sign_error = '•'
+    let g:ale_sign_warning = '•'
+
+    let g:ale_completion_delay = 500
+    let g:ale_echo_delay = 20
+    let g:ale_lint_delay = 500
+    let g:ale_lint_on_text_changed = 'normal'
+    let g:ale_lint_on_insert_leave = 1
+
+    nmap <Leader>an <Plug>(ale_next)
+    nmap <Leader>ap <Plug>(ale_previous)
+    nnoremap <Leader>ts :ALEToggle<CR>
+
+    " }}} Plugin Config - ale "
 
 endif
 
