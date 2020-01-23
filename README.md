@@ -7,7 +7,7 @@ My vim plugins and configuration
 # INSTALL
 
 ``` sh
-    git clone --depth=1 https://github.com/gangzhan/vimrc.git ~/.vim
+    git clone --depth=1 https://github.com/dalu98/vimrc.git ~/.vim
     chmod +x ~/.vim/install.sh
 ```
 
