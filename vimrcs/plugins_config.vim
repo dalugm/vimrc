@@ -153,7 +153,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         "example, if you keep your snippets in `~/.vim/mycoolsnippets` and you want to
         "make use of the UltiSnips snippets that come with other plugins, add the
         "following to your vimrc file.
-        let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
+        let g:UltiSnipsSnippetDirectories=["UltiSnips", "my-snippets"]
     endif
 
     " }}} Plugin Config - ultisnips "
