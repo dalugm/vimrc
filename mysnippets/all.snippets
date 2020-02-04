@@ -5,6 +5,10 @@
 priority -55
 
 snippet name "user name"
+dalu
+endsnippet
+
+snippet tname "user's true name"
 Mou Tong
 endsnippet
 
@@ -12,14 +16,26 @@ snippet email "user email address"
 mou.tong@qq.com
 endsnippet
 
-snippet head "name author datetime description..."
-# File Name     : ${1:name}
-# Author        : ${2:author}
-# Email         : ${3:email}
-# Created Time  : ${4:time}
-# Last Modified : ${5:time}
-# By            : ${6:author}
-# Description   : ${7:description}
+snippet author "author information"
+dalu <mou.tong@qq.com>
+endsnippet
+
+snippet header "name author datetime description..."
+Filename: ${1:name}
+Author: ${2:author}
+Maintainer: ${3:matainer}
+Created: ${4:time}
+Version: 0.1
+Last-Upated: ${5:time}
+         By: ${6:author}
+Keywords: ${7:keywords}
+
+Commentary:
+
+${8:description}
+
+
+Code:
 $0
 endsnippet
 

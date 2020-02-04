@@ -38,7 +38,8 @@ set t_ti= t_te = " put terminal in 'termcap' mode
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
 
-let $author_name = "Mou Tong"
+let $author_name  = "dalu"
+let $true_name    = "Mou Tong"
 let $author_email = "mou.tong@qq.com"
 
 " Set utf8 as standard encoding
@@ -117,7 +118,7 @@ syntax enable
 syntax on
 
 " Abbrev of prompt
-set shortmess=aoOtTI
+set shortmess=aoOtT
 
 " Highlight current line
 set cursorline
@@ -132,9 +133,9 @@ set ruler
 set foldcolumn=1
 
 " Highlight chars when over 80 rows
-augroup vimrc_autocmds
-    autocmd BufEnter * highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
-    autocmd BufEnter * match OverLength /\%81v.*/
+"augroup vimrc_autocmds
+"    autocmd BufEnter * highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
+"    autocmd BufEnter * match OverLength /\%81v.*/
 
 " Show line number by default
 if !exists('g:rc_show_line_number')
@@ -147,7 +148,7 @@ endif
 
 " Toggle showing line number
 let g:rc_linenr_switch = g:rc_show_line_number
-nnoremap <silent> <Leader>ln :call RCToggleLineNumber(g:rc_linenr_switch)<CR>
+nnoremap <silent> <Leader>n :call RCToggleLineNumber(g:rc_linenr_switch)<CR>
 
 function! RCToggleLineNumber(switch)
     if a:switch
@@ -188,6 +189,7 @@ map <Leader>sc :setlocal spell!<cr>
 set cmdheight=1
 
 " Turn on the Wild menu
+" Enhance command-line completion
 set wildmenu
 set wildmode=list:longest,full
 
@@ -372,7 +374,8 @@ nmap <silent> <C-j> :exe "resize " . (winheight(0) * 2/3)<CR>
 nmap <silent> <C-h> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
 nmap <silent> <C-l> :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
 
-" Always show status line
+" 0 means never show, 1 means show only if there are at least two windows
+" 2 means always show
 set laststatus=2
 set statusline=%<%f\ " filename
 set statusline+=%w%h%m%r " option
@@ -387,15 +390,15 @@ set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
 
 " Set font according to system
 if has("mac") || has("macunix")
-    set gfn=Fira\ Code:h12
+    set gfn=FuraCode\ Nerd\ Font\ Mono:h12
 elseif has("win16") || has("win32")
-    set gfn=Fira\ Code:h12
+    set gfn=FuraCode\ Nerd\ Font\ Mono:h12
 elseif has("gui_gtk2")
-    set gfn=Fira\ Code:h12
+    set gfn=FuraCode\ Nerd\ Font\ Mono:h12
 elseif has("linux")
-    set gfn=Fira\ Code:h12
+    set gfn=FuraCode\ Nerd\ Font\ Mono:h12
 elseif has("unix")
-    set gfn=Fira\ Code:h12
+    set gfn=FuraCode\ Nerd\ Font\ Mono:h12
 endif
 
 set guitablabel=%M\ %t
@@ -403,7 +406,7 @@ set guicursor=n:block-blinkon0
 set guicursor=v-r:hor20-blinkon0
 set guicursor=i:ver20-blinkon0
 set guicursor=c-ci:ver20-blinkon0
-" set guicursor+=a:blinkon0 " no cursor blink
+set guicursor+=a:blinkon0 " no cursor blink
 
 " Disable scrollbars
 set guioptions-=r
