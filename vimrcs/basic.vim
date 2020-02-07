@@ -213,28 +213,9 @@ set foldmethod=marker
 
 " Edit - Navigation, History, Search {{{ "
 
-" Make cursor always on center of screen by default
-if !exists('g:rc_always_center')
-    let g:rc_always_center = 1
-else
-    if g:rc_always_center == 0 | augroup! rc_always_center | endif
-endif
-
-augroup rc_always_center
-    autocmd!
-    autocmd VimEnter,WinEnter,VimResized * call RCAlwaysCenterOrNot()
-augroup END
-
-function! RCAlwaysCenterOrNot()
-    if g:rc_always_center
-        " Use <Enter> to keep center in insert mode, need proper scrolloff
-        let &scrolloff = float2nr(floor(winheight(0) / 2) + 1)
-        inoremap <CR> <CR><C-o>zz
-    else
-        let &scrolloff = 0
-        silent! iunmap <CR>
-    endif
-endfunction
+" Minimal number of screen lines to keep above and below the cursor.
+" Set this value large enough to make cursor line always be in the middle
+set scrolloff=999
 
 set sessionoptions-=options " Don't restore all options and mappings
 

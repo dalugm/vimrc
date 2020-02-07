@@ -46,27 +46,26 @@ endfunc
 
 function! CompileRun()
     exec "w"
-    if &filetype == 'c'
+    if &filetype == "c"
         exec "!gcc % -o %<"
         exec "!time ./%<"
-    elseif &filetype == 'cpp'
+    elseif &filetype == "cpp" | "cc"
         exec "!g++ % -o %<"
         exec "!time ./%<"
-    elseif &filetype == 'java'
+    elseif &filetype == "java"
         exec "!javac %"
         exec "!time java %<"
-    elseif &filetype == 'sh'
+    elseif &filetype == "sh"
         :!time bash %
-    elseif &filetype == 'python'
+    elseif &filetype == "python"
         exec "!time python %"
-    elseif &filetype == 'html'
+    elseif &filetype == "html"
         exec "!firefox % &"
-    elseif &filetype == 'go'
+    elseif &filetype == "go"
         exec "!go build %<"
         exec "!time go run %"
-    elseif &filetype == 'mkd'
-        exec "!~/.vim/markdown.pl % > %.html &"
-        exec "!firefox %.html &"
+    else
+        echo "This file type has not been matched."
     endif
 endfunc
 

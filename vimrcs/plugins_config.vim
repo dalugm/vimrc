@@ -381,7 +381,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     if filereadable(expand("~/.vim/plugged/indentLine/after/plugin/indentLine.vim"))
         " WARNING
         " do not use non-mono char, or cursor will be in wrong position
-        let g:indentLine_char_list       = ['|', '¦', '౹', '%']
+        let g:indentLine_char_list       = ['|', '¦', '౹', '\']
         let g:indentLine_enabled         = 1
         let g:autopep8_disable_show_diff = 1
     endif

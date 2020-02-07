@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2020-01-16 15:53
-" # Last Modified : 2020-01-16 15:58
+" # Last Modified : 2020-02-07 21:17
 " # By            : Mou Tong
 " # Description   : vim key map
 " ###########################################################
@@ -67,10 +67,9 @@ map <Leader>h :bprevious<CR>
 
 " }}} Key Mappings - Leader "
 
-" Key Mappings - function {{{ "
+" Key Mappings - functions {{{ "
 
 map <F5> :call CompileRun()<CR>
-map <F6> :call Title()<CR>
 
 " }}} Key Mappings - functions "
 
