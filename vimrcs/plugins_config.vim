@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-01-16 14:48
+" # Last Modified : 2020-02-07 12:35
 " # By            : Mou Tong
 " # Description   : plugins config for vim
 " ###########################################################
@@ -112,17 +112,17 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " Plugin Config - vim-colorschemes {{{ "
 
-        if has("gui_running")
-            set background=dark
-            set transparency=10
-            colorscheme solarized
-        else
-            set background=dark
-            let g:solarized_termtrans=1
-            let g:solarized_termcolors=256
-            let g:solarized_contrast="normal"
-            colorscheme solarized
-        endif
+    if has("gui_running")
+        set background=dark
+        set transparency=10
+        colorscheme solarized
+    else
+        set background=dark
+        let g:solarized_termtrans=1
+        let g:solarized_termcolors=256
+        let g:solarized_contrast="normal"
+        colorscheme solarized
+    endif
 
     " }}} Plugin Config - vim-colorschemes "
 
@@ -205,19 +205,21 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " Plugin Config - nerdtree {{{ "
 
-    " `S-i` to hide/show the hidden files
-    let g:NERDTreeWinPos  = "right"
-    let g:NERDTreeWinSize = 35
-    let NERDChristmasTree = 1 " Make nerd tree look better
+    if filereadable(expand("~/.vim/plugged/nerdtree/plugin/NERD_tree.vim"))
+        " `S-i` to hide/show the hidden files
+        let g:NERDTreeWinPos  = "right"
+        let g:NERDTreeWinSize = 35
+        let NERDChristmasTree = 1 " Make nerd tree look better
 
-    let NERDTreeCaseSensitiveSort=1 " Make file sorted by case
-    let NERDTreeIgnore = ['\.pyc','__pycache__','\~$','\.swp']
+        let NERDTreeCaseSensitiveSort=1 " Make file sorted by case
+        let NERDTreeIgnore = ['\.pyc','__pycache__','\~$','\.swp']
 
-    let NERDTreeShowHidden=1
+        let NERDTreeShowHidden=1
 
-    map <Leader>tr :NERDTreeToggle<cr>
-    map <Leader>tb :NERDTreeFromBookmark<Space>
-    map <Leader>tf :NERDTreeFind<cr>
+        map <Leader>tr :NERDTreeToggle<cr>
+        map <Leader>tb :NERDTreeFromBookmark<Space>
+        map <Leader>tf :NERDTreeFind<cr>
+    endif
 
     " }}} Plugin Config - nerdtree "
 
@@ -346,64 +348,72 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " Plugin Config - rainbow {{{ "
 
-    let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
-    let g:rainbow_conf = {
-    \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
-    \   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
-    \   'operators': '_,_',
-    \   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-    \   'separately': {
-    \       '*': {},
-    \       'tex': {
-    \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
-    \       },
-    \       'lisp': {
-    \           'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
-    \       },
-    \       'vim': {
-    \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
-    \       },
-    \       'html': {
-    \           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
-    \       },
-    \       'css': 0,
-    \   }
-    \}
+    if filereadable(expand("~/.vim/plugged/rainbow/autoload/rainbow.vim"))
+        let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+        let g:rainbow_conf = {
+        \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+        \   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+        \   'operators': '_,_',
+        \   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+        \   'separately': {
+        \       '*': {},
+        \       'tex': {
+        \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+        \       },
+        \       'lisp': {
+        \           'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+        \       },
+        \       'vim': {
+        \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+        \       },
+        \       'html': {
+        \           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+        \       },
+        \       'css': 0,
+        \   }
+        \}
+    endif
 
     " }}} Plugin Config - rainbow "
 
     " Plugin Config - indentline {{{ "
 
-    let g:indentLine_char_list       = ['|', '¦', '┆', '┊']
-    let g:indentLine_enabled         = 1
-    let g:autopep8_disable_show_diff = 1
+    if filereadable(expand("~/.vim/plugged/indentLine/after/plugin/indentLine.vim"))
+        " WARNING
+        " do not use non-mono char, or cursor will be in wrong position
+        let g:indentLine_char_list       = ['|', '¦', '౹', '%']
+        let g:indentLine_enabled         = 1
+        let g:autopep8_disable_show_diff = 1
+    endif
 
     " }}} Plugin Config - indentline "
 
     " Plugin Config - visual-multi {{{ "
 
-    let g:VM_mouse_mappings   = 1
-    let g:VM_skip_empty_lines = 1
-    let g:VM_silent_exit      = 1
+    if filereadable(expand("~/.vim/plugged/vim-visual-multi/plugin/visual-multi.vim"))
+        let g:VM_mouse_mappings   = 1
+        let g:VM_skip_empty_lines = 1
+        let g:VM_silent_exit      = 1
 
-    function! VM_Start()
-        if exists(":DelimitMateOff") | exe 'DelimitMateOff' | endif
-    endfunction
+        function! VM_Start()
+            if exists(":DelimitMateOff") | exe 'DelimitMateOff' | endif
+        endfunction
 
-    function! VM_Exit()
-        if exists(':DelimitMateOn') | exe 'DelimitMateOn' | endif
-    endfunction
+        function! VM_Exit()
+            if exists(':DelimitMateOn') | exe 'DelimitMateOn' | endif
+        endfunction
 
-    let g:VM_leader = {'default': '<Leader>', 'visual': '<Leader>', 'buffer': 'z'}
-    let g:VM_maps                           = {}
-    let g:VM_maps["Get Operator"]           = '<Leader>a'
-    let g:VM_maps["Add Cursor At Pos"]      = '<Leader><Space>'
-    let g:VM_maps["Reselect Last"]          = '<Leader>z'
-    let g:VM_maps["Visual Cursors"]         = '<Leader><Space>'
-    let g:VM_maps["Undo"]                   = 'u'
-    let g:VM_maps["Redo"]                   = '<C-r>'
-    let g:VM_maps["Visual Subtract"]        = 'zs'
-    let g:VM_maps["Visual Reduce"]          = 'zr'
+        let g:VM_leader = {'default': '<Leader>', 'visual': '<Leader>', 'buffer': 'z'}
+        let g:VM_maps                           = {}
+        let g:VM_maps["Get Operator"]           = '<Leader>a'
+        let g:VM_maps["Add Cursor At Pos"]      = '<Leader><Space>'
+        let g:VM_maps["Reselect Last"]          = '<Leader>z'
+        let g:VM_maps["Visual Cursors"]         = '<Leader><Space>'
+        let g:VM_maps["Undo"]                   = 'u'
+        let g:VM_maps["Redo"]                   = '<C-r>'
+        let g:VM_maps["Visual Subtract"]        = 'zs'
+        let g:VM_maps["Visual Reduce"]          = 'zr'
+    endif
 
     " }}} Plugin Config - visual-multi "
 
@@ -431,7 +441,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " coc config - explorer {{{ "
 
-        :nmap ge :CocCommand explorer<CR>
+    :nmap ge :CocCommand explorer<CR>
 
     " }}} coc config - explorer "
 
@@ -449,23 +459,25 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " Plugin Config - ale {{{ "
 
-    let g:ale_set_highlights = 0
-    let g:ale_fix_on_save = 1
-    let g:ale_echo_msg_format = '[#%linter%#] %s [%severity%]'
-    let g:ale_statusline_format = ['E•%d', 'W•%d', 'OK']
+    if filereadable(expand("~/.vim/plugged/ale/autoload/ale.vim"))
+        let g:ale_set_highlights = 0
+        let g:ale_fix_on_save = 1
+        let g:ale_echo_msg_format = '[#%linter%#] %s [%severity%]'
+        let g:ale_statusline_format = ['E•%d', 'W•%d', 'OK']
 
-    let g:ale_sign_error = '•'
-    let g:ale_sign_warning = '•'
+        let g:ale_sign_error = '•'
+        let g:ale_sign_warning = '•'
 
-    let g:ale_completion_delay = 500
-    let g:ale_echo_delay = 20
-    let g:ale_lint_delay = 500
-    let g:ale_lint_on_text_changed = 'normal'
-    let g:ale_lint_on_insert_leave = 1
+        let g:ale_completion_delay = 500
+        let g:ale_echo_delay = 20
+        let g:ale_lint_delay = 500
+        let g:ale_lint_on_text_changed = 'normal'
+        let g:ale_lint_on_insert_leave = 1
 
-    nmap <Leader>an <Plug>(ale_next)
-    nmap <Leader>ap <Plug>(ale_previous)
-    nnoremap <Leader>ts :ALEToggle<CR>
+        nmap <Leader>an <Plug>(ale_next)
+        nmap <Leader>ap <Plug>(ale_previous)
+        nnoremap <Leader>ts :ALEToggle<CR>
+    endif
 
     " }}} Plugin Config - ale "
 

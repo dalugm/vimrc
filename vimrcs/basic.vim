@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-01-16 16:16
+" # Last Modified : 2020-02-06 15:14
 " # By            : Mou Tong
 " # Description   : basic config for vim
 " ###########################################################
@@ -38,9 +38,9 @@ set t_ti= t_te = " put terminal in 'termcap' mode
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
 
-let $author_name  = "dalu"
-let $true_name    = "Mou Tong"
-let $author_email = "mou.tong@qq.com"
+let $user_name  = "dalu"
+let $tuser_name = "Mou Tong"
+let $user_email = "mou.tong@qq.com"
 
 " Set utf8 as standard encoding
 set encoding=utf-8
@@ -205,11 +205,9 @@ endif
 " Set 7 lines to the cursor - when moving vertically using j/k
 "set scrolloff=7
 
-" Use space to open and fold code
+" Fold code config
 set foldenable
-set foldmethod=manual
-nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc':'zo')<CR>
-
+set foldmethod=marker
 
 " }}} Appearance - Scrollbar, Highlight, Numberline "
 
@@ -390,15 +388,15 @@ set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
 
 " Set font according to system
 if has("mac") || has("macunix")
-    set gfn=FuraCode\ Nerd\ Font\ Mono:h12
+    set gfn=Sarasa\ Mono\ HC:h12
 elseif has("win16") || has("win32")
-    set gfn=FuraCode\ Nerd\ Font\ Mono:h12
+    set gfn=Sarasa\ Mono\ HC:h12
 elseif has("gui_gtk2")
-    set gfn=FuraCode\ Nerd\ Font\ Mono:h12
+    set gfn=Sarasa\ Mono\ HC:h12
 elseif has("linux")
-    set gfn=FuraCode\ Nerd\ Font\ Mono:h12
+    set gfn=Sarasa\ Mono\ HC:h12
 elseif has("unix")
-    set gfn=FuraCode\ Nerd\ Font\ Mono:h12
+    set gfn=Sarasa\ Mono\ HC:h12
 endif
 
 set guitablabel=%M\ %t
