@@ -109,6 +109,10 @@ set fillchars=vert:\ ,stl:\ ,stlnc:\
 " Use these symbols for invisible chars
 set listchars=tab:¦\ ,eol:¬,trail:⋅,extends:»,precedes:«
 
+" Fold code config
+set foldenable
+set foldmethod=marker
+
 " }}} Environment - Encoding, Indent, Fold "
 
 " Appearence - Scrollbar, Highlight, Numberline {{{ "
@@ -130,7 +134,7 @@ set mousehide
 set ruler
 
 " Add a bit extra margin to the left
-set foldcolumn=1
+set foldcolumn=2
 
 " Highlight chars when over 80 rows
 "augroup vimrc_autocmds
@@ -202,20 +206,13 @@ else
     set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
 endif
 
-" Set 7 lines to the cursor - when moving vertically using j/k
-"set scrolloff=7
-
-" Fold code config
-set foldenable
-set foldmethod=marker
+" Minimal number of screen lines to keep above and below the cursor.
+" Set this value large enough to make cursor line always be in the middle
+set scrolloff=999
 
 " }}} Appearance - Scrollbar, Highlight, Numberline "
 
 " Edit - Navigation, History, Search {{{ "
-
-" Minimal number of screen lines to keep above and below the cursor.
-" Set this value large enough to make cursor line always be in the middle
-set scrolloff=999
 
 set sessionoptions-=options " Don't restore all options and mappings
 
@@ -369,15 +366,15 @@ set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
 
 " Set font according to system
 if has("mac") || has("macunix")
-    set gfn=Sarasa\ Mono\ HC:h12
+    set guifont=Sarasa\ Mono\ HC:h12
 elseif has("win16") || has("win32")
-    set gfn=Sarasa\ Mono\ HC:h12
+    set guifont=Sarasa\ Mono\ HC:h12
 elseif has("gui_gtk2")
-    set gfn=Sarasa\ Mono\ HC:h12
+    set guifont=Sarasa\ Mono\ HC:h12
 elseif has("linux")
-    set gfn=Sarasa\ Mono\ HC:h12
+    set guifont=Sarasa\ Mono\ HC:h12
 elseif has("unix")
-    set gfn=Sarasa\ Mono\ HC:h12
+    set guifont=Sarasa\ Mono\ HC:h12
 endif
 
 set guitablabel=%M\ %t

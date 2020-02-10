@@ -29,11 +29,8 @@ let mapleader = ","
 nmap <Leader>w :w!<CR>
 
 " Fast editing and reloading of vimrc configs
-map <Leader>eb :e! ~/.vim/vimrcs/basic.vim<CR>
-map <Leader>ef :e! ~/.vim/vimrcs/functions.vim<CR>
-map <Leader>ek :e! ~/.vim/vimrcs/keymappings.vim<CR>
-map <Leader>ep :e! ~/.vim/vimrcs/plugins_config.vim<CR>
-map <Leader>en :e! ~/.vim/mysnippets<CR>
+map <Leader>ec :e! ~/.vim/vimrcs<CR>
+map <Leader>es :e! ~/.vim/mysnippets<CR>
 
 " Close the current buffer
 map <Leader>bd :bdelete<CR>

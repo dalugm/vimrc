@@ -1,5 +1,21 @@
+" Filename: setcolors.vim
+" Author: JohnBeckett (inspired by haridsv<hari.vim@gamil.com>)
+" Maintainer: L0calg0d (v0.3)
+"             dalu
+" Created: 2010-09-12 08:00
+" Version: 0.4
+" Last-Upated: 2020-02-10 20:42
+"          By: dalu <mou.tong@qq.com>
+" Keywords: colorscheme
+
+" Commentary:
+
 " Change the color scheme from a list of color scheme names.
+
+" Code:
+
 " Version 2010-09-12 from http://vim.wikia.com/wiki/VimTip341
+" Inspired by lightWeightArray.vim from http://www.vim.org/script.php?script_id=109
 " Press key:
 "   F8                next scheme
 "   Shift-F8          previous scheme
@@ -11,12 +27,13 @@
 "   :SetColors                  (display current scheme names)
 " Set the current color scheme based on time of day:
 "   :SetColors now
+
 if v:version < 700 || exists('loaded_setcolors') || &cp
   finish
 endif
 
 let loaded_setcolors = 1
-let s:mycolors = ['solarized', 'Tomorrow-Night', 'molokai', 'material']  " colorscheme names that we use to set color
+let s:mycolors = ['default', 'Tomorrow-Night', 'solarized', 'molokai']  " colorscheme names that use to set color
 
 " Set list of color scheme names that we will use, except
 " argument 'now' actually changes the current color scheme.

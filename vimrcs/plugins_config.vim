@@ -115,13 +115,17 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     if has("gui_running")
         set background=dark
         set transparency=10
-        colorscheme solarized
+        colorscheme default
     else
         set background=dark
+        " Use this to avoid screen color errors
+        " when using `solarized` in terminal
+        " Check more on `vim-colorschemes` folder or
+        " https://github.com/altercation/vim-colors-solarized
         let g:solarized_termtrans=1
         let g:solarized_termcolors=256
         let g:solarized_contrast="normal"
-        colorscheme solarized
+        colorscheme default
     endif
 
     " }}} Plugin Config - vim-colorschemes "
