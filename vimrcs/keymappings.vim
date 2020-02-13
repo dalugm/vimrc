@@ -30,7 +30,7 @@ nmap <Leader>w :w!<CR>
 
 " Fast editing and reloading of vimrc configs
 map <Leader>ec :e! ~/.vim/vimrcs<CR>
-map <Leader>es :e! ~/.vim/mysnippets<CR>
+map <Leader>es :e! ~/.vim/my-snippets<CR>
 
 " Close the current buffer
 map <Leader>bd :bdelete<CR>

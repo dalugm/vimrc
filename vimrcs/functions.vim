@@ -44,29 +44,77 @@ endfunc
 
 " CompileRun {{{ "
 
-function! CompileRun()
+func! CompileRun()
     exec "w"
     if &filetype == "c"
-        exec "!gcc % -o %<"
-        exec "!time ./%<"
-    elseif &filetype == "cpp" | "cc"
-        exec "!g++ % -o %<"
-        exec "!time ./%<"
+        exec "call CompileGcc()"
+        if search("mpi\.h") != 0
+            exec "!mpirun -np 4 ./%<"
+        else
+            exec "! ./%<"
+        endif
+    elseif &filetype == "cpp" | "cc" | "cxx" | "cp" | "C"
+        exec "call CompileGpp()"
+        exec "! ./%<"
     elseif &filetype == "java"
         exec "!javac %"
-        exec "!time java %<"
+        exec "!java %<"
     elseif &filetype == "sh"
-        :!time bash %
+        exec "!bash %"
     elseif &filetype == "python"
-        exec "!time python %"
+        exec "!python %"
     elseif &filetype == "html"
         exec "!firefox % &"
     elseif &filetype == "go"
         exec "!go build %<"
-        exec "!time go run %"
+        exec "go run %"
     else
         echo "This file type has not been matched."
     endif
+endfunc
+
+func! CompileGcc()
+    exec "w"
+    let compilecmd="!gcc"
+    let compileflag="-o %<"
+    if search("mpi\.h") != 0
+        let compilecmd = "!mpicc "
+    endif
+    if search("glut\.h") != 0
+        let compileflag .= " -lglut -lGLU -lGL "
+    endif
+    if search("cv\.h") != 0
+        let compileflag .= " -lcv -lhighgui -lcvaux "
+    endif
+    if search("omp\.h") != 0
+        let compileflag .= " -fopenmp "
+    endif
+    if search("math\.h") != 0
+        let compileflag .= " -lm "
+    endif
+    exec compilecmd." % ".compileflag
+endfunc
+
+func! CompileGpp()
+    exec "w"
+    let compilecmd="!g++"
+    let compileflag="-o %<"
+    if search("mpi\.h") != 0
+        let compilecmd = "!mpic++ "
+    endif
+    if search("glut\.h") != 0
+        let compileflag .= " -lglut -lGLU -lGL "
+    endif
+    if search("cv\.h") != 0
+        let compileflag .= " -lcv -lhighgui -lcvaux "
+    endif
+    if search("omp\.h") != 0
+        let compileflag .= " -fopenmp "
+    endif
+    if search("math\.h") != 0
+        let compileflag .= " -lm "
+    endif
+    exec compilecmd." % ".compileflag
 endfunc
 
 " }}} CompileRun "

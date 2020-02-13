@@ -134,7 +134,7 @@ set mousehide
 set ruler
 
 " Add a bit extra margin to the left
-set foldcolumn=2
+"set foldcolumn=2
 
 " Highlight chars when over 80 rows
 "augroup vimrc_autocmds
