@@ -4,7 +4,7 @@
 # Author        : Mou Tong
 # Email         : mou.tong@qq.com
 # Created Time  : 2018-01-26 08:00
-# Last Modified : 2020-01-23 12:48
+# Last Modified : 2020-02-21 21:04
 # By            : Mou Tong
 # Description   : install my vim configuration
 ###########################################################
@@ -16,7 +16,6 @@ if [ "$1" = "complete" ] ; then
     echo 'set runtimepath+=~/.vim
 source ~/.vim/vimrcs/basic.vim
 source ~/.vim/vimrcs/functions.vim
-source ~/.vim/vimrcs/setcolors.vim
 source ~/.vim/vimrcs/keymappings.vim
 source ~/.vim/vimrcs/plugins_config.vim
 
@@ -48,7 +47,6 @@ else
     echo 'set runtimepath+=~/.vim
 source ~/.vim/vimrcs/basic.vim
 source ~/.vim/vimrcs/functions.vim
-source ~/.vim/vimrcs/setcolors.vim
 source ~/.vim/vimrcs/keymappings.vim
 source ~/.vim/vimrcs/plugins_config.vim
 

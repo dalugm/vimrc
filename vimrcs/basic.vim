@@ -366,15 +366,15 @@ set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
 
 " Set font according to system
 if has("mac") || has("macunix")
-    set guifont=Sarasa\ Mono\ HC:h12
+    set guifont=Sarasa\ Mono\ SC:h12
 elseif has("win16") || has("win32")
-    set guifont=Sarasa\ Mono\ HC:h12
+    set guifont=Sarasa\ Mono\ SC:h12
 elseif has("gui_gtk2")
-    set guifont=Sarasa\ Mono\ HC:h12
+    set guifont=Sarasa\ Mono\ SC:h12
 elseif has("linux")
-    set guifont=Sarasa\ Mono\ HC:h12
+    set guifont=Sarasa\ Mono\ SC:h12
 elseif has("unix")
-    set guifont=Sarasa\ Mono\ HC:h12
+    set guifont=Sarasa\ Mono\ SC:h12
 endif
 
 set guitablabel=%M\ %t
@@ -415,7 +415,11 @@ set nrformats=alpha,octal,hex
 
 augroup rc_color_warning
     autocmd!
-    autocmd ColorScheme * call matchadd('Todo', '\W\zs\(NOTICE\|WARNING\|DANGER\)')
+    " ColorScheme means to match keywords after loading a color scheme
+    " Syntax means to match keywords when the `syntax` option has been set
+    " More details can be checked by `:help autocmd`
+    autocmd ColorScheme * call matchadd('Todo', '\W\zs\(TODO\|FIXME\|CHANGED\|BUG\|HACK\|XXX\|NOTICE\|WARNING\|DANGER\)')
+    autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
 augroup END
 
 " Find out to which highlight-group a particular keyword/symbol belongs

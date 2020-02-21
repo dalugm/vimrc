@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-02-07 12:35
+" # Last Modified : 2020-02-21 21:04
 " # By            : Mou Tong
 " # Description   : plugins config for vim
 " ###########################################################
@@ -59,6 +59,7 @@ if g:rc_use_plug_manager
         Plug 'flazz/vim-colorschemes'
         Plug 'vim-airline/vim-airline'
         Plug 'vim-airline/vim-airline-themes'
+        Plug '~/.vim/my-plugins/setcolors'
 
         " On-demand loading
         Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
@@ -78,6 +79,7 @@ if g:rc_use_plug_manager
         endif
 
         call plug#end()
+
     else
         if executable('git')
             call mkdir($HOME . "/.vim/autoload", "p")
