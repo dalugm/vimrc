@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-02-21 21:04
+" # Last Modified : 2020-03-01 13:10
 " # By            : Mou Tong
 " # Description   : plugins config for vim
 " ###########################################################
@@ -33,6 +33,7 @@ if g:rc_use_plug_manager
         Plug 'scrooloose/nerdcommenter'
         Plug 'Raimondi/delimitMate'
         Plug 'Yggdroot/indentLine'
+
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
         if version >= 704
             Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
@@ -63,6 +64,7 @@ if g:rc_use_plug_manager
 
         " On-demand loading
         Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+        Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 
         " Lsp Support
         Plug 'dense-analysis/ale'
@@ -132,7 +134,43 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - vim-colorschemes "
 
-   " Plugin Config - undotree {{{ "
+    " FIXME
+    " Plugin Config - vim-which-key {{{ "
+    if filereadable(expand("~/.vim/plugged/vim-which-key/plugin/which_key.vim"))
+
+        " By default timeoutlen is 1000 ms
+        set timeoutlen=500
+
+        let g:mapleader = ','
+        let g:maplocalleader = "\<Space>"
+        nnoremap <silent> <leader>      :<c-u>WhichKey ','<CR>
+        vnoremap <silent> <leader>      :<c-u>WhichKeyVisual ','<CR>
+        nnoremap <silent> <localleader> :<c-u>WhichKey  '<Space>'<CR>
+
+        " Define prefix dictionary
+        let g:which_key_map =  {}
+
+        "call which_key#register(',', "g:which_key_map")
+
+        " Second level dictionaries:
+        " 'name' is a special field. It will define the name of the group, e.g., leader-f is the "+file" group.
+        " Unnamed groups will show a default empty string.
+
+        " =======================================================
+        " Create menus based on existing mappings
+        " =======================================================
+        " You can pass a descriptive text to an existing mapping.
+
+        let g:which_key_map['e'] = {
+                    \ 'name' : '+config' ,
+                    \ 'c' : ['<Leader>c' , 'edit-config']   ,
+                    \ 's' : ['<Leader>s' , 'edit-snippets'] ,
+                    \ }
+    endif
+
+    " }}} Plugin Config - vim-which-key "
+
+    " Plugin Config - undotree {{{ "
 
     if filereadable(expand("~/.vim/plugged/undotree/plugin/undotree.vim"))
         let g:undotree_SplitWidth         = 40
@@ -222,9 +260,9 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         let NERDTreeShowHidden=1
 
-        map <Leader>tr :NERDTreeToggle<cr>
+        map <Leader>tr :NERDTreeToggle<CR>
         map <Leader>tb :NERDTreeFromBookmark<Space>
-        map <Leader>tf :NERDTreeFind<cr>
+        map <Leader>tf :NERDTreeFind<CR>
     endif
 
     " }}} Plugin Config - nerdtree "
@@ -272,26 +310,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "FuraCode Mono" }
         let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
 
-        let g:Lf_ShortcutF = "<leader>ff"
-        noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
-        noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
-        noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
-        noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
-
-        noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR>
-        noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
-        " search visually selected text literally
-        xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
-        noremap go :<C-U>Leaderf! rg --recall<CR>
-
-        " should use `Leaderf gtags --update` first
-        let g:Lf_GtagsAutoGenerate = 0
-        let g:Lf_Gtagslabel = 'native-pygments'
-        noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
-        noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
-        noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
-        noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
-        noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+        map <Leader>rg :Leaderf rg<CR>
     endif
 
     " }}} Plugin Config - LeaderF "
@@ -318,11 +337,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         let g:airline_powerline_fonts = 1
         let g:airline_solarized_bg    = 'dark'
 
-        let g:airline#extensions#ale#enabled                 = 1
-
-        " Shortkey to change buffer
-        "nnoremap <C-N> :bn<CR>
-        "nnoremap <C-P> :bp<CR>
+        let g:airline#extensions#ale#enabled = 1
     endif
 
     " }}} Plugin Config - airline "
@@ -422,6 +437,13 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     endif
 
     " }}} Plugin Config - visual-multi "
+
+    " Plugin Config - asyncrun {{{ "
+        if filereadable(expand("~/.vim/plugged/asyncrun.vim/plugin/asyncrun.vim"))
+            " Set the height of window when run AsyncRun
+            let g:asyncrun_open = 6
+        endif
+    " }}} Plugin Config - asyncrun "
 
     " Plugin Config - coc.nvim {{{ "
 

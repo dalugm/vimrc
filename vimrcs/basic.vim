@@ -300,7 +300,7 @@ set undofile
 set undolevels=1000
 
 call mkdir($HOME . "/.vim/undotree", "p")
-set undodir=$HOME/.vim/undotree//
+set undodir=$HOME/.vim/undotree/
 
 " For regular expressions turn magic on
 set magic
@@ -418,7 +418,7 @@ augroup rc_color_warning
     " ColorScheme means to match keywords after loading a color scheme
     " Syntax means to match keywords when the `syntax` option has been set
     " More details can be checked by `:help autocmd`
-    autocmd ColorScheme * call matchadd('Todo', '\W\zs\(TODO\|FIXME\|CHANGED\|BUG\|HACK\|XXX\|NOTICE\|WARNING\|DANGER\)')
+    autocmd ColorScheme * call matchadd('Todo', '\W\zs\(TODO\|FIXME\|CHANGED\|BUG\|HACK\|XXX\|NOTICE\|WARNING\|DANGER\|DEPRECATED\|REVIEW\)')
     autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
 augroup END
 

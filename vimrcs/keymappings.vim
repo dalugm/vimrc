@@ -22,7 +22,6 @@ nnoremap <silent> <BS> :nohlsearch<CR>
 " Key Mappings - Leader {{{ "
 
 " With a map leader it's possible to do extra key combinations
-" like <Leader>w saves the current file
 let mapleader = ","
 
 " Fast saving
@@ -32,16 +31,21 @@ nmap <Leader>w :w!<CR>
 map <Leader>ec :e! ~/.vim/vimrcs<CR>
 map <Leader>es :e! ~/.vim/my-snippets<CR>
 
-" Close the current buffer
-map <Leader>bd :bdelete<CR>
+    " Key Mappings - Buffer {{{ "
 
-" Close all the buffers
-map <Leader>ba :bufdo bd<CR>
+    " Close the current buffer
+    map <Leader>bd :bdelete<CR>
 
-map <Leader>l :bnext<CR>
-map <Leader>h :bprevious<CR>
+    " Close all the buffers
+    map <Leader>ba :bufdo bd<CR>
 
-    " Key Mappings - tab {{{ "
+    " Change buffers
+    map <Leader>l :bnext<CR>
+    map <Leader>h :bprevious<CR>
+
+    " }}} Key Mappings - Buffer "
+
+    " Key Mappings - Tab {{{ "
 
     map <Leader>tn :tabnew<CR>
     map <Leader>to :tabonly<CR>
@@ -60,7 +64,7 @@ map <Leader>h :bprevious<CR>
     " Switch CWD to the directory of the open buffer
     map <Leader>cd :cd %:p:h<CR>:pwd<CR>
 
-    " }}} Key Mappings - tab "
+    " }}} Key Mappings - Tab "
 
 " }}} Key Mappings - Leader "
 
