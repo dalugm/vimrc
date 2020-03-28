@@ -317,6 +317,9 @@ set hlsearch
 " Makes search act like search in modern browsers
 set incsearch
 
+" Add fzf for better search
+set rtp+=/usr/local/opt/fzf
+
 " Don't wrap around when junping between search result
 " set nowrapscan
 

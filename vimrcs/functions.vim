@@ -62,7 +62,7 @@ func! CompileRun()
     elseif &filetype == "sh"
         exec "!bash %"
     elseif &filetype == "python"
-        exec "!python %"
+        exec "!python3 %"
     elseif &filetype == "html"
         exec "!firefox % &"
     elseif &filetype == "go"

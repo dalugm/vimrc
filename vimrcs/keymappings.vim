@@ -25,7 +25,7 @@ nnoremap <silent> <BS> :nohlsearch<CR>
 let mapleader = ","
 
 " Fast saving
-nmap <Leader>w :w!<CR>
+nnoremap <silent> <Leader>w :update<CR>
 
 " Fast editing and reloading of vimrc configs
 map <Leader>ec :e! ~/.vim/vimrcs<CR>
