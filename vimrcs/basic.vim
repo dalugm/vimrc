@@ -286,7 +286,8 @@ set updatetime=300
 " Sets how many lines of history VIM has to remember
 set history=500 " command line history
 
-" Turn backup off, since most stuff is in SVN, git et.c anyway...
+" Turn backup off, since most stuff is in git et.c anyway...
+" And plugins demand such as `coc`...
 set nobackup
 set nowritebackup
 
@@ -316,9 +317,6 @@ set hlsearch
 
 " Makes search act like search in modern browsers
 set incsearch
-
-" Add fzf for better search
-set rtp+=/usr/local/opt/fzf
 
 " Don't wrap around when junping between search result
 " set nowrapscan
