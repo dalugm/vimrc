@@ -31,7 +31,6 @@ if g:rc_use_plug_manager
         Plug 'wellle/targets.vim'
         Plug 'kshenoy/vim-signature'
         Plug 'scrooloose/nerdcommenter'
-        Plug 'Raimondi/delimitMate'
         Plug 'Yggdroot/indentLine'
         Plug 'liuchengxu/vim-which-key'
 
@@ -44,6 +43,7 @@ if g:rc_use_plug_manager
         Plug 'junegunn/limelight.vim'
         if version >= 704
             Plug 'tpope/vim-fugitive'
+            Plug 'tpope/vim-surround'
         endif
         if version >= 800 || has('nvim')
             Plug 'skywind3000/asyncrun.vim'
@@ -62,6 +62,10 @@ if g:rc_use_plug_manager
         Plug 'vim-airline/vim-airline'
         Plug 'vim-airline/vim-airline-themes'
         Plug '~/.vim/my-plugins/setcolors'
+        Plug '~/.vim/my-plugins/qsrc'
+        Plug 'godlygeek/tabular' " vim-markdown必需
+        Plug 'plasticboy/vim-markdown'
+        Plug 'octol/vim-cpp-enhanced-highlight'
 
         " On-demand loading
         Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
@@ -69,7 +73,7 @@ if g:rc_use_plug_manager
         " Lsp Support
         Plug 'dense-analysis/ale'
         if version >= 800 || has('nvim')
-            Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
+            Plug 'neoclide/coc.nvim', {'branch': 'release'}
         else
             if version >= 703 && has('lua')
                 Plug 'Shougo/neocomplete.vim'
@@ -330,6 +334,29 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - vimtex "
 
+    " Plugin Config - vim-cpp-enhanced-highlight {{{ "
+
+    if filereadable(expand("~/.vim/plugged/vim-cpp-enhanced-highlight/after/syntax/cpp.vim"))
+
+        " 高亮类，成员函数，标准库和模板
+        let g:cpp_class_scope_highlight = 1
+        let g:cpp_member_variable_highlight = 1
+        let g:cpp_concepts_highlight = 1
+        let g:cpp_experimental_simple_template_highlight = 1
+
+    endif
+
+    " }}} Plugin Config - vim-cpp-enhanced-highlight "
+
+    " Plugin Config - vim-markdown {{{ "
+
+    if filereadable(expand("~/.vim/plugged/vim-markdown/ftplugin/markdown.vim"))
+        " 高亮数学公式
+        let g:vim_markdown_math = 1
+    endif
+
+    " }}} Plugin Config - vim-markdown "
+
     " Plugin Config - rainbow {{{ "
 
     if filereadable(expand("~/.vim/plugged/rainbow/autoload/rainbow.vim"))
@@ -411,30 +438,154 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " Plugin Config - coc.nvim {{{ "
 
     if filereadable(expand("~/.vim/plugged/coc.nvim/plugin/coc.vim"))
-        " Remap keys for gotos
-        nmap <silent> gd <Plug>(coc-definition)
-        nmap <silent> gy <Plug>(coc-type-definition)
-        nmap <silent> gi <Plug>(coc-implementation)
-        nmap <silent> gr <Plug>(coc-references)
-        vmap <silent> gf <Plug>(coc-format-selected)
-        " Remap for rename current word
-        nmap gm <Plug>(coc-rename)
-        " Show documentation in preview window
-        nmap <silent> gh :call CocAction('doHover')<CR>
-        nmap <silent> gc :CocList diagnostics<CR>
-        nmap <silent> go :CocList outline<CR>
-        nmap <silent> gs :CocList -I symbols<CR>
+        " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+        " delays and poor user experience.
+        set updatetime=300
+
+        " Don't pass messages to |ins-completion-menu|.
+        set shortmess+=c
+
+        " Always show the signcolumn, otherwise it would shift the text each time
+        " diagnostics appear/become resolved.
+        set signcolumn=yes
+
+        " FIXME
+        " Use tab for trigger completion with characters ahead and navigate.
+        " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+        " other plugin before putting this into your config.
+        " inoremap <silent><expr> <TAB>
+                    " \ pumvisible() ? "\<C-n>" :
+                    " \ <SID>check_back_space() ? "\<TAB>" :
+                    " \ coc#refresh()
+        " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+        " function! s:check_back_space() abort
+            " let col = col('.') - 1
+            " return !col || getline('.')[col - 1]  =~# '\s'
+        " endfunction
+
+        " Use <c-space> to trigger completion.
+        " inoremap <silent><expr> <c-space> coc#refresh()
+
+        " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+        " position. Coc only does snippet and additional edit on confirm.
+        " if has('patch8.1.1068')
+            " Use `complete_info` if your (Neo)Vim version supports it.
+            " inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+        " else
+            " imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+        " endif
+
+        " Use `[g` and `]g` to navigate diagnostics
+        " nmap <silent> [g <Plug>(coc-diagnostic-prev)
+        " nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+        " GoTo code navigation.
+        " nmap <silent> gd <Plug>(coc-definition)
+        " nmap <silent> gy <Plug>(coc-type-definition)
+        " nmap <silent> gi <Plug>(coc-implementation)
+        " nmap <silent> gr <Plug>(coc-references)
+
+        " Use K to show documentation in preview window.
+        " nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+        " function! s:show_documentation()
+            " if (index(['vim','help'], &filetype) >= 0)
+                " execute 'h '.expand('<cword>')
+            " else
+                " call CocAction('doHover')
+            " endif
+        " endfunction
+
+        " Highlight the symbol and its references when holding the cursor.
+        " autocmd CursorHold * silent call CocActionAsync('highlight')
+
+        " Symbol renaming.
+        " nmap <leader>rn <Plug>(coc-rename)
+
+        " Formatting selected code.
+        " xmap <leader>f  <Plug>(coc-format-selected)
+        " nmap <leader>f  <Plug>(coc-format-selected)
+
+        " augroup mygroup
+            " autocmd!
+            " Setup formatexpr specified filetype(s).
+            " autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+            " Update signature help on jump placeholder.
+            " autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+        " augroup end
+
+        " Applying codeAction to the selected region.
+        " Example: `<leader>aap` for current paragraph
+        " xmap <leader>a  <Plug>(coc-codeaction-selected)
+        " nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+        " Remap keys for applying codeAction to the current line.
+        " nmap <leader>ac  <Plug>(coc-codeaction)
+        " Apply AutoFix to problem on the current line.
+        " nmap <leader>qf  <Plug>(coc-fix-current)
+
+        " Introduce function text object
+        " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+        " xmap if <Plug>(coc-funcobj-i)
+        " xmap af <Plug>(coc-funcobj-a)
+        " omap if <Plug>(coc-funcobj-i)
+        " omap af <Plug>(coc-funcobj-a)
+
+        " Use <TAB> for selections ranges.
+        " NOTE: Requires 'textDocument/selectionRange' support from the language server.
+        " coc-tsserver, coc-python are the examples of servers that support it.
+        " nmap <silent> <TAB> <Plug>(coc-range-select)
+        " xmap <silent> <TAB> <Plug>(coc-range-select)
+
+        " Add `:Format` command to format current buffer.
+        " command! -nargs=0 Format :call CocAction('format')
+
+        " Add `:Fold` command to fold current buffer.
+        " command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+        " Add `:OR` command for organize imports of the current buffer.
+        " command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+        " Add (Neo)Vim's native statusline support.
+        " NOTE: Please see `:h coc-status` for integrations with external plugins that
+        " provide custom statusline: lightline.vim, vim-airline.
+        " set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+        " Mappings using CoCList:
+        " Show all diagnostics.
+        " nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+        " Manage extensions.
+        " nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+        " Show commands.
+        " nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+        " Find symbol of current document.
+        " nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+        " Search workspace symbols.
+        " nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+        " Do default action for next item.
+        " nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+        " Do default action for previous item.
+        " nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+        " Resume latest coc list.
+        " nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
     endif
 
-    " Use coc-explorer for file browsers
-    " Install by coc.nvim command:
-    " `CocInstall coc-explorer`
+    " Install coc extensions by coc.nvim command:
+    " `CocInstall coc-explorer coc-pairs coc-lists`
 
     " coc config - explorer {{{ "
 
-    :nmap ge :CocCommand explorer<CR>
+    nmap ge :CocCommand explorer<CR>
 
     " }}} coc config - explorer "
+
+    " coc config - pairs {{{ "
+
+    " disable characters for a specified filetype
+    autocmd FileType markdown let b:coc_pairs_disabled = ['`']
+
+    " }}} coc config - pairs "
 
     " }}} Plugin Config - coc.nvim "
 
@@ -452,12 +603,22 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     if filereadable(expand("~/.vim/plugged/ale/autoload/ale.vim"))
         let g:ale_set_highlights = 0
-        let g:ale_fix_on_save = 1
-        let g:ale_echo_msg_format = '[#%linter%#] %s [%severity%]'
-        let g:ale_statusline_format = ['E•%d', 'W•%d', 'OK']
 
-        let g:ale_sign_error = '•'
-        let g:ale_sign_warning = '•'
+        " let g:ale_fixers = {
+                    " \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+                    " \   'javascript': ['eslint'],
+                    " \}
+        " Set this variable to 1 to fix files when you save them
+        let g:ale_fix_on_save = 1
+
+        let g:ale_statusline_format = ['E@%d', 'W@%d', 'OK']
+
+        let g:ale_echo_msg_error_str = 'E'
+        let g:ale_echo_msg_warning_str = 'W'
+        let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+
+        let g:ale_sign_error = '>>'
+        let g:ale_sign_warning = '--'
 
         let g:ale_completion_delay = 500
         let g:ale_echo_delay = 20
@@ -484,11 +645,6 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         let g:maplocalleader = '\<Space>'
         nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
         nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
-
-        " Register key-value dict FIXME
-        call which_key#register('<Space>', "g:which_key_map")
-        nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
-        vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
 
         " Define prefix dictionary
         let g:which_key_map =  {}
@@ -529,7 +685,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ '=' : ['<C-W>='     , 'balance-window']        ,
                     \ 's' : ['<C-W>s'     , 'split-window-below']    ,
                     \ 'v' : ['<C-W>v'     , 'split-window-below']    ,
-                    \ '?' : ['Windows'    , 'fzf-window']            ,
+                    \ '?' : ['Windows'    , 'window']                ,
                     \ }
         let g:which_key_map['b'] = {
                     \ 'name' : '+buffer' ,
@@ -541,7 +697,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ 'l' : ['blast'     , 'last-buffer']     ,
                     \ 'n' : ['bnext'     , 'next-buffer']     ,
                     \ 'p' : ['bprevious' , 'previous-buffer'] ,
-                    \ '?' : ['Buffers'   , 'fzf-buffer']      ,
+                    \ '?' : ['Buffers'   , 'buffer']          ,
                     \ }
         let g:which_key_map['f'] = {
                     \ 'name' : '+file' ,
@@ -560,10 +716,14 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         nnoremap <silent> ] :<c-u>WhichKey ']'<CR>
         nnoremap <silent> [ :<c-u>WhichKey '['<CR>
 
+        " Register key-value dict FIXME
+        call which_key#register('<Space>', "g:which_key_map")
+        nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
+        vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
+
     endif
 
     " }}} Plugin Config - vim-which-key "
-
 
 endif
 
