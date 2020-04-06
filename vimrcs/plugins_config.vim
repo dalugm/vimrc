@@ -701,9 +701,10 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ }
         let g:which_key_map['f'] = {
                     \ 'name' : '+file' ,
-                    \ 's' : [':update'               , 'save-file']     ,
-                    \ 'p' : [':e ~/.vim/vimrcs'      , 'edit-config']   ,
-                    \ 'e' : [':e ~/.vim/my-snippets' , 'edit-snippets'] ,
+                    \ 's' : [':update'               , 'save-file']       ,
+                    \ 'p' : [':e ~/.vim/vimrcs'      , 'edit-config']     ,
+                    \ 'e' : [':e ~/.vim/my-snippets' , 'edit-snippets']   ,
+                    \ 't' : [':NERDTreeToggle'       , 'nerdtree-toggle'] ,
                     \ }
 
         let g:which_key_map['s'] = {
