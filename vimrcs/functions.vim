@@ -2,7 +2,7 @@
 " # File Name     : functions.vim
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
-" # Created Time  : 2020-01-16 15:53
+" # Created Time  : 2018-01-26 08:00
 " # Last Modified : 2020-01-16 15:58
 " # By            : Mou Tong
 " # Description   : personal function

@@ -14,7 +14,7 @@ cd ~/.vim
 
 printf 'set runtimepath+=~/.vim
 
-for file in split(glob("vimrcs/*.vim"))
+for file in split(glob("$HOME/.vim/vimrcs/*.vim"))
     exec "source" file
 endfor
 

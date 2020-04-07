@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-03-01 13:10
+" # Last Modified : 2020-04-07 17:34
 " # By            : Mou Tong
 " # Description   : plugins config for vim
 " ###########################################################
