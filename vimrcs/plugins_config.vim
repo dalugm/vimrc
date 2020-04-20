@@ -63,8 +63,6 @@ if g:rc_use_plug_manager
         Plug 'vim-airline/vim-airline-themes'
         Plug '~/.vim/my-plugins/setcolors'
         Plug '~/.vim/my-plugins/qsrc'
-        " Plug 'godlygeek/tabular' " vim-markdown必需
-        " Plug 'plasticboy/vim-markdown'
         Plug 'octol/vim-cpp-enhanced-highlight'
 
         " On-demand loading
@@ -347,15 +345,6 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     endif
 
     " }}} Plugin Config - vim-cpp-enhanced-highlight "
-
-    " Plugin Config - vim-markdown {{{ "
-
-    if filereadable(expand("~/.vim/plugged/vim-markdown/ftplugin/markdown.vim"))
-        " 高亮数学公式
-        " let g:vim_markdown_math = 1
-    endif
-
-    " }}} Plugin Config - vim-markdown "
 
     " Plugin Config - rainbow {{{ "
 
