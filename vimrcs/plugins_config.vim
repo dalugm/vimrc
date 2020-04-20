@@ -61,8 +61,6 @@ if g:rc_use_plug_manager
         Plug 'flazz/vim-colorschemes'
         Plug 'vim-airline/vim-airline'
         Plug 'vim-airline/vim-airline-themes'
-        Plug '~/.vim/my-plugins/setcolors'
-        Plug '~/.vim/my-plugins/qsrc'
         Plug 'octol/vim-cpp-enhanced-highlight'
 
         " On-demand loading
