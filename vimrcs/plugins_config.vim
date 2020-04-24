@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-04-07 17:34
+" # Last Modified : 2020-04-24 21:26
 " # By            : Mou Tong
 " # Description   : plugins config for vim
 " ###########################################################
@@ -33,6 +33,7 @@ if g:rc_use_plug_manager
         Plug 'scrooloose/nerdcommenter'
         Plug 'Yggdroot/indentLine'
         Plug 'liuchengxu/vim-which-key'
+        Plug 'airblade/vim-gitgutter'
 
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
         if version >= 704
@@ -58,10 +59,16 @@ if g:rc_use_plug_manager
 
         " Appearance
         Plug 'luochen1990/rainbow'
-        Plug 'flazz/vim-colorschemes'
-        Plug 'vim-airline/vim-airline'
-        Plug 'vim-airline/vim-airline-themes'
+        Plug 'itchyny/lightline.vim'
         Plug 'octol/vim-cpp-enhanced-highlight'
+        Plug 'ryanoasis/vim-devicons'
+        " ColorScheme
+        Plug 'dracula/vim'
+        Plug 'joshdick/onedark.vim'
+        Plug 'sickill/vim-monokai'
+        Plug 'morhetz/gruvbox'
+        Plug 'nanotech/jellybeans.vim'
+        Plug 'altercation/vim-colors-solarized'
 
         " On-demand loading
         Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
@@ -75,6 +82,10 @@ if g:rc_use_plug_manager
                 Plug 'Shougo/neocomplete.vim'
             endif
         endif
+
+        " Self maintained plugins
+        Plug '~/.vim/my-plugins/qsrc'
+        Plug '~/.vim/my-plugins/setcolors'
 
         if filereadable(expand("~/.vim/vimrc.plug"))
             source $HOME/.vim/vimrc.plug
@@ -114,7 +125,7 @@ endif
 
 if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
-    " Plugin Config - vim-colorschemes {{{ "
+    " Plugin Config - colorscheme {{{ "
 
     if has("gui_running")
         set background=dark
@@ -124,15 +135,31 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         set background=dark
         " Use this to avoid screen color errors
         " when using `solarized` in terminal
-        " Check more on `vim-colorschemes` folder or
+        " Check more on plugin folder or
         " https://github.com/altercation/vim-colors-solarized
         let g:solarized_termtrans=1
         let g:solarized_termcolors=256
-        let g:solarized_contrast="normal"
+        " let g:solarized_contrast="normal"
         colorscheme default
     endif
 
-    " }}} Plugin Config - vim-colorschemes "
+    " }}} Plugin Config - colorscheme "
+
+    " Plugin Config - lightline.vim {{{ "
+
+    if filereadable(expand("~/.vim/plugged/lightline.vim/plugin/lightline.vim"))
+
+        " -- INSERT -- is unnecessary anymore
+        set noshowmode
+        "
+        " Change colors to be darker for status bar and tab bar
+        let g:lightline = {
+                    \ 'colorscheme': 'one',
+                    \ }
+
+    endif
+
+    " }}} Plugin Config - lightline.vim "
 
     " Plugin Config - undotree {{{ "
 
@@ -263,6 +290,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " Plugin Config - LeaderF {{{ "
 
     if filereadable(expand("~/.vim/plugged/LeaderF.vim/plugin/LeaderF.vim"))
+
         " don't show the help in normal mode
         let g:Lf_HideHelp = 1
         let g:Lf_UseCache = 0
@@ -271,7 +299,6 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         " popup mode
         let g:Lf_WindowPosition = 'popup'
         let g:Lf_PreviewInPopup = 1
-        let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "FuraCode Mono" }
         let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
 
     endif
@@ -287,23 +314,6 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     endif
 
     " }}} Plugin Config - vim-easy-align "
-
-    " Plugin Config - airline {{{ "
-
-    if filereadable(expand("~/.vim/plugged/vim-airline/plugin/airline.vim"))
-        let g:airline#extensions#tabline#enabled      = 1
-        let g:airline#extensions#tabline#left_sep     = ' '
-        let g:airline#extensions#tabline#left_alt_sep = '|'
-        let g:airline#extensions#tabline#formatter    = 'unique_tail'
-
-        let g:airline_theme           = 'base16'
-        let g:airline_powerline_fonts = 1
-        let g:airline_solarized_bg    = 'dark'
-
-        let g:airline#extensions#ale#enabled = 1
-    endif
-
-    " }}} Plugin Config - airline "
 
     " Plugin Config - vimtex {{{ "
 
@@ -347,7 +357,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " Plugin Config - rainbow {{{ "
 
     if filereadable(expand("~/.vim/plugged/rainbow/autoload/rainbow.vim"))
-        let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+        let g:rainbow_active = 1 " 0 if you want to enable it later via :RainbowToggle
         let g:rainbow_conf = {
         \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
         \   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
@@ -624,20 +634,22 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     if filereadable(expand("~/.vim/plugged/vim-which-key/plugin/which_key.vim"))
 
+        " NOTE key defined here won't overwrite already defined keys
+
         " By default timeoutlen is 1000 ms
         " Use default leader key bindings when not popup
         set timeoutlen=1000
 
-        let g:mapleader = ","
-        let g:maplocalleader = '\<Space>'
-        nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
-        nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
+        let g:mapleader = ','
+        let g:maplocalleader = ' '
+        nnoremap <silent> <leader>      :<c-u>WhichKey ','<CR>
+        nnoremap <silent> <localleader> :<c-u>WhichKey ' '<CR>
 
         " Define prefix dictionary
         let g:which_key_map =  {}
 
         " Second level dictionaries
-        " `name` is a special field. It will define the name of the group,
+        " `name' is a special field. It will define the name of the group,
         " e.g., leader-f is the "+file" group.
         " Unnamed groups will show a default empty string "+prefix".
 
@@ -684,7 +696,19 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ 'l' : ['blast'     , 'last-buffer']     ,
                     \ 'n' : ['bnext'     , 'next-buffer']     ,
                     \ 'p' : ['bprevious' , 'previous-buffer'] ,
-                    \ '?' : ['Buffers'   , 'buffer']          ,
+                    \ '?' : ['buffers'   , 'list-buffers']    ,
+                    \ }
+        let g:which_key_map['t'] = {
+                    \ 'name' : '+tabs' ,
+                    \ '1' : ['t1'        , 'tab 1']        ,
+                    \ '2' : ['t2'        , 'tab 2']        ,
+                    \ 'd' : ['td'        , 'delete-tab']   ,
+                    \ 'f' : ['tfirst'    , 'first-tab']    ,
+                    \ 'h' : ['Startify'  , 'home-tab']     ,
+                    \ 'l' : ['tlast'     , 'last-tab']     ,
+                    \ 'n' : ['tnext'     , 'next-tab']     ,
+                    \ 'p' : ['tprevious' , 'previous-tab'] ,
+                    \ '?' : ['tabs'      , 'list-tabs']    ,
                     \ }
         let g:which_key_map['f'] = {
                     \ 'name' : '+file' ,
@@ -696,18 +720,17 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         let g:which_key_map['s'] = {
                     \ 'name' : '+search' ,
-                    \ 'b' : ['LeaderfBuffer' , 'search-buffer']    ,
-                    \ 'd' : ['LeaderfFile'   , 'search-cwd-files'] ,
+                    \ 'b' : ['LeaderfBuffer' , 'search-buffer'] ,
+                    \ 'd' : [':Leaderf rg'   , 'search-cwd']    ,
                     \ }
 
         " Remind other key
         nnoremap <silent> ] :<c-u>WhichKey ']'<CR>
         nnoremap <silent> [ :<c-u>WhichKey '['<CR>
 
-        " Register key-value dict FIXME
-        call which_key#register('<Space>', "g:which_key_map")
-        nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
-        vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
+        " Register key-value dict
+        call which_key#register(',', "g:which_key_map")
+        call which_key#register(' ', "g:which_key_map")
 
     endif
 

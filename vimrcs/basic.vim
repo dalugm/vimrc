@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-02-06 15:14
+" # Last Modified : 2020-04-24 20:35
 " # By            : Mou Tong
 " # Description   : basic config for vim
 " ###########################################################
@@ -292,15 +292,12 @@ set nobackup
 set nowritebackup
 
 " Swap files are necessary when crash recovery
-call mkdir($HOME . "/.vim/swapfiles", "p")
-set dir=$HOME/.vim/swapfiles//
+set dir=$HOME/.vim/swapfiles/
 
 " Turn persistent undo on,
 " means that you can undo even when you close a buffer/VIM
 set undofile
 set undolevels=1000
-
-call mkdir($HOME . "/.vim/undotree", "p")
 set undodir=$HOME/.vim/undotree/
 
 " For regular expressions turn magic on
