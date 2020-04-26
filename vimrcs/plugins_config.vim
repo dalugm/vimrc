@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-04-24 21:26
+" # Last Modified : 2020-04-26 19:03
 " # By            : Mou Tong
 " # Description   : plugins config for vim
 " ###########################################################
@@ -151,11 +151,20 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         " -- INSERT -- is unnecessary anymore
         set noshowmode
-        "
-        " Change colors to be darker for status bar and tab bar
+
         let g:lightline = {
                     \ 'colorscheme': 'one',
+                    \ 'active': {
+                    \   'left': [ [ 'mode', 'paste' ],
+                    \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+                    \ },
+                    \ 'component_function': {
+                    \   'cocstatus': 'coc#status',
+                    \ },
                     \ }
+
+        " Use auocmd to force lightline update.
+        autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
     endif
 
@@ -599,17 +608,28 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " Plugin Config - ale {{{ "
 
     if filereadable(expand("~/.vim/plugged/ale/autoload/ale.vim"))
+
+        " 关闭标志列高亮
         let g:ale_set_highlights = 0
 
-        " let g:ale_fixers = {
-                    " \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-                    " \   'javascript': ['eslint'],
-                    " \}
+        let g:ale_linters = {
+                    \   'c'     : ['clang'],
+                    \   'cpp'   : ['clang'],
+                    \   'python': ['pylint'],
+                    \}
+
+        let g:ale_fixers = {
+                    \ '*'     : ['remove_trailing_lines', 'trim_whitespace'],
+                    \}
         " Set this variable to 1 to fix files when you save them
         let g:ale_fix_on_save = 1
 
+        " 在 vim 自带的状态栏中整合 ale
+        " 在`set statusline='后添加该项
+        " %{ALEGetStatusLine()}
         let g:ale_statusline_format = ['E@%d', 'W@%d', 'OK']
 
+        " 显示 Linter 名称，出错及警告等相关信息
         let g:ale_echo_msg_error_str = 'E'
         let g:ale_echo_msg_warning_str = 'W'
         let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
@@ -623,9 +643,9 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         let g:ale_lint_on_text_changed = 'normal'
         let g:ale_lint_on_insert_leave = 1
 
-        nmap <Leader>an <Plug>(ale_next)
-        nmap <Leader>ap <Plug>(ale_previous)
-        nnoremap <Leader>ts :ALEToggle<CR>
+        nnoremap <Leader>an <Plug>(ale_next)
+        nnoremap <Leader>ap <Plug>(ale_previous)
+        nnoremap <Leader>at :ALEToggle<CR>
     endif
 
     " }}} Plugin Config - ale "

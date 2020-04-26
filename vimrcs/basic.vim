@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-04-24 20:35
+" # Last Modified : 2020-04-26 19:03
 " # By            : Mou Tong
 " # Description   : basic config for vim
 " ###########################################################
@@ -133,13 +133,16 @@ set mousehide
 " Always show current position
 set ruler
 
-" Add a bit extra margin to the left
-"set foldcolumn=2
-
 " Highlight chars when over 80 rows
-"augroup vimrc_autocmds
-"    autocmd BufEnter * highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
-"    autocmd BufEnter * match OverLength /\%81v.*/
+" augroup vimrc_autocmds
+   " autocmd BufEnter * highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
+   " autocmd BufEnter * match OverLength /\%81v.*/
+
+" Set line number
+" set number
+" set relativenumber
+
+" function - linenum {{{ "
 
 " Show line number by default
 if !exists('g:rc_show_line_number')
@@ -169,7 +172,6 @@ call RCToggleLineNumber(g:rc_show_line_number)
 
 " Use absolute linenum in insert mode; relative linenum in normal mode
 augroup rc_line_number
-    autocmd!
     autocmd FocusLost,InsertEnter * call RCUseAbsOrRelNum(1)
     autocmd FocusGained,InsertLeave * call RCUseAbsOrRelNum(0)
 augroup END
@@ -186,8 +188,7 @@ function! RCUseAbsOrRelNum(switch)
     endif
 endfunction
 
-" Pressing ,sc will toggle and untoggle spell checking
-map <Leader>sc :setlocal spell!<cr>
+" }}} linenum - function "
 
 " Height of the command bar
 set cmdheight=1
