@@ -6,11 +6,9 @@ My vim plugins and configuration
 
 ## INSTALL
 
-``` sh
-    git clone --depth=1 https://github.com/dalu98/vimrc.git ~/.vim && cd .vim
+    git clone --depth 1 https://github.com/dalu98/vimrc.git ~/.vim && cd .vim
     chmod +x install.sh && ./install.sh
-```
 
-### coc extensions
+### Add Bash lsp for `coc.nvim`
 
-    :CocInstall coc-clangd coc-python coc-pairs coc-lists coc-highlight coc-explorer
+    npm i -g bash-language-server
