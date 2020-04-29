@@ -1,5 +1,15 @@
 {
     "coc.preferences.extensionUpdateCheck": "daily",
+    "suggest.minTriggerInputLength": 2,
     "languageserver": {
-    }
+        "bash": {
+            "command": "bash-language-server",
+            "args": ["start"],
+            "filetypes": ["sh"],
+            "ignoredRootPaths": ["~"]
+        }
+    },
+    "snippets.ultisnips.directories": [
+        "~/.vim/snippets"
+    ],
 }
