@@ -1,5 +1,6 @@
 {
     "coc.preferences.extensionUpdateCheck": "daily",
+
     "suggest.minTriggerInputLength": 2,
     "languageserver": {
         "bash": {
@@ -9,7 +10,24 @@
             "ignoredRootPaths": ["~"]
         }
     },
-    "snippets.ultisnips.directories": [
-        "~/.vim/snippets"
+
+    "explorer.icon.enableNerdfont": true,
+    "explorer.icon.enableVimDevicons": true,
+    "explorer.sources": [
+        {
+            "name": "buffer",
+            "expand": false
+        },
+        {
+            "name": "file",
+            "expand": true
+        }
     ],
+    "explorer.presets": {
+        "floating": {
+            "position": "floating"
+        }
+    },
+
+    "snippets.userSnippetsDirectory": "~/.vim/snippets"
 }

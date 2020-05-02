@@ -3,119 +3,63 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-01-16 15:58
+" # Last Modified : 2020-05-02 23:14
 " # By            : Mou Tong
 " # Description   : personal function
 " ###########################################################
 
 " Personal Functions {{{ "
 
-" DeleteTillSlash {{{ "
+" Coc function {{{ "
 
-func! DeleteTillSlash()
-    let g:cmd = getcmdline()
+" }}} CocFunction "
 
-    if has("win16") || has("win32")
-        let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\]\\).*", "\\1", "")
-    else
-        let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*", "\\1", "")
-    endif
+" ToggleTransparent {{{ "
 
-    if g:cmd == g:cmd_edited
-        if has("win16") || has("win32")
-            let g:cmd_edited = substitute(g:cmd, "\\(.*\[\\\\\]\\).*\[\\\\\]", "\\1", "")
-        else
-            let g:cmd_edited = substitute(g:cmd, "\\(.*\[/\]\\).*/", "\\1", "")
-        endif
-    endif
+function ToggleTransparent()
+    highlight Normal guibg=NONE ctermbg=None
+endfunction
 
-    return g:cmd_edited
-endfunc
-
-" }}} DeleteTillSlash "
-
-" CurrentFileDir {{{ "
-
-func! CurrentFileDir(cmd)
-    return a:cmd . " " . expand("%:p:h") . "/"
-endfunc
-
-" }}} CurrentFileDir "
+" }}} ToggleTransparent "
 
 " CompileRun {{{ "
 
-func! CompileRun()
-    exec "w"
-    if &filetype == "c"
-        exec "call CompileGcc()"
-        if search("mpi\.h") != 0
-            exec "!mpirun -np 4 ./%<"
-        else
-            exec "! ./%<"
-        endif
-    elseif &filetype == "cpp" | "cc" | "cxx" | "cp" | "C"
-        exec "call CompileGpp()"
-        exec "! ./%<"
-    elseif &filetype == "java"
-        exec "!javac %"
-        exec "!java %<"
-    elseif &filetype == "sh"
-        exec "!bash %"
-    elseif &filetype == "python"
-        exec "!python3 %"
-    elseif &filetype == "html"
-        exec "!firefox % &"
-    elseif &filetype == "go"
-        exec "!go build %<"
-        exec "go run %"
-    else
-        echo "This file type has not been matched."
+function! CompileRun()
+    execute "w"
+    if (&filetype == 'c')
+        execute "AsyncRun gcc % -o %<; time ./%<"
     endif
-endfunc
-
-func! CompileGcc()
-    exec "w"
-    let compilecmd="!gcc"
-    let compileflag="-o %<"
-    if search("mpi\.h") != 0
-        let compilecmd = "!mpicc "
+    if (&filetype == 'cpp')
+        execute "AsyncRun g++ % -o %<; time ./%<"
     endif
-    if search("glut\.h") != 0
-        let compileflag .= " -lglut -lGLU -lGL "
+    if (&filetype == 'python')
+        execute "AsyncRun time python3 %"
     endif
-    if search("cv\.h") != 0
-        let compileflag .= " -lcv -lhighgui -lcvaux "
+    if (&filetype == 'php')
+        execute "AsyncRun time php %"
     endif
-    if search("omp\.h") != 0
-        let compileflag .= " -fopenmp "
+    if (&filetype == 'javascript')
+        execute "AsyncRun time node %"
     endif
-    if search("math\.h") != 0
-        let compileflag .= " -lm "
+    if (&filetype == 'java')
+        execute "AsyncRun time javac Main.java; java Main;"
     endif
-    exec compilecmd." % ".compileflag
-endfunc
-
-func! CompileGpp()
-    exec "w"
-    let compilecmd="!g++"
-    let compileflag="-o %<"
-    if search("mpi\.h") != 0
-        let compilecmd = "!mpic++ "
+    if (&filetype == 'coffee')
+        execute "AsyncRun time coffee %"
     endif
-    if search("glut\.h") != 0
-        let compileflag .= " -lglut -lGLU -lGL "
+    if (&filetype == 'rust')
+        execute "AsyncRun time rustc %; ./%< ;"
     endif
-    if search("cv\.h") != 0
-        let compileflag .= " -lcv -lhighgui -lcvaux "
+    if (&filetype == 'haskell' || &filetype == 'lhaskell')
+        execute "AsyncRun time ghc %; ./%< ;"
     endif
-    if search("omp\.h") != 0
-        let compileflag .= " -fopenmp "
+    if (&filetype == 'tex')
+        execute "AsyncRun time pdflatex %;"
     endif
-    if search("math\.h") != 0
-        let compileflag .= " -lm "
+    if (&filetype == 'markdown')
+        execute "AsyncRun time pandoc -s -S -o %<.pdf %;"
     endif
-    exec compilecmd." % ".compileflag
-endfunc
+endfunction
 
 " }}} CompileRun "
 

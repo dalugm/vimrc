@@ -1,8 +1,4 @@
-###########################################################################
-#                              Header Snippets                            #
-###########################################################################
-
-priority -55
+# Global snippets
 
 snippet name "user name"
 dalu
@@ -21,26 +17,26 @@ dalu <mou.tong@qq.com>
 endsnippet
 
 snippet copy. "copyright"
-Copyright (C) ${1:year time} ${2:authorname}
+Copyright `!v &enc[:2] == "utf" ? "©" : "(c)"` `!v strftime("%Y")` ${1:`!v g:snips_author`}. All Rights Reserved.
 endsnippet
 
-snippet header "name author datetime description..."
-Filename: ${1:name}
+snippet dalu-header "name author datetime description..."
+Filename: ${1:`!v expand('%:t')`}
 Author: ${2:author}
 Maintainer: ${3:matainer}
-Created: ${4:time}
+Created: ${4:`!v strftime("%Y-%m-%d %H:%M")`}
 Last Upated:
          By:
 Keywords: ${5:keywords}
 Version: 0.1
 Changelog:
-	0.1 - initial version
+    0.1 - initial version
 Commentary:
 
 ${6:description}
 
-
 Code:
+
 $0
 endsnippet
 
@@ -62,4 +58,18 @@ endsnippet
 
 snippet vcd "vim comment downside"
 " }}} ${1:description} "
+endsnippet
+
+snippet trump-cn "cn nobody knows ... better than I do" b
+👐  没有人
+🙌  比我
+👌  更懂
+☝️   $0
+endsnippet
+
+snippet trump-cn "nobody knows ... better than I do" b
+👐  Nobody 
+🙌  Knows
+👌  $0
+☝️   better than I do
 endsnippet

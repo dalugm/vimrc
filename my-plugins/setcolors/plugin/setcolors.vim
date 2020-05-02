@@ -1,10 +1,10 @@
 " Filename: setcolors.vim
 " Author: JohnBeckett (inspired by haridsv<hari.vim@gamil.com>)
 " Maintainer: L0calg0d (v0.3)
-"             dalu
+"             dalu (v0.4-)
 " Created: 2010-09-12 08:00
-" Version: 0.4
-" Last-Upated: 2020-02-10 20:42
+" Version: 0.5
+" Last-Upated: 2020-05-02 11:23
 "          By: dalu <mou.tong@qq.com>
 " Keywords: colorscheme
 
@@ -16,10 +16,6 @@
 
 " Version 2010-09-12 from http://vim.wikia.com/wiki/VimTip341
 " Inspired by lightWeightArray.vim from http://www.vim.org/script.php?script_id=109
-" Press key:
-"   F8                next scheme
-"   Shift-F8          previous scheme
-"   Alt-F8            random scheme
 " Set the list of color schemes used by the above (default is 'all'):
 "   :SetColors all              (all $VIMRUNTIME/colors/*.vim)
 "   :SetColors my               (names built into script)
@@ -33,7 +29,6 @@ if v:version < 700 || exists('loaded_setcolors') || &cp
 endif
 
 let loaded_setcolors = 1
-let s:mycolors = ['default', 'onedark', 'dracula', 'jellybeans', 'gruvbox', 'solarized', 'monokai']  " colorscheme names that use to set color
 
 " Set list of color scheme names that we will use, except
 " argument 'now' actually changes the current color scheme.
@@ -41,24 +36,25 @@ function! s:SetColors(args)
   if len(a:args) == 0
     echo 'Current color scheme names:'
     let i = 0
-    while i < len(s:mycolors)
-      echo '  '.join(map(s:mycolors[i : i+4], 'printf("%-14s", v:val)'))
+    while i < len(g:mycolors)
+      echo '  '.join(map(g:mycolors[i : i+4], 'printf("%-14s", v:val)'))
       let i += 5
     endwhile
   elseif a:args == 'all'
     let paths = split(globpath(&runtimepath, 'colors/*.vim'), "\n")
-    let s:mycolors = map(paths, 'fnamemodify(v:val, ":t:r")')
+    let g:mycolors = map(paths, 'fnamemodify(v:val, ":t:r")')
     echo 'List of colors set from all installed color schemes'
   elseif a:args == 'my'
-    let c1 = 'default elflord peachpuff desert256 breeze morning'
-    let c2 = 'darkblue gothic aqua earth black_angus relaxedgreen'
-    let c3 = 'darkblack freya motus impact less chocolateliquor'
-    let s:mycolors = split(c1.' '.c2.' '.c3)
+    let c1 = 'blue darkblue default delek desert'
+    let c2 = 'elflord evening industry koehler'
+    let c3 = 'morning murphy pablo peachpuff'
+    let c4 = 'ron shine slate torte zellner'
+    let g:mycolors = split(c1.' '.c2.' '.c3.' '.c4)
     echo 'List of colors set from built-in names'
   elseif a:args == 'now'
     call s:HourColor()
   else
-    let s:mycolors = split(a:args)
+    let g:mycolors = split(a:args)
     echo 'List of colors set from argument (space-separated names)'
   endif
 endfunction
@@ -75,31 +71,31 @@ endfunction
 " Helper function for NextColor(), allows echoing of the color name to be
 " disabled.
 function! s:NextColor(how, echo_color)
-  if len(s:mycolors) == 0
+  if len(g:mycolors) == 0
     call s:SetColors('all')
   endif
   if exists('g:colors_name')
-    let current = index(s:mycolors, g:colors_name)
+    let current = index(g:mycolors, g:colors_name)
   else
     let current = -1
   endif
   let missing = []
   let how = a:how
-  for i in range(len(s:mycolors))
+  for i in range(len(g:mycolors))
     if how == 0
-      let current = localtime() % len(s:mycolors)
+      let current = localtime() % len(g:mycolors)
       let how = 1  " in case random color does not exist
     else
       let current += how
-      if !(0 <= current && current < len(s:mycolors))
-        let current = (how>0 ? 0 : len(s:mycolors)-1)
+      if !(0 <= current && current < len(g:mycolors))
+        let current = (how>0 ? 0 : len(g:mycolors)-1)
       endif
     endif
     try
-      execute 'colorscheme '.s:mycolors[current]
+      execute 'colorscheme '.g:mycolors[current]
       break
     catch /E185:/
-      call add(missing, s:mycolors[current])
+      call add(missing, g:mycolors[current])
     endtry
   endfor
   redraw
@@ -110,10 +106,6 @@ function! s:NextColor(how, echo_color)
     echo g:colors_name
   endif
 endfunction
-
-nnoremap <F8> :call NextColor(1)<CR>
-nnoremap <S-F8> :call NextColor(-1)<CR>
-nnoremap <A-F8> :call NextColor(0)<CR>
 
 " Set color scheme according to current time of day.
 function! s:HourColor()

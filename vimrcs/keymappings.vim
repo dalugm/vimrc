@@ -19,6 +19,18 @@ map 0 ^
 " Disable highlight when <backspace> is pressed
 nnoremap <silent> <BS> :nohlsearch<CR>
 
+" functions {{{
+
+" SetColors {{{
+
+nnoremap <F8>   :call NextColor(1)<CR>
+nnoremap <S-F8> :call NextColor(-1)<CR>
+nnoremap <A-F8> :call NextColor(0)<CR>
+
+" }}} SetColors
+
+" functions }}}
+
 " Key Mappings - Leader {{{ "
 
 " With a map leader it's possible to do extra key combinations
@@ -30,6 +42,7 @@ nnoremap <silent> <Leader>w :update<CR>
 " Fast editing and reloading of vimrc configs
 map <Leader>ec :e! ~/.vim/vimrcs<CR>
 map <Leader>es :e! ~/.vim/my-snippets<CR>
+map <Leader>er :source ~/.vimrc<CR>
 
     " Key Mappings - Buffer {{{ "
 
@@ -67,11 +80,5 @@ map <Leader>es :e! ~/.vim/my-snippets<CR>
     " }}} Key Mappings - Tab "
 
 " }}} Key Mappings - Leader "
-
-" Key Mappings - functions {{{ "
-
-map <F5> :call CompileRun()<CR>
-
-" }}} Key Mappings - functions "
 
 " }}} Key Mappings

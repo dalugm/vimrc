@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-04-26 19:03
+" # Last Modified : 2020-05-03 00:13
 " # By            : Mou Tong
 " # Description   : basic config for vim
 " ###########################################################
@@ -18,8 +18,6 @@ if !isdirectory(expand("~/.vim/"))
     call mkdir($HOME . "/.vim")
 endif
 
-set runtimepath+=$HOME/.vim
-
 set title
 set ttyfast " Improves smoothness of redrawing
 
@@ -27,13 +25,9 @@ set ttyfast " Improves smoothness of redrawing
 set lazyredraw
 
 " No annoying sound on errors
-set noerrorbells
-set novisualbell
+set belloff=all
 set t_vb=
 set tm=500
-
-set t_Co=256 " Using 256 colors
-set t_ti= t_te = " put terminal in 'termcap' mode
 
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
@@ -44,12 +38,10 @@ let $user_email = "mou.tong@qq.com"
 
 " Set utf8 as standard encoding
 set encoding=utf-8
-set fileencodings=utf-8,usc-bom,default,cp936,big5,latin1
+set fileencodings=utf-8,gb18030,default,cp936,big5,latin1
 
 " Use Unix as the standard file type
 set fileformats=unix,mac,dos
-
-set ambiwidth=double
 
 " Also break at a multi-byte character above 255
 set formatoptions+=m
@@ -89,12 +81,6 @@ if has('clipboard')
     endif
 endif
 
-" Enable to continue where you left
-" `'` means to save mark for how many files
-" `f` means to if to save global variables
-" `<` means to save how many text lines in viminfo
-set viminfo='1000,f1,<500
-
 " set iskeyword+=-
 set whichwrap+=<,>,h,l,[,]
 
@@ -104,7 +90,7 @@ set selection=exclusive
 set selectmode=mouse,key
 
 " Clear vert split and empty line fillchar
-set fillchars=vert:\ ,stl:\ ,stlnc:\
+set fillchars=vert:│,fold:·
 
 " Use these symbols for invisible chars
 set listchars=tab:¦\ ,eol:¬,trail:⋅,extends:»,precedes:«
@@ -121,8 +107,34 @@ set foldmethod=marker
 syntax enable
 syntax on
 
+" set vim colors
+" use true colors in vim under tmux
+" @ https://github.com/tmux/tmux/issues/1246
+if has("termguicolors")
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    set termguicolors " use 24-bit colors
+else
+    set t_Co=256 " Using 256 colors
+endif
+
+" set cursor shape
+if has('nvim') || has('gui_running')
+    set guicursor=n:block-blinkon0
+    set guicursor=v-r:hor20-blinkon0
+    set guicursor=i:ver20-blinkon0
+    set guicursor=c-ci:ver20-blinkon0
+    set guicursor+=a:blinkon0 " no cursor blink
+else
+    " Cursor Shape
+    " NOTE the value can be different in different terminals
+    set t_SI = "\<Esc>]50;CursorShape=1\x7"
+    set t_SR = "\<Esc>]50;CursorShape=2\x7"
+    set t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+
 " Abbrev of prompt
-set shortmess=aoOtT
+set shortmess=aoOtTF
 
 " Highlight current line
 set cursorline
@@ -190,6 +202,9 @@ endfunction
 
 " }}} linenum - function "
 
+" show command in the last line of screen
+set showcmd
+
 " Height of the command bar
 set cmdheight=1
 
@@ -208,84 +223,60 @@ else
 endif
 
 " Minimal number of screen lines to keep above and below the cursor.
-" Set this value large enough to make cursor line always be in the middle
-set scrolloff=999
+set scrolloff=3
 
 " }}} Appearance - Scrollbar, Highlight, Numberline "
 
 " Edit - Navigation, History, Search {{{ "
 
-set sessionoptions-=options " Don't restore all options and mappings
+" session config
+set sessionoptions-=options " do not store global and local values in a session
+set sessionoptions-=folds " do not store folds
 
-" Restore last session automatically (default off)
-if !exists('g:rc_restore_last_session') | let g:rc_restore_last_session = 0 | endif
+" function - restore last session {{{ "
 
-" Always save the last session
-augroup save_session
-    autocmd!
-    autocmd VimLeave * exe ":mksession! ~/.vim/.last.session"
-augroup END
-
-" Try to restore last session
-augroup restore_session
-    autocmd!
-    autocmd VimEnter * call RCRestoreLastSession()
-augroup END
-
-function! RCRestoreLastSession()
-    if g:rc_restore_last_session
-        if filereadable(expand("~/.vim/.last.session"))
-           exe ":source ~/.vim/.last.session"
-       endif
-   endif
+function! MakeSession(overwrite)
+  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  if (filewritable(b:sessiondir) != 2)
+    exe 'silent !mkdir -p ' b:sessiondir
+    redraw!
+  endif
+  let b:filename = b:sessiondir . '/session.vim'
+  if a:overwrite == 0 && !empty(glob(b:filename))
+    return
+  endif
+  exe "mksession! " . b:filename
 endfunction
 
-" Restore the last session manually
-if filereadable(expand("~/.vim/.last.session"))
-    nmap <silent> <Leader>r :source ~/.vim/.last.session<CR>
-endif
+function! LoadSession()
+  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  let b:sessionfile = b:sessiondir . "/session.vim"
+  if (filereadable(b:sessionfile))
+    exe 'source ' b:sessionfile
+  else
+    echo "No session loaded."
+  endif
+endfunction
 
-set completeopt=menu,preview,longest
-set pumheight=10
-
-" Automatically close the preview window when popup menu is invisible
-if !exists('g:rc_auto_close_pw')
-    let g:rc_auto_close_pw = 1
+" Adding automatons for when entering or leaving Vim
+if(argc() == 0)
+  au VimEnter * nested :call LoadSession()
+  au VimLeave * :call MakeSession(1)
 else
-    if g:rc_auto_close_pw == 0 | augroup! rc_close_pw | end
+  au VimLeave * :call MakeSession(0)
 endif
 
-augroup rc_close_pw
-    autocmd!
-    autocmd CursorMovedI,InsertLeave * call RCClosePWOrNot()
-augroup END
-
-function! RCClosePWOrNot()
-    if g:rc_auto_close_pw
-        if !pumvisible() && (!exists('*getcmdwintype') || empty(getcmdwintype()))
-            silent! pclose
-        endif
-    endif
-endfunction
-
-" Return to last edit position when opening files
-autocmd BufReadPost *
-    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-    \ |   exe "normal! g`\""
-    \ | endif
+" }}} function - restore last session "
 
 " Set to auto read when a file is changed from the outside
 set autoread
-
-" Automatically write a file when leaving a modified buffer
-" set autowrite
 
 " Automatically write a file after milliseconds nothing is typed
 " Will get bad experience for diagnostics when it's default 4000
 set updatetime=300
 
 " Sets how many lines of history VIM has to remember
-set history=500 " command line history
+set history=1000 " command line history
 
 " Turn backup off, since most stuff is in git et.c anyway...
 " And plugins demand such as `coc`...
@@ -293,13 +284,15 @@ set nobackup
 set nowritebackup
 
 " Swap files are necessary when crash recovery
-set dir=$HOME/.vim/swapfiles/
+set directory=$HOME/.vim/swapfiles/
 
 " Turn persistent undo on,
 " means that you can undo even when you close a buffer/VIM
-set undofile
-set undolevels=1000
-set undodir=$HOME/.vim/undotree/
+if has('persistent_undo')
+    set undodir=$HOME/.vim/undotree/
+    set undofile
+    set undolevels=1000
+endif
 
 " For regular expressions turn magic on
 set magic
@@ -317,7 +310,12 @@ set hlsearch
 set incsearch
 
 " Don't wrap around when junping between search result
-" set nowrapscan
+set nowrapscan
+"
+" Netrw config
+let g:netrw_liststyle = 3
+let g:netrw_winsize = 30
+autocmd FileType netrw setlocal bufhidden=delete
 
 " }}} Edit - Navigation, History, Search "
 
@@ -326,28 +324,19 @@ set incsearch
 " A buffer becomes hidden when it's abandoned
 set hidden
 
-" Change current working directory automatically
-set autochdir
-
-let g:netrw_liststyle = 3
-let g:netrw_winsize = 30
-nnoremap <silent> <Leader>ve :Vexplore <C-r>=expand("%:p:h")<CR><CR>
-autocmd FileType netrw setlocal bufhidden=delete
-
 " Specify the behavior when switching between buffers
 set switchbuf=useopen
 set showtabline=1
+set tabpagemax=50
 
 set splitright " Puts new vsplit windows to the right of the current
 set splitbelow " Puts new split windows to the bottom of the current
 
 " Split management
-nnoremap <silent> [b :bprevious<cr>
-nnoremap <silent> ]b :bnext<cr>
-nmap <silent> <C-k> :exe "resize " . (winheight(0) * 3/2)<CR>
-nmap <silent> <C-j> :exe "resize " . (winheight(0) * 2/3)<CR>
-nmap <silent> <C-h> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
-nmap <silent> <C-l> :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
+nmap <silent> <M-j> :exe "resize " . (winheight(0) * 3/2)<CR>
+nmap <silent> <M-k> :exe "resize " . (winheight(0) * 2/3)<CR>
+nmap <silent> <M-h> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
+nmap <silent> <M-l> :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
 
 " 0 means never show, 1 means show only if there are at least two windows
 " 2 means always show
@@ -363,25 +352,10 @@ set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
 
 " GUI Related {{{ "
 
-" Set font according to system
-if has("mac") || has("macunix")
-    set guifont=Sarasa\ Mono\ SC:h12
-elseif has("win16") || has("win32")
-    set guifont=Sarasa\ Mono\ SC:h12
-elseif has("gui_gtk2")
-    set guifont=Sarasa\ Mono\ SC:h12
-elseif has("linux")
-    set guifont=Sarasa\ Mono\ SC:h12
-elseif has("unix")
-    set guifont=Sarasa\ Mono\ SC:h12
-endif
+" Set gui font
+set guifont=Sarasa\ Mono\ SC:h12
 
-set guitablabel=%M\ %t
-set guicursor=n:block-blinkon0
-set guicursor=v-r:hor20-blinkon0
-set guicursor=i:ver20-blinkon0
-set guicursor=c-ci:ver20-blinkon0
-set guicursor+=a:blinkon0 " no cursor blink
+set guitablabel=%N:%M%t " show table numbers
 
 " Disable scrollbars
 set guioptions-=r
@@ -397,9 +371,50 @@ endif
 
 " }}} GUI Releated "
 
-" Misc {{{ "
+" Neovim Related {{{ "
 
-set noshowcmd
+" Enable to continue where you left
+if has('nvim')
+    set shada=!,'100,<50,s10,h
+else
+    set viminfo='100,s10,<50
+endif
+
+" add mouse support to nvim
+if !has('nvim')
+    set ttymouse=xterm2
+endif
+
+if has('nvim')
+    tnoremap <Esc> <C-\><C-n>
+endif
+
+if exists(':tnoremap')
+    tnoremap <Esc> <C-\><C-n>
+endif
+
+" Set cursor type
+" NOTE different terminal the value of `\<Esc>]<n>' can be different
+" Neovim set cursor type
+if has('nvim')
+else
+    " start insert mode (bar cursor shape)
+    let &t_SI = "\<Esc>]12;CursorShape=1\x7"
+    " start replace mode (underline cursor shape)
+    let &t_SR = "\<Esc>]12;CursorShape=2\x7"
+    " end insert or replace mode (block cursor shape)
+    let &t_EI = "\<Esc>]12;CursorShape=0\x7"
+endif
+
+" tabline. Replaced by `guitablabel' when GUI is running
+if has('nvim')
+else
+    set tabline=%N:%M%t
+endif
+
+" }}} Neovim Related "
+
+" Misc {{{ "
 
 " vertical diffsplit
 set diffopt+=vertical
@@ -410,9 +425,9 @@ set showmatch
 set matchtime=2
 
 " Define how to use the CTRL-A and CTRL-X commands for adding to and subtracting from a number respectively
-set nrformats=alpha,octal,hex
+set nrformats=bin,hex
 
-augroup rc_color_warning
+augroup dalu_color_warning
     autocmd!
     " ColorScheme means to match keywords after loading a color scheme
     " Syntax means to match keywords when the `syntax` option has been set
@@ -421,40 +436,11 @@ augroup rc_color_warning
     autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
 augroup END
 
-" Find out to which highlight-group a particular keyword/symbol belongs
-command! Wcolor echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") .
-            \ "> trans<" . synIDattr(synID(line("."),col("."),0),"name") .
-            \ "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") .
-            \ "> fg:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")
-
-augroup rc_ft_settings
-    autocmd!
-    autocmd FileType python setlocal foldmethod=indent textwidth=80
-    autocmd BufNewFile,BufRead *.org setlocal filetype=org commentstring=#%s
-    autocmd BufNewFile,BufRead *.tex setlocal filetype=tex
-    autocmd FileType qf setlocal nowrap
-augroup END
-
-" Strip trailing spaces and blank lines of EOF when saving files
-if !exists('g:rc_strip_wsbl')
-    let g:rc_strip_wsbl = 1
-else
-    if g:rc_strip_wsbl == 0 | augroup! rc_strip_wsbl | endif
+" call pyenv when using neovim
+if has("nvim")
+    let g:python_host_prog  = $HOME . "/.pyenv/versions/neovim2/bin/python"
+    let g:python3_host_prog = $HOME . "/.pyenv/versions/neovim3/bin/python"
 endif
-
-augroup rc_strip_wsbl
-    autocmd!
-    autocmd BufWritePre * call RCStripWSBL()
-augroup END
-
-nnoremap <silent> <Leader>s :call RCStripWSBL()<CR>
-function! RCStripWSBL()
-    let l = line(".")
-    let c = col(".")
-    %s/\s\+$//ge
-    %s/\(\n\)\+\%$//ge
-    call cursor(l, c)
-endfunction
 
 " Make TOhtml behavior better
 let g:html_dynamic_folds = 1

@@ -10,20 +10,11 @@
 ###########################################################
 set -e
 
-cd ~/.vim
-
-printf 'set runtimepath+=~/.vim
+printf 'set runtimepath^=$HOME/.vim runtimepath+=$HOME/.vim/after
+let &packpath = &runtimepath
 
 for file in split(glob("$HOME/.vim/vimrcs/*.vim"))
     exec "source" file
-endfor
-
-" Use private config {{{ "
-    if filereadable(expand("~/.vim/my_configs.vim"))
-        source ~/.vim/my_configs.vim
-    endif
-" }}} "
-
-  ' > ~/.vim/vimrc
+endfor' > ~/.vim/init.vim
 
 echo "Install vim configuration successfully."

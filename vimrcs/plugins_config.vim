@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-04-26 19:03
+" # Last Modified : 2020-05-02 23:31
 " # By            : Mou Tong
 " # Description   : plugins config for vim
 " ###########################################################
@@ -22,54 +22,56 @@ if g:rc_use_plug_manager
     if filereadable(expand("~/.vim/autoload/plug.vim"))
         call plug#begin('~/.vim/plugged')
 
-        if version >= 704 || version ==703 && has('patch005')
-            Plug 'mbbill/undotree'
-        endif
-        Plug 'mattn/emmet-vim'
-        Plug 'dhruvasagar/vim-table-mode'
-        Plug 'machakann/vim-sandwich'
+        " better operation
+        Plug 'mbbill/undotree'
+        Plug 'junegunn/fzf.vim'
+        Plug 'honza/vim-snippets'
         Plug 'wellle/targets.vim'
-        Plug 'kshenoy/vim-signature'
-        Plug 'scrooloose/nerdcommenter'
-        Plug 'Yggdroot/indentLine'
+        Plug 'tpope/vim-surround'
+        Plug 'junegunn/vim-easy-align'
         Plug 'liuchengxu/vim-which-key'
+        Plug 'scrooloose/nerdcommenter'
+        Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+
+        if version >= 800 || has('nvim')
+            Plug 'mg979/vim-visual-multi'
+            Plug 'skywind3000/asyncrun.vim'
+        endif
+
+        " git support
+        Plug 'tpope/vim-fugitive'
         Plug 'airblade/vim-gitgutter'
 
-        Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-        Plug 'honza/vim-snippets'
-        Plug 'junegunn/vim-easy-align'
-        Plug 'junegunn/goyo.vim'
-        Plug 'junegunn/limelight.vim'
-        if version >= 704
-            Plug 'tpope/vim-fugitive'
-            Plug 'tpope/vim-surround'
-        endif
-        if version >= 800 || has('nvim')
-            Plug 'skywind3000/asyncrun.vim'
-            Plug 'mg979/vim-visual-multi'
-        endif
+        " language
+        Plug 'mattn/emmet-vim'
+        Plug 'tpope/vim-markdown'
+        Plug 'mzlogin/vim-markdown-toc'
         if executable('latexmk')
             Plug 'lervag/vimtex'
         endif
-        if !has('win32')
-            Plug 'metakirby5/codi.vim'
-        endif
 
         " Appearance
+        Plug 'junegunn/goyo.vim'
+        Plug 'junegunn/limelight.vim'
+
+        Plug 'Yggdroot/indentLine'
         Plug 'luochen1990/rainbow'
         Plug 'itchyny/lightline.vim'
-        Plug 'octol/vim-cpp-enhanced-highlight'
         Plug 'ryanoasis/vim-devicons'
+        Plug 'octol/vim-cpp-enhanced-highlight'
         " ColorScheme
         Plug 'dracula/vim'
-        Plug 'joshdick/onedark.vim'
-        Plug 'sickill/vim-monokai'
         Plug 'morhetz/gruvbox'
+        Plug 'ayu-theme/ayu-vim'
+        Plug 'sickill/vim-monokai'
+        Plug 'cocopon/iceberg.vim'
+        Plug 'joshdick/onedark.vim'
         Plug 'nanotech/jellybeans.vim'
+        Plug 'arcticicestudio/nord-vim'
+        Plug 'NLKNguyen/papercolor-theme'
         Plug 'altercation/vim-colors-solarized'
 
         " On-demand loading
-        Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
         " Lsp Support
         if version >= 800 || has('nvim')
@@ -81,6 +83,7 @@ if g:rc_use_plug_manager
         endif
 
         " Self maintained plugins
+        Plug '/usr/local/opt/fzf'
         Plug '~/.vim/my-plugins/qsrc'
         Plug '~/.vim/my-plugins/setcolors'
 
@@ -124,21 +127,31 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " Plugin Config - colorscheme {{{ "
 
-    if has("gui_running")
-        set background=dark
-        set transparency=10
-        colorscheme default
-    else
-        set background=dark
-        " Use this to avoid screen color errors
-        " when using `solarized` in terminal
-        " Check more on plugin folder or
-        " https://github.com/altercation/vim-colors-solarized
-        let g:solarized_termtrans=1
-        let g:solarized_termcolors=256
-        " let g:solarized_contrast="normal"
-        colorscheme default
-    endif
+    set background=dark
+    colorscheme onedark
+
+    " colorscheme names that use to set color
+    let g:mycolors = [
+                \ 'ayu'        ,
+                \ 'default'    ,
+                \ 'dracula'    ,
+                \ 'gruvbox'    ,
+                \ 'iceberg'    ,
+                \ 'monokai'    ,
+                \ 'jellybeans' ,
+                \ 'nord'       ,
+                \ 'onedark'    ,
+                \ 'PaperColor' ,
+                \ 'solarized'  ,
+                \ ]
+
+    " Use this to avoid screen color errors
+    " when using `solarized` in terminal
+    " Check more on plugin folder or
+    " https://github.com/altercation/vim-colors-solarized
+    let g:solarized_termtrans=1
+    let g:onedark_termcolors=256
+    let g:solarized_termcolors=256
 
     " }}} Plugin Config - colorscheme "
 
@@ -148,17 +161,40 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         " -- INSERT -- is unnecessary anymore
         set noshowmode
-
+ 
         let g:lightline = {
                     \ 'colorscheme': 'one',
                     \ 'active': {
-                    \   'left': [ [ 'mode', 'paste' ],
-                    \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+                    \   'left': [ [ 'mode', 'paste' ], 
+                    \             [ 'cocstatus', 'readonly', 'filename', 'fugitive' ] ]
                     \ },
                     \ 'component_function': {
                     \   'cocstatus': 'coc#status',
+                    \   'filename': 'LightlineFilename',
+                    \   'fugitive': 'LightlineFugitive',
                     \ },
                     \ }
+
+        function! LightlineModified()
+            return &ft =~# 'help\|vimfiler' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+        endfunction
+        function! LightlineReadonly()
+            return &ft !~? 'help\|vimfiler' && &readonly ? 'RO' : ''
+        endfunction
+        function! LightlineFilename()
+            return (LightlineReadonly() !=# '' ? LightlineReadonly() . ' ' : '') .
+                        \ (&ft ==# 'vimfiler' ? vimfiler#get_status_string() :
+                        \  &ft ==# 'unite' ? unite#get_status_string() :
+                        \  &ft ==# 'vimshell' ? vimshell#get_status_string() :
+                        \ expand('%:t') !=# '' ? expand('%:t') : '[No Name]') .
+                        \ (LightlineModified() !=# '' ? ' ' . LightlineModified() : '')
+        endfunction
+        function! LightlineFugitive()
+            if &ft !~? 'vimfiler' && exists('*FugitiveHead')
+                return FugitiveHead()
+            endif
+            return ''
+        endfunction
 
         " Use auocmd to force lightline update.
         autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
@@ -172,7 +208,6 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     if filereadable(expand("~/.vim/plugged/undotree/plugin/undotree.vim"))
         let g:undotree_SplitWidth         = 40
         let g:undotree_SetFocusWhenToggle = 1
-        nmap <silent> <Leader>u :UndotreeToggle<CR>
     endif
 
     " }}} Plugin Config - undotree "
@@ -187,74 +222,41 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - emmet-vim "
 
-    " Plugin Config - vim-table-mode {{{ "
-
-    if filereadable(expand("~/.vim/plugged/vim-table-mode/autoload/tablemode.vim"))
-
-        let g:table_mode_auto_align = 0
-        autocmd FileType markdown,rst,org :silent TableModeEnable
-
-        autocmd FileType markdown
-                    \ let g:table_mode_corner = "|" |
-                    \ let g:table_mode_corner_corner = "|" |
-                    \ let g:table_mode_header_fillchar = "-" |
-                    \ let g:table_mode_align_char = ":"
-        autocmd FileType rst
-                    \ let g:table_mode_corner = "+" |
-                    \ let g:table_mode_corner_corner = "+" |
-                    \ let g:table_mode_header_fillchar = "="
-        autocmd FileType org
-                    \ let g:table_mode_corner = "+" |
-                    \ let g:table_mode_corner_corner = "|" |
-                    \ let g:table_mode_header_fillchar = "-"
-    endif
-
-    " }}} Plugin Config - vim-table-mode "
-
     " Plugin Config - nerdcommenter {{{ "
 
     if filereadable(expand("~/.vim/plugged/nerdcommenter/plugin/NERD_commenter.vim"))
+
         " Always leave a space between the comment character and the comment
         let NERDSpaceDelims = 1
+
     endif
 
     " }}} Plugin Config - nerdcommenter "
 
-    " Plugin Config - nerdtree {{{ "
-
-    if filereadable(expand("~/.vim/plugged/nerdtree/plugin/NERD_tree.vim"))
-        " `S-i` to hide/show the hidden files
-        let g:NERDTreeWinPos  = "right"
-        let g:NERDTreeWinSize = 35
-        let NERDChristmasTree = 1 " Make nerd tree look better
-
-        let NERDTreeCaseSensitiveSort=1 " Make file sorted by case
-        let NERDTreeIgnore = ['\.pyc','__pycache__','\~$','\.swp']
-
-        let NERDTreeShowHidden=1
-
-        map <Leader>tr :NERDTreeToggle<CR>
-        map <Leader>tb :NERDTreeFromBookmark<Space>
-        map <Leader>tf :NERDTreeFind<CR>
-    endif
-
-    " }}} Plugin Config - nerdtree "
-
     " Plugin Config - Goyo {{{ "
 
     if filereadable(expand("~/.vim/plugged/goyo.vim/plugin/goyo.vim"))
-        nmap <silent> <C-w><Space> :Goyo<CR>
+
         function! s:goyo_enter()
             let b:fcstatus = &foldcolumn
             setlocal foldcolumn=0
+            set noshowmode
+            set noshowcmd
+            set scrolloff=999
+            Limelight
         endfunction
 
         function! s:goyo_leave()
             let &foldcolumn = b:fcstatus
+            set showmode
+            set showcmd
+            set scrolloff=3
+            Limelight!
         endfunction
 
         autocmd! User GoyoEnter nested call <SID>goyo_enter()
         autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
     endif
 
     " }}} Plugin Config - Goyo "
@@ -300,6 +302,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " Plugin Config - vimtex {{{ "
 
     if filereadable(expand("~/.vim/plugged/vimtex/autoload/vimtex.vim"))
+
         let g:vimtex_compiler_latexmk = {
             \ 'options' : [
             \   '-xelatex',
@@ -310,6 +313,12 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
             \   '-interaction=nonstopmode',
             \ ],
             \ }
+
+        " add compiler callback for neovim
+        if !has('nvim')
+            let g:vimtex_compiler_progname = 'nvr'
+        endif
+
         " vimtex configuration for neocomplete
         if exists('g:loaded_neocomplete')
             if !exists('g:neocomplete#sources#omni#input_patterns')
@@ -318,6 +327,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
             let g:neocomplete#sources#omni#input_patterns.tex =
                 \ g:vimtex#re#neocomplete
         endif
+
     endif
 
     " }}} Plugin Config - vimtex "
@@ -336,6 +346,17 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - vim-cpp-enhanced-highlight "
 
+    " Plugin Config - vim-markdown {{{
+
+    if filereadable(expand("~/.vim/plugged/vim-markdown/ftplugin/markdown.vim"))
+                \ && filereadable(expand("~/.vim/plugged/vim-markdown/ftplugin/markdown.vim"))
+
+        let g:markdown_fenced_languages = ['css', 'js=javascript', 'sh']
+
+    endif
+
+    " }}} Plugin Config - vim-markdown
+    
     " Plugin Config - rainbow {{{ "
 
     if filereadable(expand("~/.vim/plugged/rainbow/autoload/rainbow.vim"))
@@ -369,12 +390,18 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " Plugin Config - indentline {{{ "
 
     if filereadable(expand("~/.vim/plugged/indentLine/after/plugin/indentLine.vim"))
+
+        let g:indentLine_enabled = 1
         " WARNING
         " do not use non-mono char, or cursor will be in wrong position
-        let g:indentLine_char_list       = ['|', '¦']
-        let g:indentLine_enabled         = 1
-        let g:autopep8_disable_show_diff = 1
-        let g:indentLine_fileTypeExclude = ['json', 'markdown']
+        let g:indentLine_char_list = ['|', '¦']
+        " Set indent level
+        let g:indentLine_indentLevel = 5
+        " Exclude file
+        let g:indentLine_fileTypeExclude = ['text', 'help', 'json', 'markdown', 'coc-explorer']
+        " let colorscheme highlight indentLine
+        let g:indentLine_setColors = 0
+
     endif
 
     " }}} Plugin Config - indentline "
@@ -382,6 +409,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " Plugin Config - vim-visual-multi {{{ "
 
     if filereadable(expand("~/.vim/plugged/vim-visual-multi/plugin/visual-multi.vim"))
+
         let g:VM_mouse_mappings   = 1
         let g:VM_skip_empty_lines = 1
         let g:VM_silent_exit      = 1
@@ -396,10 +424,10 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         let g:VM_leader = {'default': '<Leader>', 'visual': '<Leader>', 'buffer': 'z'}
         let g:VM_maps                      = {}
-        let g:VM_maps["Get Operator"]      = '<Leader>a'
-        let g:VM_maps["Add Cursor At Pos"] = '<Leader><Space>'
-        let g:VM_maps["Reselect Last"]     = '<Leader>z'
-        let g:VM_maps["Visual Cursors"]    = '<Leader><Space>'
+        let g:VM_maps["Get Operator"]      = 'gza'
+        let g:VM_maps["Add Cursor At Pos"] = 'gzz'
+        let g:VM_maps["Reselect Last"]     = 'gzp'
+        let g:VM_maps["Visual Cursors"]    = 'gzc'
         let g:VM_maps["Undo"]              = 'u'
         let g:VM_maps["Redo"]              = '<C-r>'
         let g:VM_maps["Visual Subtract"]   = 'zs'
@@ -413,6 +441,8 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         if filereadable(expand("~/.vim/plugged/asyncrun.vim/plugin/asyncrun.vim"))
             " Set the height of window when run AsyncRun
             let g:asyncrun_open = 6
+            " 定义文件所属目录
+            let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '_darcs', 'build.xml']
         endif
 
     " }}} Plugin Config - asyncrun "
@@ -446,7 +476,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         endfunction
 
         "  trigger completion.
-        " inoremap <silent><expr> <c-space> coc#refresh()
+        inoremap <silent><expr> <M-space> coc#refresh()
 
         " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
         " position. Coc only does snippet and additional edit on confirm.
@@ -513,38 +543,67 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         command! -nargs=0 Format :call CocAction('format')
 
         " Add `:Fold` command to fold current buffer.
-        command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+        command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
         " Add `:OR` command for organize imports of the current buffer.
-        command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+        command! -nargs=0 OR   :call CocAction('runCommand', 'editor.action.organizeImport')
 
         " Add (Neo)Vim's native statusline support.
         " NOTE: Please see `:h coc-status` for integrations with external plugins that
         " provide custom statusline: lightline.vim, vim-airline.
-        " set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+        set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
         " install coc extensions
         let g:coc_global_extensions = [
                     \ 'coc-clangd',
                     \ 'coc-explorer',
-                    \ 'coc-lists',
                     \ 'coc-highlight',
                     \ 'coc-json',
+                    \ 'coc-lists',
                     \ 'coc-pairs',
                     \ 'coc-python',
                     \ 'coc-snippets',
                     \ 'coc-yank'
                     \ ]
 
+        " coc config - explorer {{{ "
+
+        let g:coc_explorer_global_presets = {
+                    \   '.vim': {
+                    \      'root-uri': '~/.vim',
+                    \   },
+                    \   'floating': {
+                    \      'position': 'floating',
+                    \   },
+                    \   'floatingLeftside': {
+                    \      'position': 'floating',
+                    \      'floating-position': 'left-center',
+                    \      'floating-width': 50,
+                    \   },
+                    \   'floatingRightside': {
+                    \      'position': 'floating',
+                    \      'floating-position': 'left-center',
+                    \      'floating-width': 50,
+                    \   },
+                    \   'simplify': {
+                    \     'file.child.template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
+                    \   }
+                    \ }
+
+        " }}} coc config - explorer "
+ 
         " coc config - pairs {{{ "
 
         " disable characters for a specified filetype
-        autocmd FileType markdown let b:coc_pairs_disabled = ['`']
         autocmd FileType vim let b:coc_pairs_disabled = ['"']
 
         " }}} coc config - pairs "
 
         " coc config - snippets {{{ "
+
+        let g:snips_author = "dalu"
+        let g:snips_email  = "mou.tong@qq.com"
+        let g:snips_github = "dalu98"
 
         " Use <C-l> for trigger snippet expand.
         imap <C-l> <Plug>(coc-snippets-expand)
@@ -627,75 +686,84 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         let g:which_key_map['w'] = {
                     \ 'name' : '+windows' ,
-                    \ 'w' : ['<C-W>w'     , 'other-window']          ,
-                    \ 'd' : ['<C-W>c'     , 'delete-window']         ,
-                    \ '-' : ['<C-W>s'     , 'split-window-below']    ,
-                    \ '|' : ['<C-W>v'     , 'split-window-right']    ,
-                    \ '2' : ['<C-W>v'     , 'layout-double-columns'] ,
-                    \ 'h' : ['<C-W>h'     , 'window-left']           ,
-                    \ 'j' : ['<C-W>j'     , 'window-below']          ,
-                    \ 'l' : ['<C-W>l'     , 'window-right']          ,
-                    \ 'k' : ['<C-W>k'     , 'window-up']             ,
-                    \ 'H' : ['<C-W>5<'    , 'expand-window-left']    ,
-                    \ 'J' : ['resize +5'  , 'expand-window-below']   ,
-                    \ 'L' : ['<C-W>5>'    , 'expand-window-right']   ,
-                    \ 'K' : ['resize -5'  , 'expand-window-up']      ,
-                    \ '=' : ['<C-W>='     , 'balance-window']        ,
-                    \ 's' : ['<C-W>s'     , 'split-window-below']    ,
-                    \ 'v' : ['<C-W>v'     , 'split-window-below']    ,
-                    \ '?' : ['Windows'    , 'window']                ,
+                    \ 'w' : ['<C-W>w'           , 'other-window']          ,
+                    \ 'd' : ['<C-W>c'           , 'delete-window']         ,
+                    \ '-' : ['<C-W>s'           , 'split-window-below']    ,
+                    \ '|' : ['<C-W>v'           , 'split-window-right']    ,
+                    \ '2' : ['<C-W>v'           , 'layout-double-columns'] ,
+                    \ 'h' : ['<C-W>h'           , 'window-left']           ,
+                    \ 'j' : ['<C-W>j'           , 'window-below']          ,
+                    \ 'l' : ['<C-W>l'           , 'window-right']          ,
+                    \ 'k' : ['<C-W>k'           , 'window-up']             ,
+                    \ 'H' : ['<C-W>5<'          , 'expand-window-left']    ,
+                    \ 'J' : ['resize +5'        , 'expand-window-below']   ,
+                    \ 'L' : ['<C-W>5>'          , 'expand-window-right']   ,
+                    \ 'K' : ['resize -5'        , 'expand-window-up']      ,
+                    \ '=' : ['<C-W>='           , 'balance-window']        ,
+                    \ 's' : ['<C-W>s'           , 'split-window-below']    ,
+                    \ 'v' : ['<C-W>v'           , 'split-window-below']    ,
+                    \ '?' : [':CocList windows' , 'window']                ,
+                    \ 'o' : [':call asyncrun#quickfix_toggle(6)' , 'open-quickfix'] ,
                     \ }
+
         let g:which_key_map['b'] = {
                     \ 'name' : '+buffer' ,
-                    \ '1' : ['b1'        , 'buffer 1']        ,
-                    \ '2' : ['b2'        , 'buffer 2']        ,
-                    \ 'd' : ['bd'        , 'delete-buffer']   ,
-                    \ 'f' : ['bfirst'    , 'first-buffer']    ,
-                    \ 'h' : ['Startify'  , 'home-buffer']     ,
-                    \ 'l' : ['blast'     , 'last-buffer']     ,
-                    \ 'n' : ['bnext'     , 'next-buffer']     ,
-                    \ 'p' : ['bprevious' , 'previous-buffer'] ,
-                    \ '?' : ['buffers'   , 'list-buffers']    ,
+                    \ 'd' : ['bd'               , 'delete-buffer']   ,
+                    \ 'f' : ['bfirst'           , 'first-buffer']    ,
+                    \ 'l' : ['blast'            , 'last-buffer']     ,
+                    \ 'n' : ['bnext'            , 'next-buffer']     ,
+                    \ 'p' : ['bprevious'        , 'previous-buffer'] ,
+                    \ '?' : [':CocList buffers' , 'list-buffers']    ,
                     \ }
+
         let g:which_key_map['t'] = {
                     \ 'name' : '+tabs' ,
-                    \ '1' : ['t1'        , 'tab 1']        ,
-                    \ '2' : ['t2'        , 'tab 2']        ,
-                    \ 'd' : ['td'        , 'delete-tab']   ,
-                    \ 'f' : ['tfirst'    , 'first-tab']    ,
-                    \ 'h' : ['Startify'  , 'home-tab']     ,
-                    \ 'l' : ['tlast'     , 'last-tab']     ,
-                    \ 'n' : ['tnext'     , 'next-tab']     ,
-                    \ 'p' : ['tprevious' , 'previous-tab'] ,
-                    \ '?' : ['tabs'      , 'list-tabs']    ,
+                    \ 'd' : ['tabclose'    , 'delete-tab']   ,
+                    \ 'f' : ['tabfirst'    , 'first-tab']    ,
+                    \ 'l' : ['tablast'     , 'last-tab']     ,
+                    \ 'n' : ['tabnext'     , 'next-tab']     ,
+                    \ 'p' : ['tabprevious' , 'previous-tab'] ,
+                    \ '?' : ['tabs'        , 'list-tabs']    ,
                     \ }
+
         let g:which_key_map['f'] = {
                     \ 'name' : '+file' ,
-                    \ 's' : [':update'                  , 'save-file']       ,
-                    \ 'c' : [':e ~/.vim/vimrcs'         , 'edit-config']     ,
-                    \ 'p' : [':e ~/.vim/my-snippets'    , 'edit-snippets']   ,
                     \ 'e' : [':CocCommand explorer' , 'coc-explorer']  ,
-                    \ 't' : [':NERDTreeToggle'          , 'nerdtree-toggle'] ,
+                    \ 's' : ['update'               , 'save-file']     ,
+                    \ 'S' : ['Files'                , 'find-file']     ,
+                    \ 'c' : [':e ~/.vim/vimrcs'     , 'edit-config']   ,
+                    \ 'o' : ['<Plug>(coc-openlink)' , 'open-link']     ,
+                    \ 'p' : [':e ~/.vim/snippets'   , 'edit-snippets'] ,
+                    \ 'r' : [':source ~/.vimrc'     , 'reload-config'] ,
+                    \ 'u' : ['UndotreeToggle'       , 'undo-tree']     ,
                     \ }
 
         let g:which_key_map['s'] = {
                     \ 'name' : '+search' ,
-                    \ 'b' : ['LeaderfBuffer' , 'search-buffer'] ,
-                    \ 'd' : [':Leaderf rg'   , 'search-cwd']    ,
+                    \ 'b' : ['LeaderfBuffer'          , 'search-buffer']        ,
+                    \ 'f' : ['LeaderfFile'            , 'search-file']          ,
+                    \ 'h' : [':CocList searchhistory' , 'search-history']       ,
+                    \ 'd' : [':Leaderf rg'            , 'search-cwd']           ,
+                    \ 's' : [':CocList lines'         , 'search-buffer']        ,
+                    \ 'm' : ['LeaderfMru'             , 'search-rencent-files'] ,
                     \ }
 
         let g:which_key_map['c'] = {
-                    \ 'name' : '+code' ,
-                    \ 'a' : ['<Plug>(coc-codeaction-selected)', 'codeAction']      ,
-                    \ 'd' : ['<Plug>(coc-definition)'         , 'definition']      ,
-                    \ 'f' : ['<Plug>(coc-format-selected)'    , 'format']          ,
-                    \ 'i' : ['<Plug>(coc-implementation)'     , 'implementation']  ,
-                    \ 'r' : ['<Plug>(coc-references)'         , 'references']      ,
-                    \ 't' : ['<Plug>(coc-type-definition)'    , 'type-definition'] ,
+                    \ 'name' : '+code',
+                    \ 'a' : ['<Plug>(coc-codeaction-selected)' , 'codeAction']      ,
+                    \ 'c' : [':call CompileRun()'              , 'compile-run']     ,
+                    \ 'd' : ['<Plug>(coc-definition)'          , 'definition']      ,
+                    \ 'f' : ['<Plug>(coc-fix-current)'         , 'fix-error']       ,
+                    \ 'F' : ['<Plug>(coc-format-selected)'     , 'format']          ,
+                    \ 'G' : [':Goyo'                           , 'Goyo']            ,
+                    \ 'i' : ['<Plug>(coc-implementation)'      , 'implementation']  ,
+                    \ 'r' : ['<Plug>(coc-references)'          , 'references']      ,
+                    \ 'R' : ['<Plug>(coc-refactor)'            , 'refactor']        ,
+                    \ 't' : ['<Plug>(coc-type-definition)'     , 'type-definition'] ,
                     \ 'g' : {
-                    \ 'name' : '+goto' ,
-                    \ '[' : ['<Plug>(coc-diagnostic-prev)' , 'prev error'] ,
-                    \ ']' : ['<Plug>(coc-diagnostic-next)' , 'next error'] ,
+                    \ 'name' : '+goto',
+                    \ '[' : ['<Plug>(coc-diagnostic-prev)',     'prev error'],
+                    \ ']' : ['<Plug>(coc-diagnostic-next)',     'next error'],
                     \ },
                     \ }
 
@@ -704,12 +772,13 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ 'a' : [':CocList diagnostics'      , 'show-diagnostics']         ,
                     \ 'e' : [':CocList extensions'       , 'show-extensions']          ,
                     \ 'c' : [':CocList commands'         , 'show-commands']            ,
+                    \ 'C' : [':CocConfig'                , 'edit-CocConfig']           ,
                     \ 'o' : [':CocList outline'          , 'find-current-symbol']      ,
                     \ 's' : [':CocList -I symbols'       , 'search-workspace-symbols'] ,
                     \ 'j' : [':CocNext'                  , 'action-for-next-item']     ,
                     \ 'k' : [':CocPrev'                  , 'action-for-prev-item']     ,
                     \ 'p' : [':CocListResume'            , 'resume-latest-coc-list']   ,
-                    \ 'y' : [':Coclist -A --normal yank' , 'open-yank-list']           ,
+                    \ 'y' : [':CocList -A --normal yank' , 'open-yank-list']           ,
                     \    }
 
         " Remind other key
@@ -717,8 +786,8 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         nnoremap <silent> [ :<c-u>WhichKey '['<CR>
 
         " Register key-value dict
-        call which_key#register(',', "g:which_key_map")
-        call which_key#register(' ', "g:which_key_map")
+        call which_key#register(',' , "g:which_key_map")
+        call which_key#register(' ' , "g:which_key_map")
 
     endif
 
