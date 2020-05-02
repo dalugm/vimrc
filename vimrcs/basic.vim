@@ -110,9 +110,12 @@ syntax on
 " set vim colors
 " use true colors in vim under tmux
 " @ https://github.com/tmux/tmux/issues/1246
-if has("termguicolors")
+" @ https://github.com/vim/vim/issues/993#issuecomment-255651605
+if has("termguicolors") && !has('nvim')
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    set termguicolors " use 24-bit colors
+elseif has('nvim')
     set termguicolors " use 24-bit colors
 else
     set t_Co=256 " Using 256 colors
