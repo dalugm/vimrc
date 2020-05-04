@@ -1,0 +1,34 @@
+[file-build]
+# 文件名可能包含空格，所以用双引号
+command:c=gcc -Wall "$(VIM_FILEPATH)" -o "$(VIM_PATHNOEXT)"
+command:cpp=gcc -Wall "$(VIM_FILEPATH)" -o "$(VIM_PATHNOEXT)"
+command:go=go build -o "$(VIM_PATHNOEXT)" "$(VIM_FILEPATH)"
+command:make=make -f "$(VIM_FILEPATH)"
+output=quickfix
+cwd=$(VIM_FILEDIR)
+# 运行前保存所有改动的文件
+save=2
+
+[file-run]
+command="$(VIM_FILEPATH)"
+command:c,cpp="$(VIM_PATHNOEXT)"
+command:go="$(VIM_PATHNOEXT)"
+command:python=python "$(VIM_FILENAME)"
+command:javascript=node "$(VIM_FILENAME)"
+command:sh=bash "$(VIM_FILENAME)"
+command:lua=lua "$(VIM_FILENAME)"
+command:perl=perl "$(VIM_FILENAME)"
+command:ruby=ruby "$(VIM_FILENAME)"
+output=terminal
+
+
+[project-build]
+command=make
+# 设置在当前项目的根目录处运行 make
+cwd=$(VIM_ROOT)
+
+[project-run]
+command=make run
+# <root> 是 $(VIM_ROOT) 的别名，写起来容易些
+cwd=<root>
+output=terminal

@@ -28,17 +28,16 @@ if g:rc_use_plug_manager
         Plug 'honza/vim-snippets'
         Plug 'wellle/targets.vim'
         Plug 'tpope/vim-surround'
+        Plug 'mg979/vim-visual-multi'
         Plug 'junegunn/vim-easy-align'
         Plug 'liuchengxu/vim-which-key'
         Plug 'scrooloose/nerdcommenter'
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 
-        if version >= 800 || has('nvim')
-            Plug 'mg979/vim-visual-multi'
-            Plug 'skywind3000/asyncrun.vim'
-        endif
+        Plug 'skywind3000/asyncrun.vim'
+        Plug 'skywind3000/asynctasks.vim'
 
-        " git support
+        " git
         Plug 'tpope/vim-fugitive'
         Plug 'airblade/vim-gitgutter'
 
@@ -86,10 +85,6 @@ if g:rc_use_plug_manager
         Plug '/usr/local/opt/fzf'
         Plug '~/.vim/my-plugins/qsrc'
         Plug '~/.vim/my-plugins/setcolors'
-
-        if filereadable(expand("~/.vim/vimrc.plug"))
-            source $HOME/.vim/vimrc.plug
-        endif
 
         call plug#end()
 
@@ -280,6 +275,8 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         let g:Lf_UseCache = 0
         let g:Lf_UseVersionControlTool = 0
         let g:Lf_IgnoreCurrentBufferName = 1
+        " Show icons, icons are shown by default
+        let g:Lf_ShowDevIcons = 1
         " popup mode
         let g:Lf_WindowPosition = 'popup'
         let g:Lf_PreviewInPopup = 1
@@ -400,7 +397,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         " Exclude file
         let g:indentLine_fileTypeExclude = ['text', 'help', 'json', 'markdown', 'coc-explorer']
         " let colorscheme highlight indentLine
-        let g:indentLine_setColors = 0
+        " let g:indentLine_setColors = 0
 
     endif
 
@@ -436,13 +433,18 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - vim-visual-multi "
 
-    " Plugin Config - asyncrun {{{ "
+    " Plugin Config - async {{{ "
 
         if filereadable(expand("~/.vim/plugged/asyncrun.vim/plugin/asyncrun.vim"))
             " Set the height of window when run AsyncRun
             let g:asyncrun_open = 6
-            " 定义文件所属目录
-            let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '_darcs', 'build.xml']
+            " Identify the project root directory
+            " If not in any these rootmarks put an empty .root in directory
+            let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '.project', '.hg', 'build.xml']
+            " Set terminal position and style when set output=terminal
+            let g:asynctasks_term_pos = 'bottom'
+            " Set default global name of AsyncTask config
+            let g:asynctasks_rtp_config = "tasks.toml"
         endif
 
     " }}} Plugin Config - asyncrun "
@@ -703,7 +705,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ 's' : ['<C-W>s'           , 'split-window-below']    ,
                     \ 'v' : ['<C-W>v'           , 'split-window-below']    ,
                     \ '?' : [':CocList windows' , 'window']                ,
-                    \ 'o' : [':call asyncrun#quickfix_toggle(6)' , 'open-quickfix'] ,
+                    \ 'q' : [':call asyncrun#quickfix_toggle(6)' , 'toggle-quickfix'] ,
                     \ }
 
         let g:which_key_map['b'] = {
@@ -731,6 +733,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ 'e' : [':CocCommand explorer' , 'coc-explorer']  ,
                     \ 's' : ['update'               , 'save-file']     ,
                     \ 'S' : ['Files'                , 'find-file']     ,
+                    \ 'g' : [':Goyo'                , 'Goyo']          ,
                     \ 'c' : [':e ~/.vim/vimrcs'     , 'edit-config']   ,
                     \ 'o' : ['<Plug>(coc-openlink)' , 'open-link']     ,
                     \ 'p' : [':e ~/.vim/snippets'   , 'edit-snippets'] ,
@@ -751,11 +754,11 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         let g:which_key_map['c'] = {
                     \ 'name' : '+code',
                     \ 'a' : ['<Plug>(coc-codeaction-selected)' , 'codeAction']      ,
-                    \ 'c' : [':call CompileRun()'              , 'compile-run']     ,
+                    \ 'c' : [':AsyncTask file-run'             , 'run-file']        ,
+                    \ 'C' : [':AsyncTask file-build'           , 'build-file']      ,
                     \ 'd' : ['<Plug>(coc-definition)'          , 'definition']      ,
                     \ 'f' : ['<Plug>(coc-fix-current)'         , 'fix-error']       ,
                     \ 'F' : ['<Plug>(coc-format-selected)'     , 'format']          ,
-                    \ 'G' : [':Goyo'                           , 'Goyo']            ,
                     \ 'i' : ['<Plug>(coc-implementation)'      , 'implementation']  ,
                     \ 'r' : ['<Plug>(coc-references)'          , 'references']      ,
                     \ 'R' : ['<Plug>(coc-refactor)'            , 'refactor']        ,

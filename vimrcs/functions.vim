@@ -12,6 +12,10 @@
 
 " Coc function {{{ "
 
+function FloatingTransparen()
+    highlight CocFloating ctermbg=None
+endfunction
+
 " }}} CocFunction "
 
 " ToggleTransparent {{{ "
@@ -21,46 +25,5 @@ function ToggleTransparent()
 endfunction
 
 " }}} ToggleTransparent "
-
-" CompileRun {{{ "
-
-function! CompileRun()
-    execute "w"
-    if (&filetype == 'c')
-        execute "AsyncRun gcc % -o %<; time ./%<"
-    endif
-    if (&filetype == 'cpp')
-        execute "AsyncRun g++ % -o %<; time ./%<"
-    endif
-    if (&filetype == 'python')
-        execute "AsyncRun time python3 %"
-    endif
-    if (&filetype == 'php')
-        execute "AsyncRun time php %"
-    endif
-    if (&filetype == 'javascript')
-        execute "AsyncRun time node %"
-    endif
-    if (&filetype == 'java')
-        execute "AsyncRun time javac Main.java; java Main;"
-    endif
-    if (&filetype == 'coffee')
-        execute "AsyncRun time coffee %"
-    endif
-    if (&filetype == 'rust')
-        execute "AsyncRun time rustc %; ./%< ;"
-    endif
-    if (&filetype == 'haskell' || &filetype == 'lhaskell')
-        execute "AsyncRun time ghc %; ./%< ;"
-    endif
-    if (&filetype == 'tex')
-        execute "AsyncRun time pdflatex %;"
-    endif
-    if (&filetype == 'markdown')
-        execute "AsyncRun time pandoc -s -S -o %<.pdf %;"
-    endif
-endfunction
-
-" }}} CompileRun "
 
 " }}} Personal Functions "

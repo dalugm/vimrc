@@ -123,10 +123,10 @@ endif
 
 " set cursor shape
 if has('nvim') || has('gui_running')
-    set guicursor=n:block-blinkon0
-    set guicursor=v-r:hor20-blinkon0
-    set guicursor=i:ver20-blinkon0
-    set guicursor=c-ci:ver20-blinkon0
+    set guicursor=n:block
+    set guicursor+=v-r:hor20
+    set guicursor+=i:ver20
+    set guicursor+=c-ci:ver20
     set guicursor+=a:blinkon0 " no cursor blink
 else
     " Cursor Shape
@@ -274,6 +274,9 @@ endif
 " Set to auto read when a file is changed from the outside
 set autoread
 
+" Change cwd when open a new file
+set autochdir
+
 " Automatically write a file after milliseconds nothing is typed
 " Will get bad experience for diagnostics when it's default 4000
 set updatetime=300
@@ -336,10 +339,16 @@ set splitright " Puts new vsplit windows to the right of the current
 set splitbelow " Puts new split windows to the bottom of the current
 
 " Split management
-nmap <silent> <M-j> :exe "resize " . (winheight(0) * 3/2)<CR>
-nmap <silent> <M-k> :exe "resize " . (winheight(0) * 2/3)<CR>
-nmap <silent> <M-h> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
-nmap <silent> <M-l> :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
+nmap <silent> <M-J> :exe "resize " . (winheight(0) * 3/2)<CR>
+nmap <silent> <M-K> :exe "resize " . (winheight(0) * 2/3)<CR>
+nmap <silent> <M-H> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
+nmap <silent> <M-L> :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
+
+" Window change
+nmap <silent> <M-j> <C-w>j
+nmap <silent> <M-k> <C-w>k
+nmap <silent> <M-h> <C-w>h
+nmap <silent> <M-l> <C-w>l
 
 " 0 means never show, 1 means show only if there are at least two windows
 " 2 means always show
@@ -415,6 +424,12 @@ else
     set tabline=%N:%M%t
 endif
 
+" call pyenv when using neovim
+if has("nvim")
+    let g:python_host_prog  = $HOME . "/.pyenv/versions/neovim2/bin/python"
+    let g:python3_host_prog = $HOME . "/.pyenv/versions/neovim3/bin/python"
+endif
+
 " }}} Neovim Related "
 
 " Misc {{{ "
@@ -438,12 +453,6 @@ augroup dalu_color_warning
     autocmd ColorScheme * call matchadd('Todo', '\W\zs\(TODO\|FIXME\|CHANGED\|BUG\|HACK\|XXX\|NOTICE\|WARNING\|DANGER\|DEPRECATED\|REVIEW\)')
     autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
 augroup END
-
-" call pyenv when using neovim
-if has("nvim")
-    let g:python_host_prog  = $HOME . "/.pyenv/versions/neovim2/bin/python"
-    let g:python3_host_prog = $HOME . "/.pyenv/versions/neovim3/bin/python"
-endif
 
 " Make TOhtml behavior better
 let g:html_dynamic_folds = 1
