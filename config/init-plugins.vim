@@ -1,5 +1,5 @@
 " ###########################################################
-" # File Name     : plugins_config.vim
+" # File Name     : init-plugins.vim
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
@@ -83,8 +83,8 @@ if g:rc_use_plug_manager
 
         " Self maintained plugins
         Plug '/usr/local/opt/fzf'
-        Plug '~/.vim/my-plugins/qsrc'
-        Plug '~/.vim/my-plugins/setcolors'
+        Plug '~/.vim/extensions/qsrc'
+        Plug '~/.vim/extensions/setcolors'
 
         call plug#end()
 
@@ -147,6 +147,14 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     let g:solarized_termtrans=1
     let g:onedark_termcolors=256
     let g:solarized_termcolors=256
+    
+    " SetColors {{{
+
+    nnoremap <F8>   :call NextColor(1)<CR>
+    nnoremap <S-F8> :call NextColor(-1)<CR>
+    nnoremap <M-F8> :call NextColor(0)<CR>
+
+    " }}} SetColors
 
     " }}} Plugin Config - colorscheme "
 
@@ -605,6 +613,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         let g:snips_author = "dalu"
         let g:snips_email  = "mou.tong@qq.com"
+        let g:snips_about  = "dalu <mou.tong@qq.com>"
         let g:snips_github = "dalu98"
 
         " Use <C-l> for trigger snippet expand.
@@ -720,8 +729,9 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         let g:which_key_map['t'] = {
                     \ 'name' : '+tabs' ,
+                    \ 'a' : ['tabnew'      , 'add-tab']      ,
                     \ 'd' : ['tabclose'    , 'delete-tab']   ,
-                    \ 'f' : ['tabfirst'    , 'first-tab']    ,
+                    \ 'h' : ['tabfirst'    , 'first-tab']    ,
                     \ 'l' : ['tablast'     , 'last-tab']     ,
                     \ 'n' : ['tabnext'     , 'next-tab']     ,
                     \ 'p' : ['tabprevious' , 'previous-tab'] ,
@@ -730,15 +740,16 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         let g:which_key_map['f'] = {
                     \ 'name' : '+file' ,
-                    \ 'e' : [':CocCommand explorer' , 'coc-explorer']  ,
-                    \ 's' : ['update'               , 'save-file']     ,
-                    \ 'S' : ['Files'                , 'find-file']     ,
-                    \ 'g' : [':Goyo'                , 'Goyo']          ,
-                    \ 'c' : [':e ~/.vim/vimrcs'     , 'edit-config']   ,
-                    \ 'o' : ['<Plug>(coc-openlink)' , 'open-link']     ,
-                    \ 'p' : [':e ~/.vim/snippets'   , 'edit-snippets'] ,
-                    \ 'r' : [':source ~/.vimrc'     , 'reload-config'] ,
-                    \ 'u' : ['UndotreeToggle'       , 'undo-tree']     ,
+                    \ 'c' : [':e ~/.vim/vimrcs'     , 'edit-config']     ,
+                    \ 'e' : [':CocCommand explorer' , 'coc-explorer']    ,
+                    \ 's' : ['update'               , 'save-file']       ,
+                    \ 'S' : ['Files'                , 'find-file']       ,
+                    \ 'g' : [':Goyo'                , 'Goyo']            ,
+                    \ 'l' : [':call LoadSession()'  , 'restore-session'] ,
+                    \ 'o' : ['<Plug>(coc-openlink)' , 'open-link']       ,
+                    \ 'p' : [':e ~/.vim/snippets'   , 'edit-snippets']   ,
+                    \ 'r' : [':source ~/.vimrc'     , 'reload-config']   ,
+                    \ 'u' : ['UndotreeToggle'       , 'undo-tree']       ,
                     \ }
 
         let g:which_key_map['s'] = {
@@ -753,20 +764,20 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         let g:which_key_map['c'] = {
                     \ 'name' : '+code',
-                    \ 'a' : ['<Plug>(coc-codeaction-selected)' , 'codeAction']      ,
-                    \ 'c' : [':AsyncTask file-run'             , 'run-file']        ,
-                    \ 'C' : [':AsyncTask file-build'           , 'build-file']      ,
-                    \ 'd' : ['<Plug>(coc-definition)'          , 'definition']      ,
-                    \ 'f' : ['<Plug>(coc-fix-current)'         , 'fix-error']       ,
-                    \ 'F' : ['<Plug>(coc-format-selected)'     , 'format']          ,
-                    \ 'i' : ['<Plug>(coc-implementation)'      , 'implementation']  ,
-                    \ 'r' : ['<Plug>(coc-references)'          , 'references']      ,
-                    \ 'R' : ['<Plug>(coc-refactor)'            , 'refactor']        ,
-                    \ 't' : ['<Plug>(coc-type-definition)'     , 'type-definition'] ,
+                    \ 'a' : ['<Plug>(coc-codeaction-selected)' , 'codeAction'] ,
+                    \ 'c' : [':AsyncTask file-run'             , 'run-file']   ,
+                    \ 'C' : [':AsyncTask file-build'           , 'build-file'] ,
+                    \ 'f' : ['<Plug>(coc-fix-current)'         , 'fix-error']  ,
+                    \ 'F' : ['<Plug>(coc-format-selected)'     , 'format']     ,
+                    \ 'R' : ['<Plug>(coc-refactor)'            , 'refactor']   ,
                     \ 'g' : {
                     \ 'name' : '+goto',
-                    \ '[' : ['<Plug>(coc-diagnostic-prev)',     'prev error'],
-                    \ ']' : ['<Plug>(coc-diagnostic-next)',     'next error'],
+                    \ 'd' : ['<Plug>(coc-definition)'      , 'definition']      ,
+                    \ 'r' : ['<Plug>(coc-references)'      , 'references']      ,
+                    \ 't' : ['<Plug>(coc-type-definition)' , 'type-definition'] ,
+                    \ 'i' : ['<Plug>(coc-implementation)'  , 'implementation']  ,
+                    \ '[' : ['<Plug>(coc-diagnostic-prev)' , 'prev error']      ,
+                    \ ']' : ['<Plug>(coc-diagnostic-next)' , 'next error']      ,
                     \ },
                     \ }
 

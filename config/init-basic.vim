@@ -1,9 +1,9 @@
 " ###########################################################
-" # File Name     : basic.vim
+" # File Name     : init-basic.vim
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-05-03 00:13
+" # Last Modified : 2020-05-05 18:22
 " # By            : Mou Tong
 " # Description   : basic config for vim
 " ###########################################################
@@ -232,6 +232,12 @@ set scrolloff=3
 
 " Edit - Navigation, History, Search {{{ "
 
+" Map jk to enter normal mode
+imap jk <Esc>
+
+" Disable highlight when <backspace> is pressed
+nnoremap <silent> <BS> :nohlsearch<CR>
+
 " session config
 set sessionoptions-=options " do not store global and local values in a session
 set sessionoptions-=folds " do not store folds
@@ -263,7 +269,6 @@ endfunction
 
 " Adding automatons for when entering or leaving Vim
 if(argc() == 0)
-  au VimEnter * nested :call LoadSession()
   au VimLeave * :call MakeSession(1)
 else
   au VimLeave * :call MakeSession(0)
@@ -361,6 +366,55 @@ set statusline+=\ [%{&encoding}] " encoding
 set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
 
 " }}} Buffer - BufferSwitch, FileExplorer, StatusLine "
+
+" Leader - keybindings {{{ "
+
+" With a map leader it's possible to do extra key combinations
+let mapleader = ","
+
+" Fast saving
+nnoremap <silent> <Leader>w :update<CR>
+
+" Fast editing and reloading of vimrc configs
+map <Leader>ec :e! ~/.vim<CR>
+map <Leader>er :source ~/.vimrc<CR>
+
+" Switch CWD to the directory of the open buffer
+map <Leader>cd :cd %:p:h<CR>:pwd<CR>
+
+
+    " Key Mappings - Buffer {{{ "
+
+    " Close the current buffer
+    map <Leader>bd :bdelete<CR>
+
+    " Close all the buffers
+    map <Leader>ba :bufdo bd<CR>
+
+    " Change buffers
+    map <Leader>l :bnext<CR>
+    map <Leader>h :bprevious<CR>
+
+    " }}} Key Mappings - Buffer "
+
+    " Key Mappings - Tab {{{ "
+
+    map <Leader>tn :tabnew<CR>
+    map <Leader>to :tabonly<CR>
+    map <Leader>tc :tabclose<CR>
+    map <Leader>tm :tabmove
+
+    " Let 'tl' toggle between this and the last accessed tab
+    let g:lasttab = 1
+    nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
+    au TabLeave * let g:lasttab = tabpagenr()
+
+    " Opens a new tab with the current buffer's path
+    map <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>/
+
+    " }}} Key Mappings - Tab "
+    
+" }}} Leader - keybindings "
 
 " GUI Related {{{ "
 

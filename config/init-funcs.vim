@@ -1,5 +1,5 @@
 " ###########################################################
-" # File Name     : functions.vim
+" # File Name     : init-funcs.vim
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
