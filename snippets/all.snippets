@@ -135,10 +135,16 @@ snippet trump-cn "cn nobody knows ... better than I do" b
 ☝️   $0
 endsnippet
 
-snippet fortune-shici "the default snippet to format shici"
+snippet fortune-poem "the default snippet to format poem"
 [32m《${1:name}》[m
 [33m${2:author}[m
 ${0:content}
 %
 endsnippet
+
+snippet fortune-motto "the default snippet to format motto"
+${0:content}
+        [32m-  ${1:author}[m
+endsnippet
+
 # vim:ft=snippets:

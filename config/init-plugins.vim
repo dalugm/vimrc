@@ -65,6 +65,7 @@ if g:rc_use_plug_manager
         Plug 'sickill/vim-monokai'
         Plug 'cocopon/iceberg.vim'
         Plug 'joshdick/onedark.vim'
+        Plug 'junegunn/seoul256.vim'
         Plug 'nanotech/jellybeans.vim'
         Plug 'arcticicestudio/nord-vim'
         Plug 'NLKNguyen/papercolor-theme'
@@ -137,6 +138,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                 \ 'nord'       ,
                 \ 'onedark'    ,
                 \ 'PaperColor' ,
+                \ 'seoul256'   ,
                 \ 'solarized'  ,
                 \ ]
 
@@ -320,7 +322,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
             \ }
 
         " add compiler callback for neovim
-        if !has('nvim')
+        if has('nvim')
             let g:vimtex_compiler_progname = 'nvr'
         endif
 
@@ -740,7 +742,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         let g:which_key_map['f'] = {
                     \ 'name' : '+file' ,
-                    \ 'c' : [':e ~/.vim/vimrcs'     , 'edit-config']     ,
+                    \ 'c' : [':e ~/.vim/config'     , 'edit-config']     ,
                     \ 'e' : [':CocCommand explorer' , 'coc-explorer']    ,
                     \ 's' : ['update'               , 'save-file']       ,
                     \ 'S' : ['Files'                , 'find-file']       ,

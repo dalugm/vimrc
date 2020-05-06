@@ -121,21 +121,6 @@ else
     set t_Co=256 " Using 256 colors
 endif
 
-" set cursor shape
-if has('nvim') || has('gui_running')
-    set guicursor=n:block
-    set guicursor+=v-r:hor20
-    set guicursor+=i:ver20
-    set guicursor+=c-ci:ver20
-    set guicursor+=a:blinkon0 " no cursor blink
-else
-    " Cursor Shape
-    " NOTE the value can be different in different terminals
-    set t_SI = "\<Esc>]50;CursorShape=1\x7"
-    set t_SR = "\<Esc>]50;CursorShape=2\x7"
-    set t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
-
 " Abbrev of prompt
 set shortmess=aoOtTF
 
@@ -279,9 +264,6 @@ endif
 " Set to auto read when a file is changed from the outside
 set autoread
 
-" Change cwd when open a new file
-set autochdir
-
 " Automatically write a file after milliseconds nothing is typed
 " Will get bad experience for diagnostics when it's default 4000
 set updatetime=300
@@ -421,7 +403,31 @@ map <Leader>cd :cd %:p:h<CR>:pwd<CR>
 " Set gui font
 set guifont=Sarasa\ Mono\ SC:h12
 
-set guitablabel=%N:%M%t " show table numbers
+" show table numbers
+set guitablabel=%N:%M%t
+
+" set cursor shape
+if has ('nvim') || has('gui_running')
+    set guicursor=n-v-sm:block
+    set guicursor+=i-c-ci-ve:ver25
+    set guicursor+=r-cr-o:hor20
+    set guicursor+=a:blinkon0 " no cursor blink
+else
+    " Cursor Shape
+    " NOTE the value can be different in different terminals
+    if $TERM_PROGRAM =~ "iTerm"
+        if empty($TMUX)
+            let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+            let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+            let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+        else
+            let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+            let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+            let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
+        endif
+    endif
+endif
+
 
 " Disable scrollbars
 set guioptions-=r
@@ -429,11 +435,6 @@ set guioptions-=R
 set guioptions-=l
 set guioptions-=L
 set guioptions-=T " Also disable toolbar
-
-" Properly disable sound on errors on MacVim
-if has("gui_macvim")
-    autocmd GUIEnter * set vb t_vb=
-endif
 
 " }}} GUI Releated "
 

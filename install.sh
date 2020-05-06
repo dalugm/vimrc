@@ -13,7 +13,7 @@ set -e
 printf 'set runtimepath^=$HOME/.vim runtimepath+=$HOME/.vim/after
 let &packpath = &runtimepath
 
-for file in split(glob("$HOME/.vim/vimrcs/*.vim"))
+for file in split(glob("$HOME/.vim/config/*.vim"))
     exec "source" file
 endfor' > ~/.vim/init.vim
 
