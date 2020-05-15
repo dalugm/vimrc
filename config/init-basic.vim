@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-05-05 18:22
+" # Last Modified : 2020-05-08 09:50
 " # By            : Mou Tong
 " # Description   : basic config for vim
 " ###########################################################
@@ -60,14 +60,20 @@ filetype on
 filetype plugin on
 filetype plugin indent on
 
-" 1 tab == 4 spaces
+" N spaces for every indent
 set shiftwidth=4
-set tabstop=4
-set softtabstop=4
-set smarttab
 
-set expandtab " Use space instead of tabs
-set wrap " Wrap lines
+" 1 tab == N spaces
+set tabstop=4
+
+" perform N spaces when edit
+set softtabstop=4
+
+" Use space instead of tabs
+set expandtab
+
+" Add `shiftwidth' spaces or `tabstop' spaces when <Tab>
+set smarttab
 
 " Popup confirm when edit unsave or readonly files
 set confirm
@@ -304,7 +310,10 @@ set incsearch
 
 " Don't wrap around when junping between search result
 set nowrapscan
-"
+
+" Use `%%' to expand current file's dir
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
 " Netrw config
 let g:netrw_liststyle = 3
 let g:netrw_winsize = 30
@@ -314,7 +323,7 @@ autocmd FileType netrw setlocal bufhidden=delete
 
 " Buffer - BufferSwitch, FileExplorer, Statusline {{{ "
 
-" A buffer becomes hidden when it's abandoned
+" execute `:argdo' etc. by omitting `!'
 set hidden
 
 " Specify the behavior when switching between buffers
@@ -358,7 +367,7 @@ let mapleader = ","
 nnoremap <silent> <Leader>w :update<CR>
 
 " Fast editing and reloading of vimrc configs
-map <Leader>ec :e! ~/.vim<CR>
+map <Leader>ec :e! ~/.vim/config<CR>
 map <Leader>er :source ~/.vimrc<CR>
 
 " Switch CWD to the directory of the open buffer
@@ -409,22 +418,37 @@ set guitablabel=%N:%M%t
 " set cursor shape
 if has ('nvim') || has('gui_running')
     set guicursor=n-v-sm:block
-    set guicursor+=i-c-ci-ve:ver25
-    set guicursor+=r-cr-o:hor20
+    set guicursor+=i-c-ci:ver25
+    set guicursor+=ve-r-cr-o:hor20
     set guicursor+=a:blinkon0 " no cursor blink
 else
     " Cursor Shape
+    " SI = INSERT mode
+    " SR = REPLACE mode
+    " EI = NORMAL mode (ELSE)
+    " Cursor settings:
+    " 1 -> blinking block
+    " 2 -> solid block
+    " 3 -> blinking underscore
+    " 4 -> solid underscore
+    " 5 -> blinking vertical bar
+    " 6 -> solid vertical bar
     " NOTE the value can be different in different terminals
-    if $TERM_PROGRAM =~ "iTerm"
+    " @ https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
+    if $TERM_PROGRAM =~ "iTerm.app"
         if empty($TMUX)
             let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-            let &t_EI = "\<Esc>]50;CursorShape=0\x7"
             let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+            let &t_EI = "\<Esc>]50;CursorShape=0\x7"
         else
             let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-            let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
             let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
+            let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
         endif
+    else
+        let &t_SI.="\e[5 q"
+        let &t_SR.="\e[4 q"
+        let &t_EI.="\e[1 q"
     endif
 endif
 

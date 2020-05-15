@@ -27,15 +27,21 @@ if g:rc_use_plug_manager
         Plug 'junegunn/fzf.vim'
         Plug 'honza/vim-snippets'
         Plug 'wellle/targets.vim'
-        Plug 'tpope/vim-surround'
         Plug 'mg979/vim-visual-multi'
         Plug 'junegunn/vim-easy-align'
         Plug 'liuchengxu/vim-which-key'
-        Plug 'scrooloose/nerdcommenter'
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+
+        Plug 'tpope/vim-rails'
+        Plug 'tpope/vim-repeat'
+        Plug 'tpope/vim-surround'
+        Plug 'tpope/vim-commentary'
+        Plug 'tpope/vim-unimpaired'
 
         Plug 'skywind3000/asyncrun.vim'
         Plug 'skywind3000/asynctasks.vim'
+
+        Plug 'kana/vim-textobj-user'
 
         " git
         Plug 'tpope/vim-fugitive'
@@ -171,7 +177,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ 'colorscheme': 'one',
                     \ 'active': {
                     \   'left': [ [ 'mode', 'paste' ], 
-                    \             [ 'cocstatus', 'readonly', 'filename', 'fugitive' ] ]
+                    \             [ 'cocstatus', 'filename', 'fugitive' ] ]
                     \ },
                     \ 'component_function': {
                     \   'cocstatus': 'coc#status',
@@ -208,15 +214,6 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - lightline.vim "
 
-    " Plugin Config - undotree {{{ "
-
-    if filereadable(expand("~/.vim/plugged/undotree/plugin/undotree.vim"))
-        let g:undotree_SplitWidth         = 40
-        let g:undotree_SetFocusWhenToggle = 1
-    endif
-
-    " }}} Plugin Config - undotree "
-
     " Plugin Config - emmet-vim {{{ "
 
     if filereadable(expand("~/.vim/plugged/emmet-vim/plugin/emmet.vim"))
@@ -227,16 +224,62 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - emmet-vim "
 
-    " Plugin Config - nerdcommenter {{{ "
+    " Plugin Config - vimtex {{{ "
 
-    if filereadable(expand("~/.vim/plugged/nerdcommenter/plugin/NERD_commenter.vim"))
+    if filereadable(expand("~/.vim/plugged/vimtex/autoload/vimtex.vim"))
 
-        " Always leave a space between the comment character and the comment
-        let NERDSpaceDelims = 1
+        let g:vimtex_compiler_latexmk = {
+            \ 'options' : [
+            \   '-xelatex',
+            \   '-shell-escape',
+            \   '-verbose',
+            \   '-file-line-error',
+            \   '-synctex=1',
+            \   '-interaction=nonstopmode',
+            \ ],
+            \ }
+
+        " add compiler callback for neovim
+        if has('nvim')
+            let g:vimtex_compiler_progname = 'nvr'
+        endif
+
+        " vimtex configuration for neocomplete
+        if exists('g:loaded_neocomplete')
+            if !exists('g:neocomplete#sources#omni#input_patterns')
+                let g:neocomplete#sources#omni#input_patterns = {}
+            endif
+            let g:neocomplete#sources#omni#input_patterns.tex =
+                \ g:vimtex#re#neocomplete
+        endif
 
     endif
 
-    " }}} Plugin Config - nerdcommenter "
+    " }}} Plugin Config - vimtex "
+
+    " Plugin Config - vim-cpp-enhanced-highlight {{{ "
+
+    if filereadable(expand("~/.vim/plugged/vim-cpp-enhanced-highlight/after/syntax/cpp.vim"))
+
+        " 高亮类，成员函数，标准库和模板
+        let g:cpp_class_scope_highlight = 1
+        let g:cpp_member_variable_highlight = 1
+        let g:cpp_concepts_highlight = 1
+        let g:cpp_experimental_simple_template_highlight = 1
+
+    endif
+
+    " }}} Plugin Config - vim-cpp-enhanced-highlight "
+
+    " Plugin Config - vim-markdown {{{
+
+    if filereadable(expand("~/.vim/plugged/vim-markdown/ftplugin/markdown.vim"))
+
+        let g:markdown_fenced_languages = ['css', 'js=javascript', 'sh']
+
+    endif
+
+    " }}} Plugin Config - vim-markdown
 
     " Plugin Config - Goyo {{{ "
 
@@ -296,6 +339,106 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - LeaderF "
 
+    " Plugin Config - undotree {{{ "
+
+    if filereadable(expand("~/.vim/plugged/undotree/plugin/undotree.vim"))
+        let g:undotree_SplitWidth         = 40
+        let g:undotree_SetFocusWhenToggle = 1
+    endif
+
+    " }}} Plugin Config - undotree "
+
+    " Plugin Config - vim-textobj-user {{{ "
+
+    if filereadable(expand("~/.vim/plugged/vim-textobj-user/autoload/textobj/user.vim"))
+
+        call textobj#user#plugin('braces', {
+                    \   'angle': {
+                    \     'pattern': ['<<', '>>'],
+                    \     'select-a': 'aA',
+                    \     'select-i': 'iA',
+                    \   },
+                    \ })
+
+        call textobj#user#plugin('entire', {
+                    \      '-': {
+                    \        'select-a': 'ae',  'select-a-function': 'CurrentBufferA',
+                    \        'select-i': 'ie',  'select-i-function': 'CurrentBufferI'
+                    \      },
+                    \    })
+
+        function! CurrentBufferA()
+            normal! m'
+            keepjumps normal! gg0
+            let start_pos = getpos('.')
+            keepjumps normal! G$
+            let end_pos = getpos('.')
+            return ['V', start_pos, end_pos]
+        endfunction
+
+        function! CurrentBufferI()
+            normal! m'
+            keepjumps normal! gg0
+            call search('^.', 'cW')
+            let start_pos = getpos('.')
+            keepjumps normal! G$
+            call search('^.', 'bcW')
+            normal! $
+            let end_pos = getpos('.')
+            return ['V', start_pos, end_pos]
+        endfunction
+
+        call textobj#user#plugin('line', {
+                    \   '-': {
+                    \     'select-a-function': 'CurrentLineA',
+                    \     'select-a': 'al',
+                    \     'select-i-function': 'CurrentLineI',
+                    \     'select-i': 'il',
+                    \   },
+                    \ })
+
+        function! CurrentLineA()
+            normal! 0
+            let head_pos = getpos('.')
+            normal! $
+            let tail_pos = getpos('.')
+            return ['v', head_pos, tail_pos]
+        endfunction
+
+        function! CurrentLineI()
+            normal! ^
+            let head_pos = getpos('.')
+            normal! g_
+            let tail_pos = getpos('.')
+            let non_blank_char_exists_p = getline('.')[head_pos[2] - 1] !~# '\s'
+            return
+                        \ non_blank_char_exists_p
+                        \ ? ['v', head_pos, tail_pos]
+                        \ : 0
+        endfunction
+
+        call textobj#user#plugin('tex', {
+                    \   'paren-math': {
+                    \     'pattern': ['\\left(', '\\right)'],
+                    \     'select-a': [],
+                    \     'select-i': [],
+                    \   },
+                    \ })
+
+        augroup tex_textobjs
+            autocmd!
+            autocmd FileType tex call textobj#user#map('tex', {
+                        \   'paren-math': {
+                        \     'select-a': '<buffer> a(',
+                        \     'select-i': '<buffer> i(',
+                        \   },
+                        \ })
+        augroup END
+
+    endif
+
+    " }}} Plugin Config - vim-textobj-user "
+
     " Plugin Config - vim-easy-align {{{ "
 
     if filereadable(expand("~/.vim/plugged/vim-easy-align/plugin/easy_align.vim"))
@@ -306,64 +449,28 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - vim-easy-align "
 
-    " Plugin Config - vimtex {{{ "
+    " {{{ Plugin Config - vim-repeat "
 
-    if filereadable(expand("~/.vim/plugged/vimtex/autoload/vimtex.vim"))
+    if filereadable(expand("~/.vim/plugged/vim-repeat/autoload/repeat.vim"))
 
-        let g:vimtex_compiler_latexmk = {
-            \ 'options' : [
-            \   '-xelatex',
-            \   '-shell-escape',
-            \   '-verbose',
-            \   '-file-line-error',
-            \   '-synctex=1',
-            \   '-interaction=nonstopmode',
-            \ ],
-            \ }
-
-        " add compiler callback for neovim
-        if has('nvim')
-            let g:vimtex_compiler_progname = 'nvr'
-        endif
-
-        " vimtex configuration for neocomplete
-        if exists('g:loaded_neocomplete')
-            if !exists('g:neocomplete#sources#omni#input_patterns')
-                let g:neocomplete#sources#omni#input_patterns = {}
-            endif
-            let g:neocomplete#sources#omni#input_patterns.tex =
-                \ g:vimtex#re#neocomplete
-        endif
+        " add support to different plugins
+        " silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
 
     endif
 
-    " }}} Plugin Config - vimtex "
+    " }}} Plugin Config - vim-repeat "
 
-    " Plugin Config - vim-cpp-enhanced-highlight {{{ "
-
-    if filereadable(expand("~/.vim/plugged/vim-cpp-enhanced-highlight/after/syntax/cpp.vim"))
-
-        " 高亮类，成员函数，标准库和模板
-        let g:cpp_class_scope_highlight = 1
-        let g:cpp_member_variable_highlight = 1
-        let g:cpp_concepts_highlight = 1
-        let g:cpp_experimental_simple_template_highlight = 1
-
-    endif
-
-    " }}} Plugin Config - vim-cpp-enhanced-highlight "
-
-    " Plugin Config - vim-markdown {{{
-
-    if filereadable(expand("~/.vim/plugged/vim-markdown/ftplugin/markdown.vim"))
-                \ && filereadable(expand("~/.vim/plugged/vim-markdown/ftplugin/markdown.vim"))
-
-        let g:markdown_fenced_languages = ['css', 'js=javascript', 'sh']
-
-    endif
-
-    " }}} Plugin Config - vim-markdown
+    " Plugin Config - commentary {{{ "
     
+    if filereadable(expand("~/.vim/plugged/vim-commentary/plugin/commentary.vim"))
+
+        " add comment support for specific file type
+        autocmd FileType apache setlocal commentstring=#\ %s
+
+    endif
+
+    " }}} Plugin Config - commentary "
+
     " Plugin Config - rainbow {{{ "
 
     if filereadable(expand("~/.vim/plugged/rainbow/autoload/rainbow.vim"))
@@ -545,11 +652,11 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         omap if <Plug>(coc-funcobj-i)
         omap af <Plug>(coc-funcobj-a)
 
-        " Use <TAB> for selections ranges.
+        " Use <C-s> for selections ranges.
         " NOTE: Requires 'textDocument/selectionRange' support from the language server.
         " coc-tsserver, coc-python are the examples of servers that support it.
-        nmap <silent> <TAB> <Plug>(coc-range-select)
-        xmap <silent> <TAB> <Plug>(coc-range-select)
+        nmap <silent> <C-s> <Plug>(coc-range-select)
+        xmap <silent> <C-s> <Plug>(coc-range-select)
 
         " Add `:Format` command to format current buffer.
         command! -nargs=0 Format :call CocAction('format')
@@ -701,9 +808,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ 'name' : '+windows' ,
                     \ 'w' : ['<C-W>w'           , 'other-window']          ,
                     \ 'd' : ['<C-W>c'           , 'delete-window']         ,
-                    \ '-' : ['<C-W>s'           , 'split-window-below']    ,
-                    \ '|' : ['<C-W>v'           , 'split-window-right']    ,
-                    \ '2' : ['<C-W>v'           , 'layout-double-columns'] ,
+                    \ '1' : ['<C-W>v'           , 'layout-double-columns'] ,
                     \ 'h' : ['<C-W>h'           , 'window-left']           ,
                     \ 'j' : ['<C-W>j'           , 'window-below']          ,
                     \ 'l' : ['<C-W>l'           , 'window-right']          ,
@@ -714,7 +819,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ 'K' : ['resize -5'        , 'expand-window-up']      ,
                     \ '=' : ['<C-W>='           , 'balance-window']        ,
                     \ 's' : ['<C-W>s'           , 'split-window-below']    ,
-                    \ 'v' : ['<C-W>v'           , 'split-window-below']    ,
+                    \ 'v' : ['<C-W>v'           , 'split-window-right']    ,
                     \ '?' : [':CocList windows' , 'window']                ,
                     \ 'q' : [':call asyncrun#quickfix_toggle(6)' , 'toggle-quickfix'] ,
                     \ }
