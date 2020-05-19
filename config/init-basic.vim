@@ -8,8 +8,6 @@
 " # Description   : basic config for vim
 " ###########################################################
 
-" General {{{ "
-
 " Environment - Encoding, Indent, Fold {{{ "
 
 set nocompatible " be iMproved required
@@ -296,9 +294,6 @@ endif
 " For regular expressions turn magic on
 set magic
 
-" Ignore case when searching
-set ignorecase
-
 " When searching try to be smart about cases
 set smartcase
 
@@ -363,6 +358,9 @@ set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
 " With a map leader it's possible to do extra key combinations
 let mapleader = ","
 
+" Use `\' to replace `,' since `,' is leaderkey
+noremap \ ,
+
 " Fast saving
 nnoremap <silent> <Leader>w :update<CR>
 
@@ -404,8 +402,27 @@ map <Leader>cd :cd %:p:h<CR>:pwd<CR>
     map <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>/
 
     " }}} Key Mappings - Tab "
-    
+
 " }}} Leader - keybindings "
+
+" Package opt {{{ "
+
+if version >= 800
+    " Enhance `%' command
+    packadd! matchit
+    " when editing a file that is already edited with another Vim instance
+    " go to that Vim instance
+    if !has('nvim')
+        packadd! editexisting
+    endif
+else
+    runtime macros/matchit.vim
+    if !has('nvim')
+        runtime macros/editexisting.vim
+    endif
+endif
+
+" }}} Package opt "
 
 " GUI Related {{{ "
 
@@ -437,21 +454,20 @@ else
     " @ https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
     if $TERM_PROGRAM =~ "iTerm.app"
         if empty($TMUX)
-            let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-            let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-            let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+            let &t_SI .= "\<Esc>]50;CursorShape=1\x7"
+            let &t_SR .= "\<Esc>]50;CursorShape=2\x7"
+            let &t_EI .= "\<Esc>]50;CursorShape=0\x7"
         else
-            let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-            let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
-            let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+            let &t_SI .= "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+            let &t_SR .= "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
+            let &t_EI .= "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
         endif
     else
-        let &t_SI.="\e[5 q"
-        let &t_SR.="\e[4 q"
-        let &t_EI.="\e[1 q"
+        let &t_SI .= "\e[5 q"
+        let &t_SR .= "\e[4 q"
+        let &t_EI .= "\e[1 q"
     endif
 endif
-
 
 " Disable scrollbars
 set guioptions-=r
@@ -482,19 +498,6 @@ endif
 
 if exists(':tnoremap')
     tnoremap <Esc> <C-\><C-n>
-endif
-
-" Set cursor type
-" NOTE different terminal the value of `\<Esc>]<n>' can be different
-" Neovim set cursor type
-if has('nvim')
-else
-    " start insert mode (bar cursor shape)
-    let &t_SI = "\<Esc>]12;CursorShape=1\x7"
-    " start replace mode (underline cursor shape)
-    let &t_SR = "\<Esc>]12;CursorShape=2\x7"
-    " end insert or replace mode (block cursor shape)
-    let &t_EI = "\<Esc>]12;CursorShape=0\x7"
 endif
 
 " tabline. Replaced by `guitablabel' when GUI is running
@@ -538,5 +541,3 @@ let g:html_dynamic_folds = 1
 let g:html_prevent_copy = "fntd"
 
 " }}} Misc "
-
-" }}} General "

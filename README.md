@@ -16,9 +16,15 @@ Inspired by [ashfinal](https://github.com/ashfinal/vimrc-config)
 
 ### Windows
 
-    git clone --depth 1 https://github.com/dalu98/vimrc.git ~/.vim && cd .vim
-    chmod +x install.sh && ./install.sh
-    ln -s -f ${HOME}/.vim/init.vim ${HOME}/_vimrc
+    git clone --depth 1 https://github.com/dalu98/vimrc.git ${HOME}/.vim && cd .vim
+    chmod +x install.sh && install.sh
+    ln -s -f ${HOME}/vimfiles/init.vim ${HOME}/_vimrc
+
+### Third party packages
+
+    git submodule update --init --recursive
+    git submodule foreach git reset --hard
+    git submodule foreach git checkout master
 
 ### neovim
 

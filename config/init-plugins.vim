@@ -8,8 +8,6 @@
 " # Description   : plugins config for vim
 " ###########################################################
 
-" Plugins List & Config {{{ "
-
 " Plugin List {{{ "
 
 " Specify a directory for plugins
@@ -26,11 +24,16 @@ if g:rc_use_plug_manager
         Plug 'mbbill/undotree'
         Plug 'junegunn/fzf.vim'
         Plug 'honza/vim-snippets'
-        Plug 'wellle/targets.vim'
         Plug 'mg979/vim-visual-multi'
-        Plug 'junegunn/vim-easy-align'
         Plug 'liuchengxu/vim-which-key'
+        Plug 'editorconfig/editorconfig-vim'
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+
+        " textobj
+        Plug 'wellle/targets.vim'
+        Plug 'kana/vim-textobj-user'
+        Plug 'junegunn/vim-easy-align'
+        Plug 'easymotion/vim-easymotion'
 
         Plug 'tpope/vim-rails'
         Plug 'tpope/vim-repeat'
@@ -41,15 +44,12 @@ if g:rc_use_plug_manager
         Plug 'skywind3000/asyncrun.vim'
         Plug 'skywind3000/asynctasks.vim'
 
-        Plug 'kana/vim-textobj-user'
-
         " git
         Plug 'tpope/vim-fugitive'
         Plug 'airblade/vim-gitgutter'
 
         " language
         Plug 'mattn/emmet-vim'
-        Plug 'tpope/vim-markdown'
         Plug 'mzlogin/vim-markdown-toc'
         if executable('latexmk')
             Plug 'lervag/vimtex'
@@ -90,8 +90,6 @@ if g:rc_use_plug_manager
 
         " Self maintained plugins
         Plug '/usr/local/opt/fzf'
-        Plug '~/.vim/extensions/qsrc'
-        Plug '~/.vim/extensions/setcolors'
 
         call plug#end()
 
@@ -155,7 +153,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     let g:solarized_termtrans=1
     let g:onedark_termcolors=256
     let g:solarized_termcolors=256
-    
+
     " SetColors {{{
 
     nnoremap <F8>   :call NextColor(1)<CR>
@@ -172,7 +170,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         " -- INSERT -- is unnecessary anymore
         set noshowmode
- 
+
         let g:lightline = {
                     \ 'colorscheme': 'one',
                     \ 'active': {
@@ -217,9 +215,11 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " Plugin Config - emmet-vim {{{ "
 
     if filereadable(expand("~/.vim/plugged/emmet-vim/plugin/emmet.vim"))
+
         let g:user_emmet_install_global = 0
         autocmd FileType html,xhtml,xml,css,scss,sass,less EmmetInstall
         let g:user_emmet_leader_key = ','
+
     endif
 
     " }}} Plugin Config - emmet-vim "
@@ -271,19 +271,14 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - vim-cpp-enhanced-highlight "
 
-    " Plugin Config - vim-markdown {{{
-
-    if filereadable(expand("~/.vim/plugged/vim-markdown/ftplugin/markdown.vim"))
-
-        let g:markdown_fenced_languages = ['css', 'js=javascript', 'sh']
-
-    endif
-
-    " }}} Plugin Config - vim-markdown
-
-    " Plugin Config - Goyo {{{ "
+    " Plugin Config - Limelight && Goyo {{{ "
 
     if filereadable(expand("~/.vim/plugged/goyo.vim/plugin/goyo.vim"))
+                \       && filereadable(expand("~/.vim/plugged/limelight.vim/plugin/limelight.vim"))
+
+        nmap <silent> <C-w><Enter> :Limelight!!<CR>
+        let g:limelight_conceal_ctermfg     = 250
+        let g:limelight_default_coefficient = 0.8
 
         function! s:goyo_enter()
             let b:fcstatus = &foldcolumn
@@ -307,17 +302,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     endif
 
-    " }}} Plugin Config - Goyo "
-
-    " Plugin Config - Limelight {{{ "
-
-    if filereadable(expand("~/.vim/plugged/limelight.vim/plugin/limelight.vim"))
-        nmap <silent> <C-w><Enter> :Limelight!!<CR>
-        let g:limelight_conceal_ctermfg     = 250
-        let g:limelight_default_coefficient = 0.8
-    endif
-
-    " }}} Plugin Config - Limelight "
+    " }}} Plugin Config - Limelight && Goyo "
 
     " Plugin Config - LeaderF {{{ "
 
@@ -342,8 +327,10 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " Plugin Config - undotree {{{ "
 
     if filereadable(expand("~/.vim/plugged/undotree/plugin/undotree.vim"))
+
         let g:undotree_SplitWidth         = 40
         let g:undotree_SetFocusWhenToggle = 1
+
     endif
 
     " }}} Plugin Config - undotree "
@@ -461,7 +448,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " }}} Plugin Config - vim-repeat "
 
     " Plugin Config - commentary {{{ "
-    
+
     if filereadable(expand("~/.vim/plugged/vim-commentary/plugin/commentary.vim"))
 
         " add comment support for specific file type
@@ -549,6 +536,17 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     endif
 
     " }}} Plugin Config - vim-visual-multi "
+
+    " Plugin Config - editorconfig {{{ "
+
+    if filereadable(expand("~/.vim/plugged/editorconfig-vim/plugin/editorconfig.vim"))
+
+        " Excluded patterns
+        let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+
+    endif
+
+    " }}} Plugin Config - editorconfig "
 
     " Plugin Config - async {{{ "
 
@@ -710,7 +708,7 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ }
 
         " }}} coc config - explorer "
- 
+
         " coc config - pairs {{{ "
 
         " disable characters for a specified filetype
@@ -889,12 +887,13 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ }
 
         let g:which_key_map['l'] = {
-                    \ 'name' : '+coc-list',
+                    \ 'name' : '+coc-list' ,
                     \ 'a' : [':CocList diagnostics'      , 'show-diagnostics']         ,
                     \ 'e' : [':CocList extensions'       , 'show-extensions']          ,
                     \ 'c' : [':CocList commands'         , 'show-commands']            ,
                     \ 'C' : [':CocConfig'                , 'edit-CocConfig']           ,
                     \ 'o' : [':CocList outline'          , 'find-current-symbol']      ,
+                    \ 'r' : [':CocRestart'               , 'restart-coc']              ,
                     \ 's' : [':CocList -I symbols'       , 'search-workspace-symbols'] ,
                     \ 'j' : [':CocNext'                  , 'action-for-next-item']     ,
                     \ 'k' : [':CocPrev'                  , 'action-for-prev-item']     ,
@@ -917,5 +916,3 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 endif
 
 " }}} Plugin Config "
-
-" }}} Plugins List & Config "

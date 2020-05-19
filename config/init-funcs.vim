@@ -8,8 +8,6 @@
 " # Description   : personal function
 " ###########################################################
 
-" Personal Functions {{{ "
-
 " Coc function {{{ "
 
 function FloatingTransparen()
@@ -25,5 +23,3 @@ function ToggleTransparent()
 endfunction
 
 " }}} ToggleTransparent "
-
-" }}} Personal Functions "

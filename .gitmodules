@@ -1,0 +1,3 @@
+[submodule "pack/mine/opt/killersheep"]
+	path = pack/mine/opt/killersheep
+	url = https://github.com/vim/killersheep.git
