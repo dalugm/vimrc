@@ -15,8 +15,8 @@
 " Make sure you use single quotes
 
 " Use plug.vim by default
-if !exists('g:rc_use_plug_manager') | let g:rc_use_plug_manager = 1 | endif
-if g:rc_use_plug_manager
+if !exists('g:dalu_use_plug_manager') | let g:dalu_use_plug_manager = 1 | endif
+if g:dalu_use_plug_manager
     if filereadable(expand("~/.vim/autoload/plug.vim"))
         call plug#begin('~/.vim/plugged')
 
@@ -24,7 +24,6 @@ if g:rc_use_plug_manager
         Plug 'mbbill/undotree'
         Plug 'junegunn/fzf.vim'
         Plug 'honza/vim-snippets'
-        Plug 'mg979/vim-visual-multi'
         Plug 'liuchengxu/vim-which-key'
         Plug 'editorconfig/editorconfig-vim'
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
@@ -37,6 +36,7 @@ if g:rc_use_plug_manager
 
         Plug 'tpope/vim-rails'
         Plug 'tpope/vim-repeat'
+        Plug 'tpope/vim-abolish'
         Plug 'tpope/vim-surround'
         Plug 'tpope/vim-commentary'
         Plug 'tpope/vim-unimpaired'
@@ -94,36 +94,21 @@ if g:rc_use_plug_manager
         call plug#end()
 
     else
-        if executable('git')
-            call mkdir($HOME . "/.vim/autoload", "p")
-            if has('python')
-                echo "Downloading plug.vim, please wait a second..."
-                exe 'py import os,urllib2; f = urllib2.urlopen("https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"); g = os.path.join(os.path.expanduser("~"), ".vim/autoload/plug.vim"); open(g, "wb").write(f.read())'
-            else
-                if has('python3')
-                    echo "Downloading plug.vim, please wait a second..."
-                    exe 'py3 import os,urllib.request; f = urllib.request.urlopen("https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"); g = os.path.join(os.path.expanduser("~"), ".vim/autoload/plug.vim"); open(g, "wb").write(f.read())'
-                else
-                    exe "silent !echo 'let g:rc_use_plug_manager = 0' > ~/.vim/vimrc.before"
-                    echo "WARNING: plug.vim has been disabled due to the absence of 'python' or 'python3' features.\nIf you solve the problem and want to use it, you should delete the line with 'let g:rc_use_plug_manager = 0' in '~/.vim/vimrc.before' file.\nIf you don't take any action, that's OK. This message won't appear again. If you have any trouble contact me."
-                endif
-            endif
-            if filereadable(expand("~/.vim/autoload/plug.vim"))
-                echo "PluginManager - plug.vim just installed! vim will quit now.\nYou should relaunch vim, use PlugInstall to install plugins OR do nothing just use the basic config."
-                exe 'qall!'
-            endif
-        else
-            exe "silent !echo 'let g:rc_use_plug_manager = 0' > ~/.vim/vimrc.before"
-            echo "WARNING: plug.vim has been disabled due to the absence of 'git'.\nIf you solve the problem and want to use it, you should delete the line with 'let g:rc_use_plug_manager = 0' in '~/.vim/vimrc.before' file.\nIf you don't take any action, that's OK. This message won't appear again. If you have any trouble contact me."
-        endif
+
+        echo "WARNING: plug.vim undetected, now downloading...\n"
+        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+
     endif
+
 endif
 
 " }}} Plugin List "
 
 " Plugin Config {{{ "
 
-if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
+if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " Plugin Config - colorscheme {{{ "
 
@@ -507,36 +492,6 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - indentline "
 
-    " Plugin Config - vim-visual-multi {{{ "
-
-    if filereadable(expand("~/.vim/plugged/vim-visual-multi/plugin/visual-multi.vim"))
-
-        let g:VM_mouse_mappings   = 1
-        let g:VM_skip_empty_lines = 1
-        let g:VM_silent_exit      = 1
-
-        function! VM_Start()
-            if exists(":DelimitMateOff") | exe 'DelimitMateOff' | endif
-        endfunction
-
-        function! VM_Exit()
-            if exists(':DelimitMateOn') | exe 'DelimitMateOn' | endif
-        endfunction
-
-        let g:VM_leader = {'default': '<Leader>', 'visual': '<Leader>', 'buffer': 'z'}
-        let g:VM_maps                      = {}
-        let g:VM_maps["Get Operator"]      = 'gza'
-        let g:VM_maps["Add Cursor At Pos"] = 'gzz'
-        let g:VM_maps["Reselect Last"]     = 'gzp'
-        let g:VM_maps["Visual Cursors"]    = 'gzc'
-        let g:VM_maps["Undo"]              = 'u'
-        let g:VM_maps["Redo"]              = '<C-r>'
-        let g:VM_maps["Visual Subtract"]   = 'zs'
-        let g:VM_maps["Visual Reduce"]     = 'zr'
-    endif
-
-    " }}} Plugin Config - vim-visual-multi "
-
     " Plugin Config - editorconfig {{{ "
 
     if filereadable(expand("~/.vim/plugged/editorconfig-vim/plugin/editorconfig.vim"))
@@ -916,3 +871,27 @@ if g:rc_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 endif
 
 " }}} Plugin Config "
+
+" minpac config {{{ "
+
+packadd minpac
+
+if !exists('*minpac#init')
+    echo "WARNING: minpac undetected, now downloading...\n"
+    silent !git clone --depth 1 -- https://github.com/k-takata/minpac.git
+			    \ ~/.vim/pack/minpac/opt/minpac
+else
+    " minpac is available.
+    call minpac#init()
+    call minpac#add('k-takata/minpac', {'type': 'opt'})
+
+    " Additional plugins here.
+    call minpac#add('vim/killersheep', {'type': 'opt'})
+
+endif
+
+command! PackUpdate call minpac#update()
+command! PackStatus call minpac#status()
+command! PackClean call minpac#clean()
+
+" }}} minpac config "

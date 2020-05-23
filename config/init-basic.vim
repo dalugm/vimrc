@@ -3,14 +3,20 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-05-08 09:50
+" # Last Modified : 2020-05-21 20:44
 " # By            : Mou Tong
 " # Description   : basic config for vim
 " ###########################################################
 
 " Environment - Encoding, Indent, Fold {{{ "
 
-set nocompatible " be iMproved required
+if version >= 800 && !has('nvim')
+    unlet! skip_defaults_vim
+    source $VIMRUNTIME/defaults.vim
+elseif !has('nvim')
+    set nocompatible " Vi IMproved
+    filetype plugin indent on " Enable filetype plugins
+endif
 
 if !isdirectory(expand("~/.vim/"))
     call mkdir($HOME . "/.vim")
@@ -52,11 +58,6 @@ set formatoptions+=n
 
 set autoindent " Auto indent
 set smartindent " Smart indent
-
-" Enable filetype plugins
-filetype on
-filetype plugin on
-filetype plugin indent on
 
 " N spaces for every indent
 set shiftwidth=4
@@ -140,58 +141,6 @@ set ruler
    " autocmd BufEnter * highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
    " autocmd BufEnter * match OverLength /\%81v.*/
 
-" Set line number
-" set number
-" set relativenumber
-
-" function - linenum {{{ "
-
-" Show line number by default
-if !exists('g:rc_show_line_number')
-    let g:rc_show_line_number = 1
-else
-    " If show_line_number is explicitly set to false,
-    " events-driving UseAbsOrRelNum will be stopped.
-    if g:rc_show_line_number == 0 | augroup! rc_line_number | endif
-endif
-
-" Toggle showing line number
-let g:rc_linenr_switch = g:rc_show_line_number
-nnoremap <silent> <Leader>n :call RCToggleLineNumber(g:rc_linenr_switch)<CR>
-
-function! RCToggleLineNumber(switch)
-    if a:switch
-        set number relativenumber
-        let g:rc_linenr_switch = 0
-    else
-        set nonumber norelativenumber
-        let g:rc_linenr_switch = 1
-    endif
-endfunction
-
-" Run once to show initial linenum
-call RCToggleLineNumber(g:rc_show_line_number)
-
-" Use absolute linenum in insert mode; relative linenum in normal mode
-augroup rc_line_number
-    autocmd FocusLost,InsertEnter * call RCUseAbsOrRelNum(1)
-    autocmd FocusGained,InsertLeave * call RCUseAbsOrRelNum(0)
-augroup END
-
-function! RCUseAbsOrRelNum(switch)
-    if g:rc_show_line_number == 0 || exists('#goyo')
-        set nonumber norelativenumber
-    else
-        if a:switch
-            set number norelativenumber
-        else
-            set number relativenumber
-        endif
-    endif
-endfunction
-
-" }}} linenum - function "
-
 " show command in the last line of screen
 set showcmd
 
@@ -213,7 +162,7 @@ else
 endif
 
 " Minimal number of screen lines to keep above and below the cursor.
-set scrolloff=3
+set scrolloff=5
 
 " }}} Appearance - Scrollbar, Highlight, Numberline "
 
@@ -222,8 +171,53 @@ set scrolloff=3
 " Map jk to enter normal mode
 imap jk <Esc>
 
+" For regular expressions turn magic on
+set magic
+
+" When searching try to be smart about cases
+set smartcase
+
 " Enhance <C-l> by adding disable `highlight' temporarily
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+
+" Make `&' keep the flags in substitute
+nnoremap & :&&<CR>
+xnoremap & :&&<CR>
+
+" Highlight search results
+set hlsearch
+
+" Update preview instantly when searching
+set incsearch
+
+" Don't wrap around when junping between search result
+set nowrapscan
+
+" Use `%%' to expand current file's dir
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
+" Enhace `*' {{{ "
+
+" makes * and # work on visual mode too.
+function! s:VSetSearch(cmdtype)
+  let temp = @s
+  norm! gv"sy
+  let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
+  let @s = temp
+endfunction
+
+xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
+xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
+
+" recursively vimgrep for word under cursor or selection if you hit leader-star
+if maparg('<leader>*', 'n') == ''
+  nmap <leader>* :execute 'noautocmd vimgrep /\V' . substitute(escape(expand("<cword>"), '\'), '\n', '\\n', 'g') . '/ **'<CR>
+endif
+if maparg('<leader>*', 'v') == ''
+  vmap <leader>* :<C-u>call <SID>VSetSearch()<CR>:execute 'noautocmd vimgrep /' . @/ . '/ **'<CR>
+endif
+
+" }}} Enhace `*' "
 
 " session config
 set sessionoptions-=options " do not store global and local values in a session
@@ -288,24 +282,6 @@ if has('persistent_undo')
     set undofile
     set undolevels=1000
 endif
-
-" For regular expressions turn magic on
-set magic
-
-" When searching try to be smart about cases
-set smartcase
-
-" Highlight search results
-set hlsearch
-
-" Update preview instantly when searching
-set incsearch
-
-" Don't wrap around when junping between search result
-set nowrapscan
-
-" Use `%%' to expand current file's dir
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 " Netrw config
 let g:netrw_liststyle = 3
@@ -436,35 +412,35 @@ if has ('nvim') || has('gui_running')
     set guicursor+=i-c-ci:ver25
     set guicursor+=ve-r-cr-o:hor20
     set guicursor+=a:blinkon0 " no cursor blink
-" else
-"     " Cursor Shape
-"     " SI = INSERT mode
-"     " SR = REPLACE mode
-"     " EI = NORMAL mode (ELSE)
-"     " Cursor settings:
-"     " 1 -> blinking block
-"     " 2 -> solid block
-"     " 3 -> blinking underscore
-"     " 4 -> solid underscore
-"     " 5 -> blinking vertical bar
-"     " 6 -> solid vertical bar
-"     " NOTE the value can be different in different terminals
-"     " @ https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
-"     if $TERM_PROGRAM =~ "iTerm.app"
-"         if empty($TMUX)
-"             let &t_SI .= "\<Esc>]50;CursorShape=1\x7"
-"             let &t_SR .= "\<Esc>]50;CursorShape=2\x7"
-"             let &t_EI .= "\<Esc>]50;CursorShape=0\x7"
-"         else
-"             let &t_SI .= "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-"             let &t_SR .= "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
-"             let &t_EI .= "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-"         endif
-"     else
-"         let &t_SI .= "\e[5 q"
-"         let &t_SR .= "\e[4 q"
-"         let &t_EI .= "\e[1 q"
-"     endif
+else
+    " Cursor Shape
+    " SI = INSERT mode
+    " SR = REPLACE mode
+    " EI = NORMAL mode (ELSE)
+    " Cursor settings:
+    " 1 -> blinking block
+    " 2 -> solid block
+    " 3 -> blinking underscore
+    " 4 -> solid underscore
+    " 5 -> blinking vertical bar
+    " 6 -> solid vertical bar
+    " NOTE the value can be different in different terminals
+    " @ https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
+    if $TERM_PROGRAM =~ "iTerm.app"
+        if empty($TMUX)
+            let &t_SI .= "\<Esc>]50;CursorShape=1\x7"
+            let &t_SR .= "\<Esc>]50;CursorShape=2\x7"
+            let &t_EI .= "\<Esc>]50;CursorShape=0\x7"
+        else
+            let &t_SI .= "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+            let &t_SR .= "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
+            let &t_EI .= "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+        endif
+    else
+        let &t_SI .= "\e[5 q"
+        let &t_SR .= "\e[4 q"
+        let &t_EI .= "\e[1 q"
+    endif
 endif
 
 " Disable scrollbars
@@ -533,9 +509,5 @@ augroup dalu_color_warning
     autocmd ColorScheme * call matchadd('Todo', '\W\zs\(TODO\|FIXME\|CHANGED\|BUG\|HACK\|XXX\|NOTICE\|WARNING\|DANGER\|DEPRECATED\|REVIEW\)')
     autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
 augroup END
-
-" Make TOhtml behavior better
-let g:html_dynamic_folds = 1
-let g:html_prevent_copy = "fntd"
 
 " }}} Misc "
