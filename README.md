@@ -20,12 +20,6 @@ Inspired by [ashfinal](https://github.com/ashfinal/vimrc-config)
     chmod +x install.sh && install.sh
     ln -s -f ${HOME}/vimfiles/init.vim ${HOME}/_vimrc
 
-### Third party packages
-
-    git submodule update --init --recursive
-    git submodule foreach git reset --hard
-    git submodule foreach git checkout master
-
 ### neovim
 
     ln -s ~/.vim ~/.config/nvim
