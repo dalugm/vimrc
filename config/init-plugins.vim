@@ -135,7 +135,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " when using `solarized` in terminal
     " Check more on plugin folder or
     " https://github.com/altercation/vim-colors-solarized
-    let g:solarized_termtrans=1
+    " let g:solarized_termtrans=1
     let g:onedark_termcolors=256
     let g:solarized_termcolors=256
 

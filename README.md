@@ -8,17 +8,17 @@ Inspired by [ashfinal](https://github.com/ashfinal/vimrc-config)
 
 ## INSTALL
 
-### *nix
+### Unix
 
-    git clone --depth 1 https://github.com/dalu98/vimrc.git ~/.vim && cd .vim
+    git clone --depth 1 https://github.com/dalu98/vimrc.git $HOME/.vim && cd .vim
     chmod +x install.sh && ./install.sh
-    ln -s -f ${HOME}/.vim/init.vim ${HOME}/.vimrc
+    ln -s -f $HOME/.vim/init.vim $HOME/.vimrc
 
 ### Windows
 
-    git clone --depth 1 https://github.com/dalu98/vimrc.git ${HOME}/.vim && cd .vim
+    git clone --depth 1 https://github.com/dalu98/vimrc.git $HOME\vimfiles && cd .vim
     chmod +x install.sh && install.sh
-    ln -s -f ${HOME}/vimfiles/init.vim ${HOME}/_vimrc
+    ln -s -f $HOME\vimfiles\init.vim $HOME\_vimrc
 
 ### neovim
 
@@ -53,3 +53,9 @@ let g:coc_user_config = extend(g:coc_common, g:coc_explorer)
 ### Add Bash lsp for `coc.nvim`
 
     npm i -g bash-language-server
+
+### Documentation
+
+    :mkdir -p ~/.vim/doc
+    :!cp path/to/[plugin].vim ~/.vim/doc
+    :helptags ~/.vim/doc

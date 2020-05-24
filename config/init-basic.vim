@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-05-21 20:44
+" # Last Modified : 2020-05-24 12:55
 " # By            : Mou Tong
 " # Description   : basic config for vim
 " ###########################################################
@@ -127,9 +127,6 @@ endif
 " Abbrev of prompt
 set shortmess=aoOtTF
 
-" Highlight current line
-set cursorline
-
 " Hide mouse pointer when type
 set mousehide
 
@@ -177,8 +174,8 @@ set magic
 " When searching try to be smart about cases
 set smartcase
 
-" Enhance <C-l> by adding disable `highlight' temporarily
-nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+" Enhance <C-l>
+nnoremap <silent> <C-l> :<C-u>nohlsearch<CR>:diffupdate<CR>:syntax sync fromstart<CR><C-l>
 
 " Make `&' keep the flags in substitute
 nnoremap & :&&<CR>
@@ -288,6 +285,10 @@ let g:netrw_liststyle = 3
 let g:netrw_winsize = 30
 autocmd FileType netrw setlocal bufhidden=delete
 
+" Make auto-complete faster
+set complete-=i   " disable scanning included files
+set complete-=t   " disable searching tags
+
 " }}} Edit - Navigation, History, Search "
 
 " Buffer - BufferSwitch, FileExplorer, Statusline {{{ "
@@ -339,12 +340,14 @@ noremap \ ,
 nnoremap <silent> <Leader>w :update<CR>
 
 " Fast editing and reloading of vimrc configs
-map <Leader>ec :e! ~/.vim/config<CR>
-map <Leader>er :source ~/.vimrc<CR>
+nnoremap <Leader>ec :e! ~/.vim/config<CR>
+nnoremap <Leader>er :source ~/.vimrc<CR>
 
 " Switch CWD to the directory of the open buffer
-map <Leader>cd :cd %:p:h<CR>:pwd<CR>
+nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 
+" Edit macros
+nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
     " Key Mappings - Buffer {{{ "
 
@@ -381,30 +384,32 @@ map <Leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Package opt {{{ "
 
-if version >= 800
+if has('packages')
+
     " Enhance `%' command
     packadd! matchit
+    autocmd FileType python let b:match_words = '\<if\>:\<elif\>:\<else\>'
+
     " when editing a file that is already edited with another Vim instance
     " go to that Vim instance
     if !has('nvim')
         packadd! editexisting
     endif
+
 else
+
     runtime macros/matchit.vim
+    autocmd FileType python let b:match_words = '\<if\>:\<elif\>:\<else\>'
+
     if !has('nvim')
         runtime macros/editexisting.vim
     endif
+
 endif
 
 " }}} Package opt "
 
 " GUI Related {{{ "
-
-" Set gui font
-set guifont=Sarasa\ Mono\ SC:h12
-
-" show table numbers
-set guitablabel=%N:%M%t
 
 " set cursor shape
 if has ('nvim') || has('gui_running')
@@ -443,12 +448,24 @@ else
     endif
 endif
 
-" Disable scrollbars
-set guioptions-=r
-set guioptions-=R
-set guioptions-=l
-set guioptions-=L
-set guioptions-=T " Also disable toolbar
+if has('gui_running')
+    " set gui font
+    set guifont=Sarasa\ Mono\ SC:h12
+
+    " change gui font size
+    command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
+    command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
+
+    " show table numbers
+    set guitablabel=%N:%M%t
+
+    " disable scrollbars
+    set guioptions-=r
+    set guioptions-=R
+    set guioptions-=l
+    set guioptions-=L
+    set guioptions-=T " Also disable toolbar
+endif
 
 " }}} GUI Releated "
 
@@ -458,7 +475,7 @@ set guioptions-=T " Also disable toolbar
 if has('nvim')
     set shada=!,'100,<50,s10,h
 else
-    set viminfo='100,s10,<50
+    set viminfo='100,s10,<50,n$HOME/.vim/viminfo
 endif
 
 " add mouse support to nvim
