@@ -22,27 +22,31 @@ if g:dalu_use_plug_manager
 
         " better operation
         Plug 'mbbill/undotree'
-        Plug 'junegunn/fzf.vim'
         Plug 'honza/vim-snippets'
+        Plug 'Yggdroot/indentLine'
         Plug 'liuchengxu/vim-which-key'
         Plug 'editorconfig/editorconfig-vim'
         Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+
+        Plug 'tpope/vim-rails'
+        Plug 'tpope/vim-repeat'
+        Plug 'tpope/vim-abolish'
+        Plug 'tpope/vim-surround'
+        Plug 'tpope/vim-dispatch'
+        Plug 'tpope/vim-commentary'
+        Plug 'tpope/vim-unimpaired'
+        Plug 'tpope/vim-projectionist'
+
+        Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } | Plug 'junegunn/fzf.vim'
+
+        Plug 'skywind3000/asyncrun.vim'
+        Plug 'skywind3000/asynctasks.vim'
 
         " textobj
         Plug 'wellle/targets.vim'
         Plug 'kana/vim-textobj-user'
         Plug 'junegunn/vim-easy-align'
         Plug 'easymotion/vim-easymotion'
-
-        Plug 'tpope/vim-rails'
-        Plug 'tpope/vim-repeat'
-        Plug 'tpope/vim-abolish'
-        Plug 'tpope/vim-surround'
-        Plug 'tpope/vim-commentary'
-        Plug 'tpope/vim-unimpaired'
-
-        Plug 'skywind3000/asyncrun.vim'
-        Plug 'skywind3000/asynctasks.vim'
 
         " git
         Plug 'tpope/vim-fugitive'
@@ -59,7 +63,6 @@ if g:dalu_use_plug_manager
         Plug 'junegunn/goyo.vim'
         Plug 'junegunn/limelight.vim'
 
-        Plug 'Yggdroot/indentLine'
         Plug 'luochen1990/rainbow'
         Plug 'itchyny/lightline.vim'
         Plug 'ryanoasis/vim-devicons'
@@ -77,8 +80,6 @@ if g:dalu_use_plug_manager
         Plug 'NLKNguyen/papercolor-theme'
         Plug 'altercation/vim-colors-solarized'
 
-        " On-demand loading
-
         " Lsp Support
         if version >= 800 || has('nvim')
             Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -88,8 +89,6 @@ if g:dalu_use_plug_manager
             endif
         endif
 
-        " Self maintained plugins
-        Plug '/usr/local/opt/fzf'
 
         call plug#end()
 
@@ -309,16 +308,80 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - LeaderF "
 
-    " Plugin Config - undotree {{{ "
+" Plugin Config - fzf {{{ "
 
-    if filereadable(expand("~/.vim/plugged/undotree/plugin/undotree.vim"))
+if filereadable(expand("~/.vim/plugged/fzf.vim/plugin/fzf.vim"))
 
-        let g:undotree_SplitWidth         = 40
-        let g:undotree_SetFocusWhenToggle = 1
+    nnoremap <Leader>p :<C-u>FZF<CR>
 
-    endif
+    " This is the default extra key bindings
+    let g:fzf_action = {
+                \ 'ctrl-t': 'tab split',
+                \ 'ctrl-x': 'split',
+                \ 'ctrl-v': 'vsplit'
+                \ }
 
-    " }}} Plugin Config - undotree "
+    " An action can be a reference to a function that processes selected lines
+    function! s:build_quickfix_list(lines)
+        call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+        copen
+        cc
+    endfunction
+
+    let g:fzf_action = {
+                \ 'ctrl-q': function('s:build_quickfix_list'),
+                \ 'ctrl-t': 'tab split',
+                \ 'ctrl-x': 'split',
+                \ 'ctrl-v': 'vsplit'
+                \ }
+
+    " Default fzf layout
+    " - down / up / left / right
+    let g:fzf_layout = { 'down': '~40%' }
+
+    " You can set up fzf window using a Vim command (Neovim or latest Vim 8 required)
+    let g:fzf_layout = { 'window': 'enew' }
+    let g:fzf_layout = { 'window': '-tabnew' }
+    let g:fzf_layout = { 'window': '10new' }
+
+    " Customize fzf colors to match your color scheme
+    " - fzf#wrap translates this to a set of `--color` options
+    let g:fzf_colors = {
+                \ 'fg':      ['fg', 'Normal'],
+                \ 'bg':      ['bg', 'Normal'],
+                \ 'hl':      ['fg', 'Comment'],
+                \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+                \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+                \ 'hl+':     ['fg', 'Statement'],
+                \ 'info':    ['fg', 'PreProc'],
+                \ 'border':  ['fg', 'Ignore'],
+                \ 'prompt':  ['fg', 'Conditional'],
+                \ 'pointer': ['fg', 'Exception'],
+                \ 'marker':  ['fg', 'Keyword'],
+                \ 'spinner': ['fg', 'Label'],
+                \ 'header':  ['fg', 'Comment']
+                \ }
+
+" Enable per-command history
+" - History files will be stored in the specified directory
+" - When set, CTRL-N and CTRL-P will be bound to 'next-history' and
+"   'previous-history' instead of 'down' and 'up'.
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+endif
+
+" }}} Plugin Config - fzf "
+
+" Plugin Config - undotree {{{ "
+
+if filereadable(expand("~/.vim/plugged/undotree/plugin/undotree.vim"))
+
+    let g:undotree_SplitWidth         = 40
+    let g:undotree_SetFocusWhenToggle = 1
+
+endif
+
+" }}} Plugin Config - undotree "
 
     " Plugin Config - vim-textobj-user {{{ "
 
@@ -477,16 +540,15 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     if filereadable(expand("~/.vim/plugged/indentLine/after/plugin/indentLine.vim"))
 
-        let g:indentLine_enabled = 1
         " WARNING
         " do not use non-mono char, or cursor will be in wrong position
-        let g:indentLine_char_list = ['|', '¦']
+        let g:indentLine_char_list = ['|', '¦', '┆', '┊']
         " Set indent level
         let g:indentLine_indentLevel = 5
-        " Exclude file
-        let g:indentLine_fileTypeExclude = ['text', 'help', 'json', 'markdown', 'coc-explorer']
-        " let colorscheme highlight indentLine
-        " let g:indentLine_setColors = 0
+        " Disable when open specific file types
+        let g:indentLine_fileTypeExclude = ['text', 'help', 'json', 'terminal', 'coc-explorer']
+        " Make exclude work in neovim
+        let g:indentLine_bufNameExclude = ['term:.*']
 
     endif
 
@@ -522,9 +584,9 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " Plugin Config - coc.nvim {{{ "
 
     if filereadable(expand("~/.vim/plugged/coc.nvim/plugin/coc.vim"))
-        " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-        " delays and poor user experience.
-        set updatetime=300
+
+        " Disable coc in specific filetype
+        autocmd FileType text,markdown let g:coc_enabled = 0
 
         " Don't pass messages to |ins-completion-menu|.
         set shortmess+=c
@@ -575,7 +637,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         endfunction
 
         " Highlight the symbol and its references when holding the cursor.
-        autocmd CursorHold * silent call CocActionAsync('highlight')
+        " autocmd CursorHold * silent call CocActionAsync('highlight')
 
         " Symbol renaming.
         nmap <leader>rn <Plug>(coc-rename)
@@ -662,6 +724,12 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \   }
                     \ }
 
+        " Hide the statusline when open coc-explorer
+        augroup CocExplorerCustom
+            autocmd!
+            autocmd User CocExplorerOpenPost setlocal statusline=%#NonText#
+        augroup END
+
         " }}} coc config - explorer "
 
         " coc config - pairs {{{ "
@@ -726,8 +794,6 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " Plugin Config - vim-which-key {{{ "
 
     if filereadable(expand("~/.vim/plugged/vim-which-key/plugin/which_key.vim"))
-
-        " NOTE key defined here won't overwrite already defined keys
 
         " By default timeoutlen is 1000 ms
         " Use default leader key bindings when not popup
@@ -816,6 +882,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ 'name' : '+search' ,
                     \ 'b' : ['LeaderfBuffer'          , 'search-buffer']        ,
                     \ 'f' : ['LeaderfFile'            , 'search-file']          ,
+                    \ 'F' : [':FZF'                   , 'search-file-fzf']      ,
                     \ 'h' : [':CocList searchhistory' , 'search-history']       ,
                     \ 'd' : [':Leaderf rg'            , 'search-cwd']           ,
                     \ 's' : [':CocList lines'         , 'search-buffer']        ,
@@ -823,32 +890,36 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ }
 
         let g:which_key_map['c'] = {
-                    \ 'name' : '+code',
-                    \ 'a' : ['<Plug>(coc-codeaction-selected)' , 'codeAction'] ,
-                    \ 'c' : [':AsyncTask file-run'             , 'run-file']   ,
-                    \ 'C' : [':AsyncTask file-build'           , 'build-file'] ,
-                    \ 'f' : ['<Plug>(coc-fix-current)'         , 'fix-error']  ,
-                    \ 'F' : ['<Plug>(coc-format-selected)'     , 'format']     ,
-                    \ 'R' : ['<Plug>(coc-refactor)'            , 'refactor']   ,
+                    \ 'name' : '+code' ,
+                    \ 'a' : ['<Plug>(coc-codeaction-selected)' , 'codeAction']      ,
+                    \ 'c' : [':AsyncTask file-run'             , 'run-file']        ,
+                    \ 'C' : [':AsyncTask file-build'           , 'build-file']      ,
+                    \ 'f' : ['<Plug>(coc-fix-current)'         , 'fix-error']       ,
+                    \ 'F' : ['<Plug>(coc-format-selected)'     , 'format']          ,
+                    \ 'p' : [':AsyncTask project-run'          , 'run-project']     ,
+                    \ 'P' : [':AsyncTask project-build'        , 'builid-project']  ,
+                    \ 'R' : ['<Plug>(coc-refactor)'            , 'refactor']        ,
                     \ 'g' : {
-                    \ 'name' : '+goto',
-                    \ 'd' : ['<Plug>(coc-definition)'      , 'definition']      ,
-                    \ 'r' : ['<Plug>(coc-references)'      , 'references']      ,
-                    \ 't' : ['<Plug>(coc-type-definition)' , 'type-definition'] ,
-                    \ 'i' : ['<Plug>(coc-implementation)'  , 'implementation']  ,
-                    \ '[' : ['<Plug>(coc-diagnostic-prev)' , 'prev error']      ,
-                    \ ']' : ['<Plug>(coc-diagnostic-next)' , 'next error']      ,
-                    \ },
+                    \ 'name' : '+goto' ,
+                    \ 'd' : ['<Plug>(coc-definition)'          , 'definition']      ,
+                    \ 'r' : ['<Plug>(coc-references)'          , 'references']      ,
+                    \ 't' : ['<Plug>(coc-type-definition)'     , 'type-definition'] ,
+                    \ 'i' : ['<Plug>(coc-implementation)'      , 'implementation']  ,
+                    \ '[' : ['<Plug>(coc-diagnostic-prev)'     , 'prev error']      ,
+                    \ ']' : ['<Plug>(coc-diagnostic-next)'     , 'next error']      ,
+                    \ } ,
                     \ }
 
         let g:which_key_map['l'] = {
-                    \ 'name' : '+coc-list' ,
+                    \ 'name' : '+coc-list'               ,
                     \ 'a' : [':CocList diagnostics'      , 'show-diagnostics']         ,
                     \ 'e' : [':CocList extensions'       , 'show-extensions']          ,
                     \ 'c' : [':CocList commands'         , 'show-commands']            ,
                     \ 'C' : [':CocConfig'                , 'edit-CocConfig']           ,
+                    \ 'D' : [':CocDisable'               , 'coc-disable']              ,
+                    \ 'E' : [':CocEnable'                , 'coc-enable']               ,
                     \ 'o' : [':CocList outline'          , 'find-current-symbol']      ,
-                    \ 'r' : [':CocRestart'               , 'restart-coc']              ,
+                    \ 'R' : [':CocRestart'               , 'restart-coc']              ,
                     \ 's' : [':CocList -I symbols'       , 'search-workspace-symbols'] ,
                     \ 'j' : [':CocNext'                  , 'action-for-next-item']     ,
                     \ 'k' : [':CocPrev'                  , 'action-for-prev-item']     ,
@@ -874,24 +945,28 @@ endif
 
 " minpac config {{{ "
 
-packadd minpac
+if has('packages')
 
-if !exists('*minpac#init')
-    echo "WARNING: minpac undetected, now downloading...\n"
-    silent !git clone --depth 1 -- https://github.com/k-takata/minpac.git
-			    \ ~/.vim/pack/minpac/opt/minpac
-else
-    " minpac is available.
-    call minpac#init()
-    call minpac#add('k-takata/minpac', {'type': 'opt'})
+    packadd minpac
 
-    " Additional plugins here.
-    call minpac#add('vim/killersheep', {'type': 'opt'})
+    if !exists('*minpac#init')
+        echo "WARNING: minpac undetected, now downloading...\n"
+        silent !git clone --depth 1 -- https://github.com/k-takata/minpac.git
+                    \ ~/.vim/pack/minpac/opt/minpac
+    else
+        " minpac is available.
+        call minpac#init()
+        call minpac#add('k-takata/minpac', {'type': 'opt'})
+
+        " Additional plugins here.
+        call minpac#add('vim/killersheep', {'type': 'opt'})
+
+    endif
+
+    command! PackUpdate call minpac#update()
+    command! PackStatus call minpac#status()
+    command! PackClean  call minpac#clean()
 
 endif
-
-command! PackUpdate call minpac#update()
-command! PackStatus call minpac#status()
-command! PackClean call minpac#clean()
 
 " }}} minpac config "

@@ -66,7 +66,9 @@ endsnippet
 
 snippet vimlc "vim language comment"
 " ${1:description} {{{ "
+
 $0
+
 " }}} ${1:description} "
 endsnippet
 
@@ -145,6 +147,11 @@ endsnippet
 snippet fortune-motto "the default snippet to format motto"
 ${0:content}
         [32m-  ${1:author}[m
+endsnippet
+
+snippet srt "subtitle snippet" b
+${1:start time} --> ${2: end time}
+$0
 endsnippet
 
 # vim:ft=snippets:

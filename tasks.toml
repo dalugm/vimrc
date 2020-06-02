@@ -4,6 +4,7 @@ command:c=gcc -Wall "$(VIM_FILEPATH)" -o "$(VIM_PATHNOEXT)"
 command:cpp=g++ -Wall "$(VIM_FILEPATH)" -o "$(VIM_PATHNOEXT)"
 command:go=go build -o "$(VIM_PATHNOEXT)" "$(VIM_FILEPATH)"
 command:make=make -f "$(VIM_FILEPATH)"
+errorformat=%+A\ %#%f\ %#(%l\\\,%c):\ %m,%C%m
 output=quickfix
 cwd=$(VIM_FILEDIR)
 # 运行前保存所有改动的文件
@@ -26,6 +27,7 @@ output=terminal
 command=make
 # 设置在当前项目的根目录处运行 make
 cwd=$(VIM_ROOT)
+errorformat=%+A\ %#%f\ %#(%l\\\,%c):\ %m,%C%m
 
 [project-run]
 command=make run

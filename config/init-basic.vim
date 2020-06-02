@@ -34,7 +34,7 @@ set t_vb=
 set tm=500
 
 " Configure backspace so it acts as it should act
-set backspace=eol,start,indent
+set backspace=indent,eol,start
 
 let $user_name  = "dalu"
 let $tuser_name = "Mou Tong"
@@ -42,7 +42,7 @@ let $user_email = "mou.tong@qq.com"
 
 " Set utf8 as standard encoding
 set encoding=utf-8
-set fileencodings=utf-8,gb18030,default,cp936,big5,latin1
+set fileencodings=utf-8,gb18030,gb2312,default,cp936,big5,latin1
 
 " Use Unix as the standard file type
 set fileformats=unix,mac,dos
@@ -96,7 +96,9 @@ set mouse=a
 set fillchars=vert:│,fold:·
 
 " Use these symbols for invisible chars
-set listchars=tab:¦\ ,eol:¬,trail:⋅,extends:»,precedes:«
+if &listchars ==# 'eol:$'
+    set listchars=tab:>\ ,eol:¬,trail:⋅,extends:»,precedes:«,nbsp:+
+endif
 
 " Fold code config
 set foldenable
@@ -165,21 +167,11 @@ set scrolloff=5
 
 " Edit - Navigation, History, Search {{{ "
 
-" Map jk to enter normal mode
-imap jk <Esc>
-
 " For regular expressions turn magic on
 set magic
 
 " When searching try to be smart about cases
 set smartcase
-
-" Enhance <C-l>
-nnoremap <silent> <C-l> :<C-u>nohlsearch<CR>:diffupdate<CR>:syntax sync fromstart<CR><C-l>
-
-" Make `&' keep the flags in substitute
-nnoremap & :&&<CR>
-xnoremap & :&&<CR>
 
 " Highlight search results
 set hlsearch
@@ -189,32 +181,6 @@ set incsearch
 
 " Don't wrap around when junping between search result
 set nowrapscan
-
-" Use `%%' to expand current file's dir
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
-
-" Enhace `*' {{{ "
-
-" makes * and # work on visual mode too.
-function! s:VSetSearch(cmdtype)
-  let temp = @s
-  norm! gv"sy
-  let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
-  let @s = temp
-endfunction
-
-xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
-xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
-
-" recursively vimgrep for word under cursor or selection if you hit leader-star
-if maparg('<leader>*', 'n') == ''
-  nmap <leader>* :execute 'noautocmd vimgrep /\V' . substitute(escape(expand("<cword>"), '\'), '\n', '\\n', 'g') . '/ **'<CR>
-endif
-if maparg('<leader>*', 'v') == ''
-  vmap <leader>* :<C-u>call <SID>VSetSearch()<CR>:execute 'noautocmd vimgrep /' . @/ . '/ **'<CR>
-endif
-
-" }}} Enhace `*' "
 
 " session config
 set sessionoptions-=options " do not store global and local values in a session
@@ -257,6 +223,11 @@ endif
 " Set to auto read when a file is changed from the outside
 set autoread
 
+if !has('nvim') && &ttimeoutlen == -1
+  set ttimeout
+  set ttimeoutlen=100
+endif
+
 " Automatically write a file after milliseconds nothing is typed
 " Will get bad experience for diagnostics when it's default 4000
 set updatetime=300
@@ -278,6 +249,11 @@ if has('persistent_undo')
     set undodir=$HOME/.vim/undotree/
     set undofile
     set undolevels=1000
+endif
+
+" Ctags config
+if has('path_extra')
+  setglobal tags-=./tags tags-=./tags; tags^=./tags;
 endif
 
 " Netrw config
@@ -328,7 +304,45 @@ set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
 
 " }}} Buffer - BufferSwitch, FileExplorer, StatusLine "
 
-" Leader - keybindings {{{ "
+" Keybindings {{{ "
+
+" Map jk to enter normal mode
+imap jk <Esc>
+
+" Enhance <C-l>
+nnoremap <silent> <C-l> :<C-u>nohlsearch<C-R>=has('diff')?'<BAR>diffupdate':''<CR><CR>:syntax sync fromstart<CR><C-l>
+
+" Make `&' keep the flags in substitute
+nnoremap & :&&<CR>
+xnoremap & :&&<CR>
+
+" Use `%%' to expand current file's dir
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
+
+" Enhace `*' {{{ "
+
+" makes * and # work on visual mode too.
+function! s:VSetSearch(cmdtype)
+  let temp = @s
+  norm! gv"sy
+  let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
+  let @s = temp
+endfunction
+
+xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
+xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
+
+" recursively vimgrep for word under cursor or selection if you hit leader-star
+if maparg('<leader>*', 'n') == ''
+  nmap <leader>* :execute 'noautocmd vimgrep /\V' . substitute(escape(expand("<cword>"), '\'), '\n', '\\n', 'g') . '/ **'<CR>
+endif
+if maparg('<leader>*', 'v') == ''
+  vmap <leader>* :<C-u>call <SID>VSetSearch()<CR>:execute 'noautocmd vimgrep /' . @/ . '/ **'<CR>
+endif
+
+" }}} Enhace `*' "
+
+" LeaderKey {{{ "
 
 " With a map leader it's possible to do extra key combinations
 let mapleader = ","
@@ -349,38 +363,40 @@ nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
 " Edit macros
 nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
-    " Key Mappings - Buffer {{{ "
+" Key Mappings - Buffer {{{ "
 
-    " Close the current buffer
-    map <Leader>bd :bdelete<CR>
+" Close the current buffer
+map <Leader>bd :bdelete<CR>
 
-    " Close all the buffers
-    map <Leader>ba :bufdo bd<CR>
+" Close all the buffers
+map <Leader>ba :bufdo bd<CR>
 
-    " Change buffers
-    map <Leader>l :bnext<CR>
-    map <Leader>h :bprevious<CR>
+" Change buffers
+map <Leader>l :bnext<CR>
+map <Leader>h :bprevious<CR>
 
-    " }}} Key Mappings - Buffer "
+" }}} Key Mappings - Buffer "
 
-    " Key Mappings - Tab {{{ "
+" Key Mappings - Tab {{{ "
 
-    map <Leader>tn :tabnew<CR>
-    map <Leader>to :tabonly<CR>
-    map <Leader>tc :tabclose<CR>
-    map <Leader>tm :tabmove
+map <Leader>tn :tabnew<CR>
+map <Leader>to :tabonly<CR>
+map <Leader>tc :tabclose<CR>
+map <Leader>tm :tabmove
 
-    " Let 'tl' toggle between this and the last accessed tab
-    let g:lasttab = 1
-    nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
-    au TabLeave * let g:lasttab = tabpagenr()
+" Let 'tl' toggle between this and the last accessed tab
+let b:lasttab = 1
+nmap <Leader>tl :exe "tabn ".b:lasttab<CR>
+au TabLeave * let b:lasttab = tabpagenr()
 
-    " Opens a new tab with the current buffer's path
-    map <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>/
+" Opens a new tab with the current buffer's path
+map <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>/
 
-    " }}} Key Mappings - Tab "
+" }}} Key Mappings - Tab "
 
-" }}} Leader - keybindings "
+" }}} LeaderKey
+
+" }}} Keybindings "
 
 " Package opt {{{ "
 
@@ -450,7 +466,7 @@ endif
 
 if has('gui_running')
     " set gui font
-    set guifont=Sarasa\ Mono\ SC:h12
+    " set guifont=Sarasa\ Mono\ SC:h12
 
     " change gui font size
     command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
@@ -516,7 +532,7 @@ set showmatch
 set matchtime=2
 
 " Define how to use the CTRL-A and CTRL-X commands for adding to and subtracting from a number respectively
-set nrformats=bin,hex
+set nrformats-=octal
 
 augroup dalu_color_warning
     autocmd!
