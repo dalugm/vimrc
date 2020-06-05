@@ -8,7 +8,7 @@
 " # Description   : plugins config for vim
 " ###########################################################
 
-" Plugin List {{{ "
+" Plugin List {{{
 
 " Specify a directory for plugins
 " - Avoid using standard Vim directory names like 'plugin'
@@ -22,6 +22,7 @@ if g:dalu_use_plug_manager
 
         " better operation
         Plug 'mbbill/undotree'
+        Plug 'vim-test/vim-test'
         Plug 'honza/vim-snippets'
         Plug 'Yggdroot/indentLine'
         Plug 'liuchengxu/vim-which-key'
@@ -69,6 +70,7 @@ if g:dalu_use_plug_manager
         Plug 'octol/vim-cpp-enhanced-highlight'
         " ColorScheme
         Plug 'dracula/vim'
+        Plug 'rakr/vim-one'
         Plug 'morhetz/gruvbox'
         Plug 'ayu-theme/ayu-vim'
         Plug 'sickill/vim-monokai'
@@ -78,7 +80,6 @@ if g:dalu_use_plug_manager
         Plug 'nanotech/jellybeans.vim'
         Plug 'arcticicestudio/nord-vim'
         Plug 'NLKNguyen/papercolor-theme'
-        Plug 'altercation/vim-colors-solarized'
 
         " Lsp Support
         if version >= 800 || has('nvim')
@@ -103,13 +104,13 @@ if g:dalu_use_plug_manager
 
 endif
 
-" }}} Plugin List "
+" }}} Plugin List
 
-" Plugin Config {{{ "
+" Plugin Config {{{
 
 if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
-    " Plugin Config - colorscheme {{{ "
+    " Plugin Config - colorscheme {{{
 
     set background=dark
     colorscheme onedark
@@ -124,19 +125,12 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                 \ 'monokai'    ,
                 \ 'jellybeans' ,
                 \ 'nord'       ,
+                \ 'one'        ,
                 \ 'onedark'    ,
                 \ 'PaperColor' ,
                 \ 'seoul256'   ,
                 \ 'solarized'  ,
                 \ ]
-
-    " Use this to avoid screen color errors
-    " when using `solarized` in terminal
-    " Check more on plugin folder or
-    " https://github.com/altercation/vim-colors-solarized
-    " let g:solarized_termtrans=1
-    let g:onedark_termcolors=256
-    let g:solarized_termcolors=256
 
     " SetColors {{{
 
@@ -146,9 +140,9 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} SetColors
 
-    " }}} Plugin Config - colorscheme "
+    " }}} Plugin Config - colorscheme
 
-    " Plugin Config - lightline.vim {{{ "
+    " Plugin Config - lightline.vim {{{
 
     if filereadable(expand("~/.vim/plugged/lightline.vim/plugin/lightline.vim"))
 
@@ -156,7 +150,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         set noshowmode
 
         let g:lightline = {
-                    \ 'colorscheme': 'one',
+                    \ 'colorscheme': 'default',
                     \ 'active': {
                     \   'left': [ [ 'mode', 'paste' ], 
                     \             [ 'cocstatus', 'filename', 'fugitive' ] ]
@@ -194,9 +188,9 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     endif
 
-    " }}} Plugin Config - lightline.vim "
+    " }}} Plugin Config - lightline.vim
 
-    " Plugin Config - emmet-vim {{{ "
+    " Plugin Config - emmet-vim {{{
 
     if filereadable(expand("~/.vim/plugged/emmet-vim/plugin/emmet.vim"))
 
@@ -206,22 +200,22 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     endif
 
-    " }}} Plugin Config - emmet-vim "
+    " }}} Plugin Config - emmet-vim
 
-    " Plugin Config - vimtex {{{ "
+    " Plugin Config - vimtex {{{
 
     if filereadable(expand("~/.vim/plugged/vimtex/autoload/vimtex.vim"))
 
         let g:vimtex_compiler_latexmk = {
-            \ 'options' : [
-            \   '-xelatex',
-            \   '-shell-escape',
-            \   '-verbose',
-            \   '-file-line-error',
-            \   '-synctex=1',
-            \   '-interaction=nonstopmode',
-            \ ],
-            \ }
+                    \ 'options' : [
+                    \   '-xelatex',
+                    \   '-shell-escape',
+                    \   '-verbose',
+                    \   '-file-line-error',
+                    \   '-synctex=1',
+                    \   '-interaction=nonstopmode',
+                    \ ],
+                    \ }
 
         " add compiler callback for neovim
         if has('nvim')
@@ -234,14 +228,14 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                 let g:neocomplete#sources#omni#input_patterns = {}
             endif
             let g:neocomplete#sources#omni#input_patterns.tex =
-                \ g:vimtex#re#neocomplete
+                        \ g:vimtex#re#neocomplete
         endif
 
     endif
 
-    " }}} Plugin Config - vimtex "
+    " }}} Plugin Config - vimtex
 
-    " Plugin Config - vim-cpp-enhanced-highlight {{{ "
+    " Plugin Config - vim-cpp-enhanced-highlight {{{
 
     if filereadable(expand("~/.vim/plugged/vim-cpp-enhanced-highlight/after/syntax/cpp.vim"))
 
@@ -253,9 +247,9 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     endif
 
-    " }}} Plugin Config - vim-cpp-enhanced-highlight "
+    " }}} Plugin Config - vim-cpp-enhanced-highlight
 
-    " Plugin Config - Limelight && Goyo {{{ "
+    " Plugin Config - Limelight && Goyo {{{
 
     if filereadable(expand("~/.vim/plugged/goyo.vim/plugin/goyo.vim"))
                 \       && filereadable(expand("~/.vim/plugged/limelight.vim/plugin/limelight.vim"))
@@ -286,9 +280,9 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     endif
 
-    " }}} Plugin Config - Limelight && Goyo "
+    " }}} Plugin Config - Limelight && Goyo
 
-    " Plugin Config - LeaderF {{{ "
+    " Plugin Config - LeaderF {{{
 
     if filereadable(expand("~/.vim/plugged/LeaderF.vim/plugin/LeaderF.vim"))
 
@@ -306,84 +300,84 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     endif
 
-    " }}} Plugin Config - LeaderF "
+    " }}} Plugin Config - LeaderF
 
-" Plugin Config - fzf {{{ "
+    " Plugin Config - fzf {{{
 
-if filereadable(expand("~/.vim/plugged/fzf.vim/plugin/fzf.vim"))
+    if filereadable(expand("~/.vim/plugged/fzf.vim/plugin/fzf.vim"))
 
-    nnoremap <Leader>p :<C-u>FZF<CR>
+        nnoremap <Leader>p :<C-u>FZF<CR>
 
-    " This is the default extra key bindings
-    let g:fzf_action = {
-                \ 'ctrl-t': 'tab split',
-                \ 'ctrl-x': 'split',
-                \ 'ctrl-v': 'vsplit'
-                \ }
+        " This is the default extra key bindings
+        let g:fzf_action = {
+                    \ 'ctrl-t': 'tab split',
+                    \ 'ctrl-x': 'split',
+                    \ 'ctrl-v': 'vsplit'
+                    \ }
 
-    " An action can be a reference to a function that processes selected lines
-    function! s:build_quickfix_list(lines)
-        call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-        copen
-        cc
-    endfunction
+        " An action can be a reference to a function that processes selected lines
+        function! s:build_quickfix_list(lines)
+            call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+            copen
+            cc
+        endfunction
 
-    let g:fzf_action = {
-                \ 'ctrl-q': function('s:build_quickfix_list'),
-                \ 'ctrl-t': 'tab split',
-                \ 'ctrl-x': 'split',
-                \ 'ctrl-v': 'vsplit'
-                \ }
+        let g:fzf_action = {
+                    \ 'ctrl-q': function('s:build_quickfix_list'),
+                    \ 'ctrl-t': 'tab split',
+                    \ 'ctrl-x': 'split',
+                    \ 'ctrl-v': 'vsplit'
+                    \ }
 
-    " Default fzf layout
-    " - down / up / left / right
-    let g:fzf_layout = { 'down': '~40%' }
+        " Default fzf layout
+        " - down / up / left / right
+        let g:fzf_layout = { 'down': '~40%' }
 
-    " You can set up fzf window using a Vim command (Neovim or latest Vim 8 required)
-    let g:fzf_layout = { 'window': 'enew' }
-    let g:fzf_layout = { 'window': '-tabnew' }
-    let g:fzf_layout = { 'window': '10new' }
+        " You can set up fzf window using a Vim command (Neovim or latest Vim 8 required)
+        let g:fzf_layout = { 'window': 'enew' }
+        let g:fzf_layout = { 'window': '-tabnew' }
+        let g:fzf_layout = { 'window': '10new' }
 
-    " Customize fzf colors to match your color scheme
-    " - fzf#wrap translates this to a set of `--color` options
-    let g:fzf_colors = {
-                \ 'fg':      ['fg', 'Normal'],
-                \ 'bg':      ['bg', 'Normal'],
-                \ 'hl':      ['fg', 'Comment'],
-                \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-                \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-                \ 'hl+':     ['fg', 'Statement'],
-                \ 'info':    ['fg', 'PreProc'],
-                \ 'border':  ['fg', 'Ignore'],
-                \ 'prompt':  ['fg', 'Conditional'],
-                \ 'pointer': ['fg', 'Exception'],
-                \ 'marker':  ['fg', 'Keyword'],
-                \ 'spinner': ['fg', 'Label'],
-                \ 'header':  ['fg', 'Comment']
-                \ }
+        " Customize fzf colors to match your color scheme
+        " - fzf#wrap translates this to a set of `--color` options
+        let g:fzf_colors = {
+                    \ 'fg':      ['fg', 'Normal'],
+                    \ 'bg':      ['bg', 'Normal'],
+                    \ 'hl':      ['fg', 'Comment'],
+                    \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+                    \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+                    \ 'hl+':     ['fg', 'Statement'],
+                    \ 'info':    ['fg', 'PreProc'],
+                    \ 'border':  ['fg', 'Ignore'],
+                    \ 'prompt':  ['fg', 'Conditional'],
+                    \ 'pointer': ['fg', 'Exception'],
+                    \ 'marker':  ['fg', 'Keyword'],
+                    \ 'spinner': ['fg', 'Label'],
+                    \ 'header':  ['fg', 'Comment']
+                    \ }
 
-" Enable per-command history
-" - History files will be stored in the specified directory
-" - When set, CTRL-N and CTRL-P will be bound to 'next-history' and
-"   'previous-history' instead of 'down' and 'up'.
-let g:fzf_history_dir = '~/.local/share/fzf-history'
+        " Enable per-command history
+        " - History files will be stored in the specified directory
+        " - When set, CTRL-N and CTRL-P will be bound to 'next-history' and
+        "   'previous-history' instead of 'down' and 'up'.
+        let g:fzf_history_dir = '~/.local/share/fzf-history'
 
-endif
+    endif
 
-" }}} Plugin Config - fzf "
+    " }}} Plugin Config - fzf
 
-" Plugin Config - undotree {{{ "
+    " Plugin Config - undotree {{{
 
-if filereadable(expand("~/.vim/plugged/undotree/plugin/undotree.vim"))
+    if filereadable(expand("~/.vim/plugged/undotree/plugin/undotree.vim"))
 
-    let g:undotree_SplitWidth         = 40
-    let g:undotree_SetFocusWhenToggle = 1
+        let g:undotree_SplitWidth         = 40
+        let g:undotree_SetFocusWhenToggle = 1
 
-endif
+    endif
 
-" }}} Plugin Config - undotree "
+    " }}} Plugin Config - undotree
 
-    " Plugin Config - vim-textobj-user {{{ "
+    " Plugin Config - vim-textobj-user {{{
 
     if filereadable(expand("~/.vim/plugged/vim-textobj-user/autoload/textobj/user.vim"))
 
@@ -472,9 +466,9 @@ endif
 
     endif
 
-    " }}} Plugin Config - vim-textobj-user "
+    " }}} Plugin Config - vim-textobj-user
 
-    " Plugin Config - vim-easy-align {{{ "
+    " Plugin Config - vim-easy-align {{{
 
     if filereadable(expand("~/.vim/plugged/vim-easy-align/plugin/easy_align.vim"))
         map <Leader>g :EasyAlign<Space>
@@ -482,9 +476,9 @@ endif
         nmap ga <Plug>(EasyAlign)
     endif
 
-    " }}} Plugin Config - vim-easy-align "
+    " }}} Plugin Config - vim-easy-align
 
-    " {{{ Plugin Config - vim-repeat "
+    " {{{ Plugin Config - vim-repeat
 
     if filereadable(expand("~/.vim/plugged/vim-repeat/autoload/repeat.vim"))
 
@@ -493,9 +487,9 @@ endif
 
     endif
 
-    " }}} Plugin Config - vim-repeat "
+    " }}} Plugin Config - vim-repeat
 
-    " Plugin Config - commentary {{{ "
+    " Plugin Config - commentary {{{
 
     if filereadable(expand("~/.vim/plugged/vim-commentary/plugin/commentary.vim"))
 
@@ -504,39 +498,55 @@ endif
 
     endif
 
-    " }}} Plugin Config - commentary "
+    " }}} Plugin Config - commentary
 
-    " Plugin Config - rainbow {{{ "
+    " Plugin Config - vim-dispatch {{{
 
-    if filereadable(expand("~/.vim/plugged/rainbow/autoload/rainbow.vim"))
-        let g:rainbow_active = 1 " 0 if you want to enable it later via :RainbowToggle
-        let g:rainbow_conf = {
-        \   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
-        \   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
-        \   'operators': '_,_',
-        \   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-        \   'separately': {
-        \       '*': {},
-        \       'tex': {
-        \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
-        \       },
-        \       'lisp': {
-        \           'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
-        \       },
-        \       'vim': {
-        \           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
-        \       },
-        \       'html': {
-        \           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
-        \       },
-        \       'css': 0,
-        \   }
-        \}
+    if filereadable(expand("~/.vim/plugged/vim-dispatch/plugin/dispatch.vim"))
+
+        let test#strategy = "dispatch"
+        " @see https://github.com/tpope/vim-dispatch/issues/222#issuecomment-493273080
+        if !empty($TMUX)
+            set shellpipe=2>&1\|tee
+        endif
+
     endif
 
-    " }}} Plugin Config - rainbow "
+    " }}} Plugin Config - vim-dispatch
 
-    " Plugin Config - indentline {{{ "
+    " Plugin Config - rainbow {{{
+
+    if filereadable(expand("~/.vim/plugged/rainbow/autoload/rainbow.vim"))
+
+        let g:rainbow_active = 1 " 0 if you want to enable it later via :RainbowToggle
+        let g:rainbow_conf = {
+                    \ 'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+                    \ 'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+                    \ 'operators': '_,_',
+                    \ 'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+                    \ 'separately': {
+                    \     '*': {},
+                    \     'tex': {
+                    \         'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+                    \     },
+                    \     'lisp': {
+                    \         'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+                    \     },
+                    \     'vim': {
+                    \         'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+                    \     },
+                    \     'html': {
+                    \         'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+                    \     },
+                    \     'css': 0,
+                    \ }
+                    \}
+
+    endif
+
+    " }}} Plugin Config - rainbow
+
+    " Plugin Config - indentline {{{
 
     if filereadable(expand("~/.vim/plugged/indentLine/after/plugin/indentLine.vim"))
 
@@ -552,9 +562,9 @@ endif
 
     endif
 
-    " }}} Plugin Config - indentline "
+    " }}} Plugin Config - indentline
 
-    " Plugin Config - editorconfig {{{ "
+    " Plugin Config - editorconfig {{{
 
     if filereadable(expand("~/.vim/plugged/editorconfig-vim/plugin/editorconfig.vim"))
 
@@ -563,25 +573,27 @@ endif
 
     endif
 
-    " }}} Plugin Config - editorconfig "
+    " }}} Plugin Config - editorconfig
 
-    " Plugin Config - async {{{ "
+    " Plugin Config - async {{{
 
-        if filereadable(expand("~/.vim/plugged/asyncrun.vim/plugin/asyncrun.vim"))
-            " Set the height of window when run AsyncRun
-            let g:asyncrun_open = 6
-            " Identify the project root directory
-            " If not in any these rootmarks put an empty .root in directory
-            let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '.project', '.hg', 'build.xml']
-            " Set terminal position and style when set output=terminal
-            let g:asynctasks_term_pos = 'bottom'
-            " Set default global name of AsyncTask config
-            let g:asynctasks_rtp_config = "tasks.toml"
-        endif
+    if filereadable(expand("~/.vim/plugged/asyncrun.vim/plugin/asyncrun.vim"))
 
-    " }}} Plugin Config - asyncrun "
+        " Set the height of window when run AsyncRun
+        let g:asyncrun_open = 6
+        " Identify the project root directory
+        " If not in any these rootmarks put an empty .root in directory
+        let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '.project', '.hg', 'build.xml']
+        " Set terminal position and style when set output=terminal
+        let g:asynctasks_term_pos = 'bottom'
+        " Set default global name of AsyncTask config
+        let g:asynctasks_rtp_config = "tasks.toml"
 
-    " Plugin Config - coc.nvim {{{ "
+    endif
+
+    " }}} Plugin Config - async
+
+    " Plugin Config - coc.nvim {{{
 
     if filereadable(expand("~/.vim/plugged/coc.nvim/plugin/coc.vim"))
 
@@ -621,9 +633,9 @@ endif
             imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
         endif
 
-        " Use `[g` and `]g` to navigate diagnostics
-        nmap <silent> [g <Plug>(coc-diagnostic-prev)
-        nmap <silent> ]g <Plug>(coc-diagnostic-next)
+        " Use `[w` and `]w` to navigate diagnostics
+        nmap <silent> [w <Plug>(coc-diagnostic-prev)
+        nmap <silent> ]w <Plug>(coc-diagnostic-next)
 
         " Use K to show documentation in preview window.
         nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -697,10 +709,9 @@ endif
                     \ 'coc-pairs',
                     \ 'coc-python',
                     \ 'coc-snippets',
-                    \ 'coc-yank'
                     \ ]
 
-        " coc config - explorer {{{ "
+        " coc config - explorer {{{
 
         let g:coc_explorer_global_presets = {
                     \   '.vim': {
@@ -730,16 +741,16 @@ endif
             autocmd User CocExplorerOpenPost setlocal statusline=%#NonText#
         augroup END
 
-        " }}} coc config - explorer "
+        " }}} coc config - explorer
 
-        " coc config - pairs {{{ "
+        " coc config - pairs {{{
 
         " disable characters for a specified filetype
         autocmd FileType vim let b:coc_pairs_disabled = ['"']
 
-        " }}} coc config - pairs "
+        " }}} coc config - pairs
 
-        " coc config - snippets {{{ "
+        " coc config - snippets {{{
 
         let g:snips_author = "dalu"
         let g:snips_email  = "mou.tong@qq.com"
@@ -775,13 +786,13 @@ endif
 
         let g:coc_snippet_next = '<tab>'
 
-        " }}} coc config - snippets "
+        " }}} coc config - snippets
 
     endif
 
-    " }}} Plugin Config - coc.nvim "
+    " }}} Plugin Config - coc.nvim
 
-    " Plugin Config - neocomplete {{{ "
+    " Plugin Config - neocomplete {{{
 
     if filereadable(expand("~/.vim/plugged/neocomplete.vim/plugin/neocomplete.vim"))
         let g:neocomplete#enable_at_startup = 1
@@ -789,9 +800,9 @@ endif
         set omnifunc=syntaxcomplete#Complete
     endif
 
-    " }}} Plugin Config - neocomplete "
+    " }}} Plugin Config - neocomplete
 
-    " Plugin Config - vim-which-key {{{ "
+    " Plugin Config - vim-which-key {{{
 
     if filereadable(expand("~/.vim/plugged/vim-which-key/plugin/which_key.vim"))
 
@@ -817,31 +828,19 @@ endif
         " =======================================================
         " You can pass a descriptive text to an existing mapping.
 
+        let g:which_key_map['*'] = 'enhanced *'
+        let g:which_key_map['e'] = {
+                    \ 'name' : '+edit' ,
+                    \ 'c' : 'edit-config'   ,
+                    \ 'r' : 'reload-config' ,
+                    \ 'm' : 'edit-macros'
+                    \ }
+
         " =======================================================
         " Create menus not based on existing mappings:
         " =======================================================
         " Provide commands(ex-command, <Plug>/<C-W>/<C-d> mapping, etc.) and
         " descriptions for existing mappings
-
-        let g:which_key_map['w'] = {
-                    \ 'name' : '+windows' ,
-                    \ 'w' : ['<C-W>w'           , 'other-window']          ,
-                    \ 'd' : ['<C-W>c'           , 'delete-window']         ,
-                    \ '1' : ['<C-W>v'           , 'layout-double-columns'] ,
-                    \ 'h' : ['<C-W>h'           , 'window-left']           ,
-                    \ 'j' : ['<C-W>j'           , 'window-below']          ,
-                    \ 'l' : ['<C-W>l'           , 'window-right']          ,
-                    \ 'k' : ['<C-W>k'           , 'window-up']             ,
-                    \ 'H' : ['<C-W>5<'          , 'expand-window-left']    ,
-                    \ 'J' : ['resize +5'        , 'expand-window-below']   ,
-                    \ 'L' : ['<C-W>5>'          , 'expand-window-right']   ,
-                    \ 'K' : ['resize -5'        , 'expand-window-up']      ,
-                    \ '=' : ['<C-W>='           , 'balance-window']        ,
-                    \ 's' : ['<C-W>s'           , 'split-window-below']    ,
-                    \ 'v' : ['<C-W>v'           , 'split-window-right']    ,
-                    \ '?' : [':CocList windows' , 'window']                ,
-                    \ 'q' : [':call asyncrun#quickfix_toggle(6)' , 'toggle-quickfix'] ,
-                    \ }
 
         let g:which_key_map['b'] = {
                     \ 'name' : '+buffer' ,
@@ -853,16 +852,42 @@ endif
                     \ '?' : [':CocList buffers' , 'list-buffers']    ,
                     \ }
 
-        let g:which_key_map['t'] = {
-                    \ 'name' : '+tabs' ,
-                    \ 'a' : ['tabnew'      , 'add-tab']      ,
-                    \ 'd' : ['tabclose'    , 'delete-tab']   ,
-                    \ 'h' : ['tabfirst'    , 'first-tab']    ,
-                    \ 'l' : ['tablast'     , 'last-tab']     ,
-                    \ 'n' : ['tabnext'     , 'next-tab']     ,
-                    \ 'p' : ['tabprevious' , 'previous-tab'] ,
-                    \ '?' : ['tabs'        , 'list-tabs']    ,
+        let g:which_key_map['c'] = {
+                    \ 'name' : '+code' ,
+                    \ 'a' : ['<Plug>(coc-codeaction-selected)' , 'codeAction']      ,
+                    \ 'c' : [':AsyncTask file-run'             , 'run-file']        ,
+                    \ 'C' : [':AsyncTask file-build'           , 'build-file']      ,
+                    \ 'f' : ['<Plug>(coc-fix-current)'         , 'fix-error']       ,
+                    \ 'F' : ['<Plug>(coc-format-selected)'     , 'format']          ,
+                    \ 'p' : [':AsyncTask project-run'          , 'run-project']     ,
+                    \ 'P' : [':AsyncTask project-build'        , 'builid-project']  ,
+                    \ 'R' : ['<Plug>(coc-refactor)'            , 'refactor']        ,
+                    \ 'g' : {
+                    \ 'name' : '+goto' ,
+                    \ 'd' : ['<Plug>(coc-definition)'          , 'definition']      ,
+                    \ 'r' : ['<Plug>(coc-references)'          , 'references']      ,
+                    \ 't' : ['<Plug>(coc-type-definition)'     , 'type-definition'] ,
+                    \ 'i' : ['<Plug>(coc-implementation)'      , 'implementation']  ,
+                    \ '[' : ['<Plug>(coc-diagnostic-prev)'     , 'prev error']      ,
+                    \ ']' : ['<Plug>(coc-diagnostic-next)'     , 'next error']      ,
+                    \ } ,
                     \ }
+
+        let g:which_key_map['C'] = {
+                    \ 'name' : '+coc-list'               ,
+                    \ 'a' : [':CocList diagnostics'      , 'show-diagnostics']         ,
+                    \ 'e' : [':CocList extensions'       , 'show-extensions']          ,
+                    \ 'c' : [':CocList commands'         , 'show-commands']            ,
+                    \ 'C' : [':CocConfig'                , 'edit-CocConfig']           ,
+                    \ 'D' : [':CocDisable'               , 'coc-disable']              ,
+                    \ 'E' : [':CocEnable'                , 'coc-enable']               ,
+                    \ 'o' : [':CocList outline'          , 'find-current-symbol']      ,
+                    \ 'R' : [':CocRestart'               , 'restart-coc']              ,
+                    \ 's' : [':CocList -I symbols'       , 'search-workspace-symbols'] ,
+                    \ 'j' : [':CocNext'                  , 'action-for-next-item']     ,
+                    \ 'k' : [':CocPrev'                  , 'action-for-prev-item']     ,
+                    \ 'p' : [':CocListResume'            , 'resume-latest-coc-list']   ,
+                    \    }
 
         let g:which_key_map['f'] = {
                     \ 'name' : '+file' ,
@@ -889,43 +914,38 @@ endif
                     \ 'm' : ['LeaderfMru'             , 'search-rencent-files'] ,
                     \ }
 
-        let g:which_key_map['c'] = {
-                    \ 'name' : '+code' ,
-                    \ 'a' : ['<Plug>(coc-codeaction-selected)' , 'codeAction']      ,
-                    \ 'c' : [':AsyncTask file-run'             , 'run-file']        ,
-                    \ 'C' : [':AsyncTask file-build'           , 'build-file']      ,
-                    \ 'f' : ['<Plug>(coc-fix-current)'         , 'fix-error']       ,
-                    \ 'F' : ['<Plug>(coc-format-selected)'     , 'format']          ,
-                    \ 'p' : [':AsyncTask project-run'          , 'run-project']     ,
-                    \ 'P' : [':AsyncTask project-build'        , 'builid-project']  ,
-                    \ 'R' : ['<Plug>(coc-refactor)'            , 'refactor']        ,
-                    \ 'g' : {
-                    \ 'name' : '+goto' ,
-                    \ 'd' : ['<Plug>(coc-definition)'          , 'definition']      ,
-                    \ 'r' : ['<Plug>(coc-references)'          , 'references']      ,
-                    \ 't' : ['<Plug>(coc-type-definition)'     , 'type-definition'] ,
-                    \ 'i' : ['<Plug>(coc-implementation)'      , 'implementation']  ,
-                    \ '[' : ['<Plug>(coc-diagnostic-prev)'     , 'prev error']      ,
-                    \ ']' : ['<Plug>(coc-diagnostic-next)'     , 'next error']      ,
-                    \ } ,
+        let g:which_key_map['t'] = {
+                    \ 'name' : '+tabs' ,
+                    \ 'a' : ['tabnew'      , 'add-tab']      ,
+                    \ 'd' : ['tabclose'    , 'delete-tab']   ,
+                    \ 'h' : ['tabfirst'    , 'first-tab']    ,
+                    \ 'l' : ['tablast'     , 'last-tab']     ,
+                    \ 'n' : ['tabnext'     , 'next-tab']     ,
+                    \ 'p' : ['tabprevious' , 'previous-tab'] ,
+                    \ '?' : ['tabs'        , 'list-tabs']    ,
                     \ }
 
-        let g:which_key_map['l'] = {
-                    \ 'name' : '+coc-list'               ,
-                    \ 'a' : [':CocList diagnostics'      , 'show-diagnostics']         ,
-                    \ 'e' : [':CocList extensions'       , 'show-extensions']          ,
-                    \ 'c' : [':CocList commands'         , 'show-commands']            ,
-                    \ 'C' : [':CocConfig'                , 'edit-CocConfig']           ,
-                    \ 'D' : [':CocDisable'               , 'coc-disable']              ,
-                    \ 'E' : [':CocEnable'                , 'coc-enable']               ,
-                    \ 'o' : [':CocList outline'          , 'find-current-symbol']      ,
-                    \ 'R' : [':CocRestart'               , 'restart-coc']              ,
-                    \ 's' : [':CocList -I symbols'       , 'search-workspace-symbols'] ,
-                    \ 'j' : [':CocNext'                  , 'action-for-next-item']     ,
-                    \ 'k' : [':CocPrev'                  , 'action-for-prev-item']     ,
-                    \ 'p' : [':CocListResume'            , 'resume-latest-coc-list']   ,
-                    \ 'y' : [':CocList -A --normal yank' , 'open-yank-list']           ,
-                    \    }
+        let g:which_key_map['w'] = {
+                    \ 'name' : '+windows' ,
+                    \ '1' : ['<C-W>v'             , 'layout-double-columns'] ,
+                    \ '=' : ['<C-W>='             , 'balance-window']        ,
+                    \ '?' : [':CocList windows'   , 'window']                ,
+                    \ 'H' : ['<C-W>5<'            , 'expand-window-left']    ,
+                    \ 'J' : ['resize +5'          , 'expand-window-below']   ,
+                    \ 'K' : ['resize -5'          , 'expand-window-up']      ,
+                    \ 'L' : ['<C-W>5>'            , 'expand-window-right']   ,
+                    \ 'c' : ['ClearBackground'    , 'clear-bg']              ,
+                    \ 'd' : ['<C-W>c'             , 'delete-window']         ,
+                    \ 'h' : ['<C-W>h'             , 'window-left']           ,
+                    \ 'j' : ['<C-W>j'             , 'window-below']          ,
+                    \ 'k' : ['<C-W>k'             , 'window-up']             ,
+                    \ 'l' : ['<C-W>l'             , 'window-right']          ,
+                    \ 's' : ['<C-W>s'             , 'split-window-below']    ,
+                    \ 't' : ['TransparentToggle'  , 'toggle-background']     ,
+                    \ 'v' : ['<C-W>v'             , 'split-window-right']    ,
+                    \ 'w' : ['<C-W>w'             , 'other-window']          ,
+                    \ 'q' : [':call asyncrun#quickfix_toggle(6)' , 'toggle-quickfix'] ,
+                    \ }
 
         " Remind other key
         nnoremap <silent> ] :<c-u>WhichKey ']'<CR>
@@ -937,13 +957,13 @@ endif
 
     endif
 
-    " }}} Plugin Config - vim-which-key "
+    " }}} Plugin Config - vim-which-key
 
 endif
 
-" }}} Plugin Config "
+" }}} Plugin Config
 
-" minpac config {{{ "
+" minpac config {{{
 
 if has('packages')
 
@@ -969,4 +989,4 @@ if has('packages')
 
 endif
 
-" }}} minpac config "
+" }}} minpac config

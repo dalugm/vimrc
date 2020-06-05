@@ -8,7 +8,7 @@
 " # Description   : basic config for vim
 " ###########################################################
 
-" Environment - Encoding, Indent, Fold {{{ "
+" Environment - Encoding, Indent, Fold {{{
 
 if version >= 800 && !has('nvim')
     unlet! skip_defaults_vim
@@ -42,7 +42,7 @@ let $user_email = "mou.tong@qq.com"
 
 " Set utf8 as standard encoding
 set encoding=utf-8
-set fileencodings=utf-8,gb18030,gb2312,default,cp936,big5,latin1
+set fileencodings=utf-8,gb18030,default,cp936,big5,latin1
 
 " Use Unix as the standard file type
 set fileformats=unix,mac,dos
@@ -104,9 +104,9 @@ endif
 set foldenable
 set foldmethod=marker
 
-" }}} Environment - Encoding, Indent, Fold "
+" }}} Environment - Encoding, Indent, Fold
 
-" Appearence - Scrollbar, Highlight, Numberline {{{ "
+" Appearence - Scrollbar, Highlight, Numberline {{{
 
 " Enable syntax highlighting
 syntax enable
@@ -163,9 +163,9 @@ endif
 " Minimal number of screen lines to keep above and below the cursor.
 set scrolloff=5
 
-" }}} Appearance - Scrollbar, Highlight, Numberline "
+" }}} Appearance - Scrollbar, Highlight, Numberline
 
-" Edit - Navigation, History, Search {{{ "
+" Edit - Navigation, History, Search {{{
 
 " For regular expressions turn magic on
 set magic
@@ -186,7 +186,7 @@ set nowrapscan
 set sessionoptions-=options " do not store global and local values in a session
 set sessionoptions-=folds " do not store folds
 
-" function - restore last session {{{ "
+" function - restore last session {{{
 
 function! MakeSession(overwrite)
   let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
@@ -218,7 +218,7 @@ else
   au VimLeave * :call MakeSession(0)
 endif
 
-" }}} function - restore last session "
+" }}} function - restore last session
 
 " Set to auto read when a file is changed from the outside
 set autoread
@@ -265,9 +265,9 @@ autocmd FileType netrw setlocal bufhidden=delete
 set complete-=i   " disable scanning included files
 set complete-=t   " disable searching tags
 
-" }}} Edit - Navigation, History, Search "
+" }}} Edit - Navigation, History, Search
 
-" Buffer - BufferSwitch, FileExplorer, Statusline {{{ "
+" Buffer - BufferSwitch, FileExplorer, Statusline {{{
 
 " execute `:argdo' etc. by omitting `!'
 set hidden
@@ -302,9 +302,9 @@ set statusline+=\ [%{getcwd()}] " current dir
 set statusline+=\ [%{&encoding}] " encoding
 set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
 
-" }}} Buffer - BufferSwitch, FileExplorer, StatusLine "
+" }}} Buffer - BufferSwitch, FileExplorer, StatusLine
 
-" Keybindings {{{ "
+" Keybindings {{{
 
 " Map jk to enter normal mode
 imap jk <Esc>
@@ -319,7 +319,7 @@ xnoremap & :&&<CR>
 " Use `%%' to expand current file's dir
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
-" Enhace `*' {{{ "
+" Enhace `*' {{{
 
 " makes * and # work on visual mode too.
 function! s:VSetSearch(cmdtype)
@@ -340,9 +340,9 @@ if maparg('<leader>*', 'v') == ''
   vmap <leader>* :<C-u>call <SID>VSetSearch()<CR>:execute 'noautocmd vimgrep /' . @/ . '/ **'<CR>
 endif
 
-" }}} Enhace `*' "
+" }}} Enhace `*'
 
-" LeaderKey {{{ "
+" LeaderKey {{{
 
 " With a map leader it's possible to do extra key combinations
 let mapleader = ","
@@ -353,17 +353,18 @@ noremap \ ,
 " Fast saving
 nnoremap <silent> <Leader>w :update<CR>
 
-" Fast editing and reloading of vimrc configs
+" Fast editing and reloading of vim config
 nnoremap <Leader>ec :e! ~/.vim/config<CR>
+nnoremap <Leader>ev :e! ~/.vim<CR>
 nnoremap <Leader>er :source ~/.vimrc<CR>
 
-" Switch CWD to the directory of the open buffer
-nnoremap <Leader>cd :cd %:p:h<CR>:pwd<CR>
-
 " Edit macros
-nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+nnoremap <Leader>em :<C-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
-" Key Mappings - Buffer {{{ "
+" Switch CWD to the directory of the open buffer
+nnoremap <Leader>cd :lcd %:p:h<CR>:pwd<CR>
+
+" Key Mappings - Buffer {{{
 
 " Close the current buffer
 map <Leader>bd :bdelete<CR>
@@ -375,9 +376,9 @@ map <Leader>ba :bufdo bd<CR>
 map <Leader>l :bnext<CR>
 map <Leader>h :bprevious<CR>
 
-" }}} Key Mappings - Buffer "
+" }}} Key Mappings - Buffer
 
-" Key Mappings - Tab {{{ "
+" Key Mappings - Tab {{{
 
 map <Leader>tn :tabnew<CR>
 map <Leader>to :tabonly<CR>
@@ -392,13 +393,13 @@ au TabLeave * let b:lasttab = tabpagenr()
 " Opens a new tab with the current buffer's path
 map <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>/
 
-" }}} Key Mappings - Tab "
+" }}} Key Mappings - Tab
 
 " }}} LeaderKey
 
-" }}} Keybindings "
+" }}} Keybindings
 
-" Package opt {{{ "
+" Package opt {{{
 
 if has('packages')
 
@@ -423,9 +424,9 @@ else
 
 endif
 
-" }}} Package opt "
+" }}} Package opt
 
-" GUI Related {{{ "
+" GUI Related {{{
 
 " set cursor shape
 if has ('nvim') || has('gui_running')
@@ -466,9 +467,9 @@ endif
 
 if has('gui_running')
     " set gui font
-    " set guifont=Sarasa\ Mono\ SC:h12
+    set guifont=NotoMono\ Nerd\ Font\ Mono:h16
 
-    " change gui font size
+    " change GUI relatives
     command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
     command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
 
@@ -483,9 +484,9 @@ if has('gui_running')
     set guioptions-=T " Also disable toolbar
 endif
 
-" }}} GUI Releated "
+" }}} GUI Releated
 
-" Neovim Related {{{ "
+" Neovim Related {{{
 
 " Enable to continue where you left
 if has('nvim')
@@ -494,34 +495,32 @@ else
     set viminfo='100,s10,<50,n$HOME/.vim/viminfo
 endif
 
-" add mouse support to nvim
-if !has('nvim')
-    set ttymouse=xterm2
-endif
-
+" Make <Esc> back to Normal Mode
 if has('nvim')
     tnoremap <Esc> <C-\><C-n>
-endif
-
-if exists(':tnoremap')
-    tnoremap <Esc> <C-\><C-n>
-endif
-
-" tabline. Replaced by `guitablabel' when GUI is running
-if has('nvim')
-else
-    set tabline=%N:%M%t
+    tnoremap <C-v><Esc> <Esc>
 endif
 
 " call pyenv when using neovim
-if has("nvim")
+if has('nvim')
     let g:python_host_prog  = $HOME . "/.pyenv/versions/neovim2/bin/python"
     let g:python3_host_prog = $HOME . "/.pyenv/versions/neovim3/bin/python"
 endif
 
-" }}} Neovim Related "
+" Show TermCursor always
+if has('nvim')
+    highlight! link TermCursor Cursor
+    highlight! TermCursorNC guibg=red guifg=white ctermbg=1 ctermfg=15
+endif
 
-" Misc {{{ "
+" tabline. Replaced by `guitablabel' when GUI is running
+if !has('nvim')
+    set tabline=%N:%M%t
+endif
+
+" }}} Neovim Related
+
+" Misc {{{
 
 " vertical diffsplit
 set diffopt+=vertical
@@ -543,4 +542,4 @@ augroup dalu_color_warning
     autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
 augroup END
 
-" }}} Misc "
+" }}} Misc

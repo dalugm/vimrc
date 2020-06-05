@@ -14,12 +14,12 @@ save=2
 command="$(VIM_FILEPATH)"
 command:c,cpp="$(VIM_PATHNOEXT)"
 command:go="$(VIM_PATHNOEXT)"
-command:python=python3 "$(VIM_FILENAME)"
-command:javascript=node "$(VIM_FILENAME)"
-command:sh=bash "$(VIM_FILENAME)"
-command:lua=lua "$(VIM_FILENAME)"
-command:perl=perl "$(VIM_FILENAME)"
-command:ruby=ruby "$(VIM_FILENAME)"
+command:python=python "$(VIM_FILEPATH)"
+command:javascript=node "$(VIM_FILEPATH)"
+command:sh=bash "$(VIM_FILEPATH)"
+command:lua=lua "$(VIM_FILEPATH)"
+command:perl=perl "$(VIM_FILEPATH)"
+command:ruby=ruby "$(VIM_FILEPATH)"
 output=terminal
 
 

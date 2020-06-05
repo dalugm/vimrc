@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    "outFile": "./build/greeting.js"
-  },
-  "files": [
-    "src/greeting.ts"
-  ]
-}
