@@ -16,7 +16,7 @@ endfunction
 
 augroup coc
     autocmd!
-    command -bar -nargs=0 TransCoc call s:FloatingTransparen()
+    command! -bar -nargs=0 TransCoc call s:FloatingTransparen()
 augroup END
 
 " }}} CocFunction

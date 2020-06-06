@@ -8,7 +8,7 @@
 " # Description   : basic config for vim
 " ###########################################################
 
-" Environment - Encoding, Indent, Fold {{{
+" Environment {{{
 
 if version >= 800 && !has('nvim')
     unlet! skip_defaults_vim
@@ -104,9 +104,9 @@ endif
 set foldenable
 set foldmethod=marker
 
-" }}} Environment - Encoding, Indent, Fold
+" }}} Environment
 
-" Appearence - Scrollbar, Highlight, Numberline {{{
+" Appearence {{{
 
 " Enable syntax highlighting
 syntax enable
@@ -163,9 +163,36 @@ endif
 " Minimal number of screen lines to keep above and below the cursor.
 set scrolloff=5
 
-" }}} Appearance - Scrollbar, Highlight, Numberline
+" vertical diffsplit
+set diffopt+=vertical
 
-" Edit - Navigation, History, Search {{{
+" Show matching brackets when text indicator is over them
+set showmatch
+
+" How many tenths of a second to blink when matching brackets
+set matchtime=2
+
+" Specify the behavior when switching between buffers
+set switchbuf=useopen
+set showtabline=1
+set tabpagemax=50
+
+" 0 means never show, 1 means show only if there are at least two windows
+" 2 means always show
+set laststatus=2
+set statusline=%<%f\ " filename
+set statusline+=%w%h%m%r " option
+set statusline+=\ [%{&ff}]/%y " fileformat/filetype
+set statusline+=\ [%{getcwd()}] " current dir
+set statusline+=\ [%{&encoding}] " encoding
+set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
+
+" }}} Appearance
+
+" Edit {{{
+
+" execute `:argdo' etc. by omitting `!'
+set hidden
 
 " For regular expressions turn magic on
 set magic
@@ -265,49 +292,31 @@ autocmd FileType netrw setlocal bufhidden=delete
 set complete-=i   " disable scanning included files
 set complete-=t   " disable searching tags
 
-" }}} Edit - Navigation, History, Search
+" Define how to use the CTRL-A and CTRL-X commands for adding to and subtracting from a number respectively
+set nrformats-=octal
 
-" Buffer - BufferSwitch, FileExplorer, Statusline {{{
+" Set focus window when split
+set splitbelow
+set splitright
 
-" execute `:argdo' etc. by omitting `!'
-set hidden
-
-" Specify the behavior when switching between buffers
-set switchbuf=useopen
-set showtabline=1
-set tabpagemax=50
-
-set splitright " Puts new vsplit windows to the right of the current
-set splitbelow " Puts new split windows to the bottom of the current
-
-" Split management
-nmap <silent> <M-J> :exe "resize " . (winheight(0) * 3/2)<CR>
-nmap <silent> <M-K> :exe "resize " . (winheight(0) * 2/3)<CR>
-nmap <silent> <M-H> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
-nmap <silent> <M-L> :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
-
-" Window change
-nmap <silent> <M-j> <C-w>j
-nmap <silent> <M-k> <C-w>k
-nmap <silent> <M-h> <C-w>h
-nmap <silent> <M-l> <C-w>l
-
-" 0 means never show, 1 means show only if there are at least two windows
-" 2 means always show
-set laststatus=2
-set statusline=%<%f\ " filename
-set statusline+=%w%h%m%r " option
-set statusline+=\ [%{&ff}]/%y " fileformat/filetype
-set statusline+=\ [%{getcwd()}] " current dir
-set statusline+=\ [%{&encoding}] " encoding
-set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
-
-" }}} Buffer - BufferSwitch, FileExplorer, StatusLine
+" }}} Edit
 
 " Keybindings {{{
 
 " Map jk to enter normal mode
 imap jk <Esc>
+
+" Split management
+nnoremap <silent> <M-J> :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <M-K> :exe "resize " . (winheight(0) * 2/3)<CR>
+nnoremap <silent> <M-H> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
+nnoremap <silent> <M-L> :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
+
+" Window change
+nnoremap <silent> <M-j> <C-w>j
+nnoremap <silent> <M-k> <C-w>k
+nnoremap <silent> <M-h> <C-w>h
+nnoremap <silent> <M-l> <C-w>l
 
 " Enhance <C-l>
 nnoremap <silent> <C-l> :<C-u>nohlsearch<C-R>=has('diff')?'<BAR>diffupdate':''<CR><CR>:syntax sync fromstart<CR><C-l>
@@ -476,12 +485,15 @@ if has('gui_running')
     " show table numbers
     set guitablabel=%N:%M%t
 
-    " disable scrollbars
-    set guioptions-=r
-    set guioptions-=R
-    set guioptions-=l
+    " Disables the GUI tab line in favor of the plain text version
+    set guioptions-=e
+    " Disable scrollbars
     set guioptions-=L
-    set guioptions-=T " Also disable toolbar
+    set guioptions-=l
+    set guioptions-=R
+    set guioptions-=r
+    " Disable toolbar
+    set guioptions-=T
 endif
 
 " }}} GUI Releated
@@ -495,10 +507,14 @@ else
     set viminfo='100,s10,<50,n$HOME/.vim/viminfo
 endif
 
-" Make <Esc> back to Normal Mode
+" Keybindings
 if has('nvim')
     tnoremap <Esc> <C-\><C-n>
     tnoremap <C-v><Esc> <Esc>
+    tnoremap <M-h> <C-\><C-n><C-w>h
+    tnoremap <M-j> <C-\><C-n><C-w>j
+    tnoremap <M-k> <C-\><C-n><C-w>k
+    tnoremap <M-l> <C-\><C-n><C-w>l
 endif
 
 " call pyenv when using neovim
@@ -521,17 +537,6 @@ endif
 " }}} Neovim Related
 
 " Misc {{{
-
-" vertical diffsplit
-set diffopt+=vertical
-
-" Show matching brackets when text indicator is over them
-set showmatch
-" How many tenths of a second to blink when matching brackets
-set matchtime=2
-
-" Define how to use the CTRL-A and CTRL-X commands for adding to and subtracting from a number respectively
-set nrformats-=octal
 
 augroup dalu_color_warning
     autocmd!

@@ -31,11 +31,11 @@ if g:dalu_use_plug_manager
 
         Plug 'tpope/vim-rails'
         Plug 'tpope/vim-repeat'
-        Plug 'tpope/vim-abolish'
         Plug 'tpope/vim-surround'
-        Plug 'tpope/vim-dispatch'
-        Plug 'tpope/vim-commentary'
         Plug 'tpope/vim-unimpaired'
+        Plug 'tpope/vim-commentary'
+        Plug 'tpope/vim-abolish'
+        Plug 'tpope/vim-dispatch'
         Plug 'tpope/vim-projectionist'
 
         Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } | Plug 'junegunn/fzf.vim'
@@ -68,12 +68,12 @@ if g:dalu_use_plug_manager
         Plug 'itchyny/lightline.vim'
         Plug 'ryanoasis/vim-devicons'
         Plug 'octol/vim-cpp-enhanced-highlight'
+
         " ColorScheme
         Plug 'dracula/vim'
         Plug 'rakr/vim-one'
         Plug 'morhetz/gruvbox'
         Plug 'ayu-theme/ayu-vim'
-        Plug 'sickill/vim-monokai'
         Plug 'cocopon/iceberg.vim'
         Plug 'joshdick/onedark.vim'
         Plug 'junegunn/seoul256.vim'
@@ -117,19 +117,20 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " colorscheme names that use to set color
     let g:mycolors = [
+                \ 'PaperColor' ,
                 \ 'ayu'        ,
                 \ 'default'    ,
                 \ 'dracula'    ,
                 \ 'gruvbox'    ,
                 \ 'iceberg'    ,
-                \ 'monokai'    ,
                 \ 'jellybeans' ,
+                \ 'monokai'    ,
                 \ 'nord'       ,
                 \ 'one'        ,
                 \ 'onedark'    ,
-                \ 'PaperColor' ,
                 \ 'seoul256'   ,
                 \ 'solarized'  ,
+                \ 'tomorrow-night',
                 \ ]
 
     " SetColors {{{
@@ -150,40 +151,53 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         set noshowmode
 
         let g:lightline = {
-                    \ 'colorscheme': 'default',
+                    \ 'colorscheme': 'minimal',
                     \ 'active': {
-                    \   'left': [ [ 'mode', 'paste' ], 
-                    \             [ 'cocstatus', 'filename', 'fugitive' ] ]
+                    \   'left': [[ 'mode', 'paste' ], [ 'cocstatus', 'readonly', 'filename', 'git' ]]
                     \ },
                     \ 'component_function': {
                     \   'cocstatus': 'coc#status',
                     \   'filename': 'LightlineFilename',
-                    \   'fugitive': 'LightlineFugitive',
+                    \   'git': 'FugitiveHead',
                     \ },
                     \ }
 
-        function! LightlineModified()
-            return &ft =~# 'help\|vimfiler' ? '' : &modified ? '+' : &modifiable ? '' : '-'
-        endfunction
-        function! LightlineReadonly()
-            return &ft !~? 'help\|vimfiler' && &readonly ? 'RO' : ''
-        endfunction
+        " if colors_name ==# 'gruvbox'
+        "     let g:lightline = {
+        "                 \ 'colorscheme': 'gruvbox',
+        "                 \ 'active': {
+        "                 \   'left': [[ 'mode', 'paste' ], [ 'cocstatus', 'readonly', 'filename', 'git' ]]
+        "                 \ },
+        "                 \ 'component_function': {
+        "                 \   'cocstatus': 'coc#status',
+        "                 \   'filename': 'LightlineFilename',
+        "                 \   'git': 'FugitiveHead',
+        "                 \ },
+        "                 \ }
+        "     autocmd OptionSet background
+        "                 \ execute 'source' globpath(&rtp, 'autoload/lightline/colorscheme/gruvbox.vim')
+        "                 \ | call lightline#colorscheme() | call lightline#update()
+        " else        
+        "     let g:lightline = {
+        "                 \ 'colorscheme': 'minimal',
+        "                 \ 'active': {
+        "                 \   'left': [[ 'mode', 'paste' ], [ 'cocstatus', 'readonly', 'filename', 'git' ]]
+        "                 \ },
+        "                 \ 'component_function': {
+        "                 \   'cocstatus': 'coc#status',
+        "                 \   'filename': 'LightlineFilename',
+        "                 \   'git': 'FugitiveHead',
+        "                 \ },
+        "                 \ }
+        " endif
+
         function! LightlineFilename()
-            return (LightlineReadonly() !=# '' ? LightlineReadonly() . ' ' : '') .
-                        \ (&ft ==# 'vimfiler' ? vimfiler#get_status_string() :
-                        \  &ft ==# 'unite' ? unite#get_status_string() :
-                        \  &ft ==# 'vimshell' ? vimshell#get_status_string() :
-                        \ expand('%:t') !=# '' ? expand('%:t') : '[No Name]') .
-                        \ (LightlineModified() !=# '' ? ' ' . LightlineModified() : '')
-        endfunction
-        function! LightlineFugitive()
-            if &ft !~? 'vimfiler' && exists('*FugitiveHead')
-                return FugitiveHead()
-            endif
-            return ''
+            let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
+            let modified = &filetype =~# 'help\|vimfiler' ? '' : &modified ? ' +' : &modifiable ? '' : ' -'
+            return filename . modified
         endfunction
 
-        " Use auocmd to force lightline update.
+        " Use autocmd to force lightline update.
         autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
     endif
@@ -980,6 +994,15 @@ if has('packages')
 
         " Additional plugins here.
         call minpac#add('vim/killersheep', {'type': 'opt'})
+
+        call minpac#add('vimwiki/vimwiki', {'type': 'opt'})
+        let g:vimwiki_list = [{'path': '~/.vim/vimwiki/',
+                    \ 'path_html': '~/.vim/vimwiki_html/'}]
+
+        call minpac#add('tpope/vim-repeat', {'type': 'opt'})
+        call minpac#add('tpope/vim-surround', {'type': 'opt'})
+        call minpac#add('tpope/vim-unimpaired', {'type': 'opt'})
+        call minpac#add('tpope/vim-commentary', {'type': 'opt'})
 
     endif
 
