@@ -12,6 +12,8 @@ viminfo
 ##########
 
 plugged/
+pack/minpac/
+
 undotree/
 swapfiles/
 sessions/

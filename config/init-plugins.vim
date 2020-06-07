@@ -18,6 +18,7 @@
 if !exists('g:dalu_use_plug_manager') | let g:dalu_use_plug_manager = 1 | endif
 if g:dalu_use_plug_manager
     if filereadable(expand("~/.vim/autoload/plug.vim"))
+
         call plug#begin('~/.vim/plugged')
 
         " better operation
@@ -31,11 +32,11 @@ if g:dalu_use_plug_manager
 
         Plug 'tpope/vim-rails'
         Plug 'tpope/vim-repeat'
+        Plug 'tpope/vim-abolish'
+        Plug 'tpope/vim-dispatch'
         Plug 'tpope/vim-surround'
         Plug 'tpope/vim-unimpaired'
         Plug 'tpope/vim-commentary'
-        Plug 'tpope/vim-abolish'
-        Plug 'tpope/vim-dispatch'
         Plug 'tpope/vim-projectionist'
 
         Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } | Plug 'junegunn/fzf.vim'
@@ -65,9 +66,13 @@ if g:dalu_use_plug_manager
         Plug 'junegunn/limelight.vim'
 
         Plug 'luochen1990/rainbow'
-        Plug 'itchyny/lightline.vim'
         Plug 'ryanoasis/vim-devicons'
         Plug 'octol/vim-cpp-enhanced-highlight'
+        if version >= 800 || has('nvim')
+            Plug 'itchyny/lightline.vim'
+        else
+            Plug 'tpope/vim-flagship'
+        endif
 
         " ColorScheme
         Plug 'dracula/vim'
@@ -84,24 +89,19 @@ if g:dalu_use_plug_manager
         " Lsp Support
         if version >= 800 || has('nvim')
             Plug 'neoclide/coc.nvim', {'branch': 'release'}
-        else
-            if version >= 703 && has('lua')
+        elseif version >= 703 && has('lua')
                 Plug 'Shougo/neocomplete.vim'
-            endif
         endif
 
 
         call plug#end()
 
     else
-
         echo "WARNING: plug.vim undetected, now downloading...\n"
         silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
                     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
         autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-
     endif
-
 endif
 
 " }}} Plugin List

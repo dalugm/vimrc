@@ -1,11 +1,18 @@
 " =============================================================================
 " Filename: autoload/lightline/colorscheme/minimal.vim
-" Author: juacq97
-" Maintainer: dalu <mou.tong@qq.com>
+" Author: dalu <mou.tong@qq.com>
 " License: MIT
-" Last Change: 2020/04/24 20:27:51
+" Created: 2020/04/24 20:27:51
 " Last Modified: 2020-06-06 16:49
 " =============================================================================
+
+" Common colors
+let s:blue   = [ '#1772b4', 75 ]
+let s:green  = [ '#1ba784', 76 ]
+let s:purple = [ '#c678dd', 176 ]
+let s:red1   = [ '#e06c75', 168 ]
+let s:red2   = [ '#f9723d', 168 ]
+let s:yellow = [ '#e2d849', 180 ]
 
 " [ [ fg, bg ] ] colors
 let s:p = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': {}, 'tabline': {}}
@@ -19,12 +26,13 @@ let s:br  = ["#ec2b24" , 11]
 let s:bv  = ["#ffd111" , 9]
 
 
+" Common
 let s:p.normal.middle = [ [ s:fg, s:bg ] ]
 let s:p.normal.right = [ [ s:fg, s:bg ], [ s:fg, s:bg ] ]
 let s:p.normal.warning = [ [ s:fg, s:bv ] ]
 let s:p.normal.error = [ [ s:fg, s:bv ] ]
 
-let s:p.inactive.left =  [ [ s:fgn, s:bg ], [ s:fg, s:bg ] ]
+let s:p.inactive.left =  [ [ s:fgn, s:bg ], [ s:fgn, s:bg ] ]
 let s:p.inactive.middle = [ [ s:fg, s:bg ] ]
 let s:p.inactive.right = [ [ s:fg, s:bg ], [ s:fg, s:bg ] ]
 
