@@ -162,40 +162,48 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
                     \ },
                     \ }
 
-        " if colors_name ==# 'gruvbox'
-        "     let g:lightline = {
-        "                 \ 'colorscheme': 'gruvbox',
-        "                 \ 'active': {
-        "                 \   'left': [[ 'mode', 'paste' ], [ 'cocstatus', 'readonly', 'filename', 'git' ]]
-        "                 \ },
-        "                 \ 'component_function': {
-        "                 \   'cocstatus': 'coc#status',
-        "                 \   'filename': 'LightlineFilename',
-        "                 \   'git': 'FugitiveHead',
-        "                 \ },
-        "                 \ }
-        "     autocmd OptionSet background
-        "                 \ execute 'source' globpath(&rtp, 'autoload/lightline/colorscheme/gruvbox.vim')
-        "                 \ | call lightline#colorscheme() | call lightline#update()
-        " else        
-        "     let g:lightline = {
-        "                 \ 'colorscheme': 'minimal',
-        "                 \ 'active': {
-        "                 \   'left': [[ 'mode', 'paste' ], [ 'cocstatus', 'readonly', 'filename', 'git' ]]
-        "                 \ },
-        "                 \ 'component_function': {
-        "                 \   'cocstatus': 'coc#status',
-        "                 \   'filename': 'LightlineFilename',
-        "                 \   'git': 'FugitiveHead',
-        "                 \ },
-        "                 \ }
-        " endif
+        " filename {{{
 
         function! LightlineFilename()
             let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
             let modified = &filetype =~# 'help\|vimfiler' ? '' : &modified ? ' +' : &modifiable ? '' : ' -'
             return filename . modified
         endfunction
+
+        " }}} filename
+        " Colorscheme {{{
+		augroup LightlineColorscheme
+		  autocmd!
+		  autocmd ColorScheme * call s:lightline_update()
+		augroup END
+
+        function! s:lightline_update()
+            if !exists('g:loaded_lightline')
+                return
+            endif
+            try
+                if g:colors_name =~? 'wombat\|solarized\|jellybeans\|seoul256\|gruvbox'
+                    let g:lightline.colorscheme =
+                                \ substitute(substitute(g:colors_name, '-', '_', 'g'), '256.*', '', '')
+                    call lightline#init()
+                    call lightline#colorscheme()
+                    call lightline#update()
+                else
+                    let g:lightline.colorscheme = 'minimal'
+                    call lightline#init()
+                    call lightline#colorscheme()
+                    call lightline#update()
+                endif
+            catch
+            endtry
+        endfunction
+
+        if g:colors_name =~? 'gruvbox\|solarized\|tomorrow'
+            autocmd OptionSet background
+                        \ execute 'source' globpath(&rtp, 'autoload/lightline/colorscheme/' . g:colors_name . '.vim')
+                        \ | call lightline#init() | call lightline#colorscheme() | call lightline#update()
+        endif
+        " }}} ColorScheme
 
         " Use autocmd to force lightline update.
         autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
@@ -995,7 +1003,7 @@ if has('packages')
         " Additional plugins here.
         call minpac#add('vim/killersheep', {'type': 'opt'})
 
-        call minpac#add('vimwiki/vimwiki', {'type': 'opt'})
+        call minpac#add('vimwiki/vimwiki')
         let g:vimwiki_list = [{'path': '~/.vim/vimwiki/',
                     \ 'path_html': '~/.vim/vimwiki_html/'}]
 

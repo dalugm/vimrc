@@ -517,8 +517,10 @@ if has('nvim')
     tnoremap <M-l> <C-\><C-n><C-w>l
 endif
 
-" call pyenv when using neovim
+" Set provider to avoid installing relative package in every env
 if has('nvim')
+    let g:node_host_prog    = "/usr/local/bin/neovim-node-host"
+    let g:ruby_host_prog    = $HOME . "/.rbenv/versions/2.7.1/bin/neovim-ruby-host"
     let g:python_host_prog  = $HOME . "/.pyenv/versions/neovim2/bin/python"
     let g:python3_host_prog = $HOME . "/.pyenv/versions/neovim3/bin/python"
 endif

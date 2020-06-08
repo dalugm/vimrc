@@ -40,16 +40,12 @@ snip += box[3]`
 $0
 endsnippet
 
-snippet coms "insert a comment start marker"
-`!p snip.rv = get_comment_format()[1]` ${2:1}`!p snip.rv = foldmarker()[0]`
-endsnippet
-
-snippet comc "Insert a comment close marker"
-`!p snip.rv = get_comment_format()[0]` ${2:1}`!p snip.rv = foldmarker()[1]`
-endsnippet
-
-snippet com "Insert a comment marker" b
+snippet coms "Insert a comment start marker" b
 `!p snip.rv = get_comment_format()[0]` ${1:Fold description} `!p snip.rv = foldmarker()[0]`${2:1}
+endsnippet
+
+snippet comc "Insert a comment close marker" b
+`!p snip.rv = get_comment_format()[1]` ${2:1}`!p snip.rv = foldmarker()[1]` ${1:Fold description}
 endsnippet
 
 snippet comp "Insert a comment marker pair" b
@@ -57,25 +53,7 @@ snippet comp "Insert a comment marker pair" b
 
 ${2:${VISUAL:Content}}
 
-`!p snip.rv = get_comment_format()[0]` `!p snip.rv = foldmarker()[1]` $1
-endsnippet
-
-snippet cflc "c-family language comment"
-/***********************************************************
-$0
-***********************************************************/
-endsnippet
-
-snippet pylc "python language comment"
-############################################################
-endsnippet
-
-snippet vimlc "vim language comment"
-" ${1:description} {{{ "
-
-$0
-
-" }}} ${1:description} "
+`!p snip.rv = get_comment_format()[1]` `!p snip.rv = foldmarker()[1]` ${1:Fold description}
 endsnippet
 
 snippet todo "TODO comment" bw
