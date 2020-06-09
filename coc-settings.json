@@ -1,34 +1,34 @@
 {
-    "coc.preferences.extensionUpdateCheck": "weekly",
+  "coc.preferences.extensionUpdateCheck": "weekly",
 
-    "suggest.minTriggerInputLength": 2,
+  "suggest.minTriggerInputLength": 2,
 
-    "languageserver": {
-        "bash": {
-            "command": "bash-language-server",
-            "args": ["start"],
-            "filetypes": ["sh"],
-            "ignoredRootPaths": ["~"]
-        }
+  "languageserver": {
+    "bash": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "filetypes": ["sh"],
+      "ignoredRootPaths": ["~"]
+    }
+  },
+
+  "explorer.icon.enableNerdfont": true,
+  "explorer.icon.enableVimDevicons": true,
+  "explorer.sources": [
+    {
+      "name": "buffer",
+      "expand": false
     },
+    {
+      "name": "file",
+      "expand": true
+    }
+  ],
+  "explorer.presets": {
+    "floating": {
+      "position": "floating"
+    }
+  },
 
-    "explorer.icon.enableNerdfont": true,
-    "explorer.icon.enableVimDevicons": true,
-    "explorer.sources": [
-        {
-            "name": "buffer",
-            "expand": false
-        },
-        {
-            "name": "file",
-            "expand": true
-        }
-    ],
-    "explorer.presets": {
-        "floating": {
-            "position": "floating"
-        }
-    },
-
-    "snippets.userSnippetsDirectory": "~/.vim/snippets"
+  "snippets.userSnippetsDirectory": "~/.vim/snippets"
 }
