@@ -41,11 +41,11 @@ $0
 endsnippet
 
 snippet coms "Insert a comment start marker" b
-`!p snip.rv = get_comment_format()[0]` ${1:Fold description} `!p snip.rv = foldmarker()[0]`${2:1}
+`!p snip.rv = get_comment_format()[0]` ${1:Fold description} `!p snip.rv = foldmarker()[0]`
 endsnippet
 
 snippet comc "Insert a comment close marker" b
-`!p snip.rv = get_comment_format()[1]` ${2:1}`!p snip.rv = foldmarker()[1]` ${1:Fold description}
+`!p snip.rv = get_comment_format()[1]` `!p snip.rv = foldmarker()[1]` ${1:Fold description}
 endsnippet
 
 snippet comp "Insert a comment marker pair" b

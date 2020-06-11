@@ -25,6 +25,9 @@ endif
 set title
 set ttyfast " Improves smoothness of redrawing
 
+" Avoid local vimrc's problem
+set secure
+
 " Don't redraw while executing macros (good performance config)
 set lazyredraw
 
@@ -34,11 +37,10 @@ set t_vb=
 set tm=500
 
 " Configure backspace so it acts as it should act
+" Same as ":set backspace=2"
 set backspace=indent,eol,start
 
-let $user_name  = "dalu"
-let $tuser_name = "Mou Tong"
-let $user_email = "mou.tong@qq.com"
+" file {{{
 
 " Set utf8 as standard encoding
 set encoding=utf-8
@@ -55,6 +57,10 @@ set formatoptions+=B
 set formatoptions+=j
 " When formatting text, recognize numbered lists
 set formatoptions+=n
+
+" }}} file
+
+" indent {{{
 
 set autoindent " Auto indent
 set smartindent " Smart indent
@@ -73,6 +79,8 @@ set expandtab
 
 " Add `shiftwidth' spaces or `tabstop' spaces when <Tab>
 set smarttab
+
+" }}} indent
 
 " Popup confirm when edit unsave or readonly files
 set confirm
@@ -137,8 +145,9 @@ set ruler
 
 " Highlight chars when over 80 rows
 " augroup vimrc_autocmds
-   " autocmd BufEnter * highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
-   " autocmd BufEnter * match OverLength /\%81v.*/
+"     autocmd BufEnter * highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
+"     autocmd BufEnter * match OverLength /\%81v.*/
+" augroup END
 
 " show command in the last line of screen
 set showcmd
@@ -174,7 +183,7 @@ set matchtime=2
 
 " Specify the behavior when switching between buffers
 set switchbuf=useopen
-set showtabline=1
+set showtabline=2
 set tabpagemax=50
 
 " 0 means never show, 1 means show only if there are at least two windows
@@ -210,8 +219,9 @@ set incsearch
 set nowrapscan
 
 " session config
-set sessionoptions-=options " do not store global and local values in a session
-set sessionoptions-=folds " do not store folds
+set sessionoptions-=options  " do not store global and local values in a session
+set sessionoptions-=blank    " do not store empty windows
+set sessionoptions+=tabpages " store all tabpages
 
 " function - restore last session {{{
 
@@ -238,7 +248,7 @@ function! LoadSession()
   endif
 endfunction
 
-" Adding automatons for when entering or leaving Vim
+" Adding automations for when entering or leaving Vim
 if(argc() == 0)
   au VimLeave * :call MakeSession(1)
 else
@@ -268,14 +278,18 @@ set nobackup
 set nowritebackup
 
 " Swap files are necessary when crash recovery
-set directory=$HOME/.vim/swapfiles/
+set directory=$HOME/.vim/swapfiles//
 
 " Turn persistent undo on,
 " means that you can undo even when you close a buffer/VIM
 if has('persistent_undo')
-    set undodir=$HOME/.vim/undotree/
     set undofile
     set undolevels=1000
+    set undodir=$HOME/.vim/undotree
+    augroup undo
+        autocmd!
+        autocmd BufWritePre /tmp/* setlocal noundofile
+    augroup END
 endif
 
 " Ctags config
@@ -286,7 +300,9 @@ endif
 " Netrw config
 let g:netrw_liststyle = 3
 let g:netrw_winsize = 30
-autocmd FileType netrw setlocal bufhidden=delete
+augroup netrw
+    autocmd FileType netrw setlocal bufhidden=delete
+augroup END
 
 " Make auto-complete faster
 set complete-=i   " disable scanning included files
@@ -298,6 +314,9 @@ set nrformats-=octal
 " Set focus window when split
 set splitbelow
 set splitright
+
+" Close buffer not window
+command! Bd :bp | :sp | :bn | :bd
 
 " }}} Edit
 
@@ -313,10 +332,18 @@ nnoremap <silent> <M-H> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
 nnoremap <silent> <M-L> :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
 
 " Window change
-nnoremap <silent> <M-j> <C-w>j
-nnoremap <silent> <M-k> <C-w>k
-nnoremap <silent> <M-h> <C-w>h
-nnoremap <silent> <M-l> <C-w>l
+nnoremap <silent> <M-j> <C-W>j
+nnoremap <silent> <M-k> <C-W>k
+nnoremap <silent> <M-h> <C-W>h
+nnoremap <silent> <M-l> <C-W>l
+
+" Emacs-like keybindings
+inoremap <C-a> <Home>
+inoremap <C-e> <End>
+inoremap <C-n> <Down>
+inoremap <C-p> <Up>
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
 
 " Enhance <C-l>
 nnoremap <silent> <C-l> :<C-u>nohlsearch<C-R>=has('diff')?'<BAR>diffupdate':''<CR><CR>:syntax sync fromstart<CR><C-l>
@@ -332,10 +359,10 @@ cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
 " makes * and # work on visual mode too.
 function! s:VSetSearch(cmdtype)
-  let temp = @s
-  norm! gv"sy
-  let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
-  let @s = temp
+    let temp = @s
+    norm! gv"sy
+    let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
+    let @s = temp
 endfunction
 
 xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
@@ -343,10 +370,10 @@ xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
 
 " recursively vimgrep for word under cursor or selection if you hit leader-star
 if maparg('<leader>*', 'n') == ''
-  nmap <leader>* :execute 'noautocmd vimgrep /\V' . substitute(escape(expand("<cword>"), '\'), '\n', '\\n', 'g') . '/ **'<CR>
+    nmap <leader>* :execute 'noautocmd vimgrep /\V' . substitute(escape(expand("<cword>"), '\'), '\n', '\\n', 'g') . '/ **'<CR>
 endif
 if maparg('<leader>*', 'v') == ''
-  vmap <leader>* :<C-u>call <SID>VSetSearch()<CR>:execute 'noautocmd vimgrep /' . @/ . '/ **'<CR>
+    vmap <leader>* :<C-u>call <SID>VSetSearch()<CR>:execute 'noautocmd vimgrep /' . @/ . '/ **'<CR>
 endif
 
 " }}} Enhace `*'
@@ -410,28 +437,32 @@ map <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>/
 
 " Package opt {{{
 
+" Load pack
 if has('packages')
-
     " Enhance `%' command
     packadd! matchit
-    autocmd FileType python let b:match_words = '\<if\>:\<elif\>:\<else\>'
+    autocmd FileType python let b:match_words = '\<if\>:\<elif\>:\<else\>,'
+                \ . '\<try\>:\<except\>'
+    let b:match_ignorecase=0
 
     " when editing a file that is already edited with another Vim instance
     " go to that Vim instance
     if !has('nvim')
         packadd! editexisting
     endif
-
 else
-
     runtime macros/matchit.vim
-    autocmd FileType python let b:match_words = '\<if\>:\<elif\>:\<else\>'
+    autocmd FileType python let b:match_words = '\<if\>:\<elif\>:\<else\>,'
+                \ . '\<try\>:\<except\>'
+    let b:match_ignorecase=0
 
     if !has('nvim')
         runtime macros/editexisting.vim
     endif
-
 endif
+
+" Load help doc
+silent! helptags ALL
 
 " }}} Package opt
 
@@ -531,9 +562,9 @@ if has('nvim')
     highlight! TermCursorNC guibg=red guifg=white ctermbg=1 ctermfg=15
 endif
 
-" tabline. Replaced by `guitablabel' when GUI is running
-if !has('nvim')
-    set tabline=%N:%M%t
+" Set neovim as core.editor of git when not set
+if has('nvim') && executable('nvr')
+    let $VISUAL="nvr -cc split --remote-wait + 'set bufhidden=wipe'"
 endif
 
 " }}} Neovim Related

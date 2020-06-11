@@ -19,10 +19,10 @@ let s:p = {'normal': {}, 'inactive': {}, 'insert': {}, 'replace': {}, 'visual': 
 
 let s:bg  = ["NONE" , "NONE"]
 let s:fg  = ["#f8f4ed" , 7]
-let s:fgn = ["#2b1216" , 0]
+let s:fgn = ["#126e82" , 0]
 let s:bn  = ["#f8f4ed" , 51]
-let s:bi  = ["#96c24e" , 82]
-let s:br  = ["#ec2b24" , 11]
+let s:bi  = ["#20894d" , 82]
+let s:br  = ["#de1c31" , 11]
 let s:bv  = ["#ffd111" , 9]
 
 

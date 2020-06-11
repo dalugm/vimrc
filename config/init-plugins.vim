@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-05-02 23:31
+" # Last Modified : 2020-06-10 18:46
 " # By            : Mou Tong
 " # Description   : plugins config for vim
 " ###########################################################
@@ -35,8 +35,9 @@ if g:dalu_use_plug_manager
         Plug 'tpope/vim-abolish'
         Plug 'tpope/vim-dispatch'
         Plug 'tpope/vim-surround'
-        Plug 'tpope/vim-unimpaired'
+        Plug 'tpope/vim-obsession'
         Plug 'tpope/vim-commentary'
+        Plug 'tpope/vim-unimpaired'
         Plug 'tpope/vim-projectionist'
 
         Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } | Plug 'junegunn/fzf.vim'
@@ -90,7 +91,7 @@ if g:dalu_use_plug_manager
         if version >= 800 || has('nvim')
             Plug 'neoclide/coc.nvim', {'branch': 'release'}
         elseif version >= 703 && has('lua')
-                Plug 'Shougo/neocomplete.vim'
+                Plug 'Shougo/deoplete.vim'
         endif
 
 
@@ -100,7 +101,6 @@ if g:dalu_use_plug_manager
         echo "WARNING: plug.vim undetected, now downloading...\n"
         silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
                     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-        autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
     endif
 endif
 
@@ -153,16 +153,24 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         let g:lightline = {
                     \ 'colorscheme': 'minimal',
                     \ 'active': {
-                    \   'left': [[ 'mode', 'paste' ], [ 'cocstatus', 'readonly', 'filename', 'git' ]]
+                    \   'left': [ [ 'mode', 'paste' ], [ 'cocstatus', 'readonly', 'file_name' ] ],
+                    \ },
+                    \ 'inactive': {
+                    \   'left': [ [ 'filename' ], ['split'] ],
+                    \ },
+                    \ 'tabline': {
+                    \ 'left': [ [ 'tabs' ] ],
+                    \ 'right': [ [ 'git' ] ],
                     \ },
                     \ 'component_function': {
-                    \   'cocstatus': 'coc#status',
-                    \   'filename': 'LightlineFilename',
-                    \   'git': 'FugitiveHead',
+                    \   'cocstatus' : 'coc#status',
+                    \   'file_name' : 'LightlineFilename',
+                    \   'git'       : 'FugitiveHead',
+                    \   'split'     : 'LightlineSplitline',
                     \ },
                     \ }
 
-        " filename {{{
+        " file_name {{{
 
         function! LightlineFilename()
             let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
@@ -170,43 +178,23 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
             return filename . modified
         endfunction
 
-        " }}} filename
-        " Colorscheme {{{
-		augroup LightlineColorscheme
-		  autocmd!
-		  autocmd ColorScheme * call s:lightline_update()
-		augroup END
+        " }}} file_name
 
-        function! s:lightline_update()
-            if !exists('g:loaded_lightline')
-                return
-            endif
-            try
-                if g:colors_name =~? 'wombat\|solarized\|jellybeans\|seoul256\|gruvbox'
-                    let g:lightline.colorscheme =
-                                \ substitute(substitute(g:colors_name, '-', '_', 'g'), '256.*', '', '')
-                    call lightline#init()
-                    call lightline#colorscheme()
-                    call lightline#update()
-                else
-                    let g:lightline.colorscheme = 'minimal'
-                    call lightline#init()
-                    call lightline#colorscheme()
-                    call lightline#update()
-                endif
-            catch
-            endtry
+        " split {{{
+
+        function! LightlineSplitline()
+            let split = '*****'
+            let inactive = 'INACTIVE'
+            return split . inactive . split
         endfunction
 
-        if g:colors_name =~? 'gruvbox\|solarized\|tomorrow'
-            autocmd OptionSet background
-                        \ execute 'source' globpath(&rtp, 'autoload/lightline/colorscheme/' . g:colors_name . '.vim')
-                        \ | call lightline#init() | call lightline#colorscheme() | call lightline#update()
-        endif
-        " }}} ColorScheme
+        " }}} split
 
-        " Use autocmd to force lightline update.
-        autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+        " Use autocmd to update lightline when using coc.nvim
+        augroup my-plugin
+            autocmd!
+            autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+        augroup END
 
     endif
 
@@ -217,7 +205,9 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     if filereadable(expand("~/.vim/plugged/emmet-vim/plugin/emmet.vim"))
 
         let g:user_emmet_install_global = 0
-        autocmd FileType html,xhtml,xml,css,scss,sass,less EmmetInstall
+        augroup my-plugin
+            autocmd FileType html,xhtml,xml,css,scss,sass,less EmmetInstall
+        augroup END
         let g:user_emmet_leader_key = ','
 
     endif
@@ -297,8 +287,10 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
             Limelight!
         endfunction
 
-        autocmd! User GoyoEnter nested call <SID>goyo_enter()
-        autocmd! User GoyoLeave nested call <SID>goyo_leave()
+        augroup my-plugin
+            autocmd! User GoyoEnter nested call <SID>goyo_enter()
+            autocmd! User GoyoLeave nested call <SID>goyo_leave()
+        augroup END
 
     endif
 
@@ -516,7 +508,9 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     if filereadable(expand("~/.vim/plugged/vim-commentary/plugin/commentary.vim"))
 
         " add comment support for specific file type
-        autocmd FileType apache setlocal commentstring=#\ %s
+        augroup my-plugin
+            autocmd FileType apache setlocal commentstring=#\ %s
+        augroup END
 
     endif
 
@@ -620,7 +614,9 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     if filereadable(expand("~/.vim/plugged/coc.nvim/plugin/coc.vim"))
 
         " Disable coc in specific filetype
-        autocmd FileType text,markdown let g:coc_enabled = 0
+        augroup my-plugin
+            autocmd FileType text,markdown let b:coc_enabled = 0
+        augroup END
 
         " Don't pass messages to |ins-completion-menu|.
         set shortmess+=c
@@ -643,10 +639,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
             return !col || getline('.')[col - 1]  =~# '\s'
         endfunction
 
-        "  trigger completion.
-        inoremap <silent><expr> <M-space> coc#refresh()
-
-        " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+        " Use <CR> to confirm completion, `<C-g>u` means break undo chain at current
         " position. Coc only does snippet and additional edit on confirm.
         if has('patch8.1.1068')
             " Use `complete_info` if your (Neo)Vim version supports it.
@@ -673,9 +666,6 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         " Highlight the symbol and its references when holding the cursor.
         " autocmd CursorHold * silent call CocActionAsync('highlight')
 
-        " Symbol renaming.
-        nmap <leader>rn <Plug>(coc-rename)
-
         augroup mygroup
             autocmd!
             " Setup formatexpr specified filetype(s).
@@ -683,29 +673,6 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
             " Update signature help on jump placeholder.
             autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
         augroup end
-
-        " Applying codeAction to the selected region.
-        " Example: `<leader>aap` for current paragraph
-        xmap <leader>a  <Plug>(coc-codeaction-selected)
-        nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-        " Remap keys for applying codeAction to the current line.
-        nmap <leader>ac  <Plug>(coc-codeaction)
-        " Apply AutoFix to problem on the current line.
-        nmap <leader>qf  <Plug>(coc-fix-current)
-
-        " Introduce function text object
-        " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-        xmap if <Plug>(coc-funcobj-i)
-        xmap af <Plug>(coc-funcobj-a)
-        omap if <Plug>(coc-funcobj-i)
-        omap af <Plug>(coc-funcobj-a)
-
-        " Use <C-s> for selections ranges.
-        " NOTE: Requires 'textDocument/selectionRange' support from the language server.
-        " coc-tsserver, coc-python are the examples of servers that support it.
-        nmap <silent> <C-s> <Plug>(coc-range-select)
-        xmap <silent> <C-s> <Plug>(coc-range-select)
 
         " Add `:Format` command to format current buffer.
         command! -nargs=0 Format :call CocAction('format')
@@ -723,14 +690,15 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         " install coc extensions
         let g:coc_global_extensions = [
-                    \ 'coc-clangd',
-                    \ 'coc-explorer',
-                    \ 'coc-highlight',
-                    \ 'coc-json',
-                    \ 'coc-lists',
-                    \ 'coc-pairs',
-                    \ 'coc-python',
-                    \ 'coc-snippets',
+                    \ 'coc-bookmark'  ,
+                    \ 'coc-clangd'    ,
+                    \ 'coc-explorer'  ,
+                    \ 'coc-highlight' ,
+                    \ 'coc-json'      ,
+                    \ 'coc-lists'     ,
+                    \ 'coc-pairs'     ,
+                    \ 'coc-python'    ,
+                    \ 'coc-snippets'  ,
                     \ ]
 
         " coc config - explorer {{{
@@ -779,20 +747,8 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         let g:snips_about  = "dalu <mou.tong@qq.com>"
         let g:snips_github = "dalu98"
 
-        " Use <C-l> for trigger snippet expand.
-        imap <C-l> <Plug>(coc-snippets-expand)
-
-        " Use <C-j> for select text for visual placeholder of snippet.
-        vmap <C-j> <Plug>(coc-snippets-select)
-
-        " Use <C-j> for jump to next placeholder, it's default of coc.nvim
-        let g:coc_snippet_next = '<c-j>'
-
-        " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-        let g:coc_snippet_prev = '<c-k>'
-
-        " Use <C-j> for both expand and jump (make expand higher priority.)
-        imap <C-j> <Plug>(coc-snippets-expand-jump)
+        " Use <M-l> for trigger snippet expand.
+        imap <M-l> <Plug>(coc-snippets-expand)
 
         " Make <tab> for trigger completion
         inoremap <silent><expr> <TAB>
@@ -814,15 +770,12 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} Plugin Config - coc.nvim
 
-    " Plugin Config - neocomplete {{{
+    " Plugin Config - deoplete {{{
 
-    if filereadable(expand("~/.vim/plugged/neocomplete.vim/plugin/neocomplete.vim"))
-        let g:neocomplete#enable_at_startup = 1
-    else
-        set omnifunc=syntaxcomplete#Complete
+    if filereadable(expand("~/.vim/plugged/deoplete.nvim/plugin/deoplete.vim"))
     endif
 
-    " }}} Plugin Config - neocomplete
+    " }}} Plugin Config - deoplete
 
     " Plugin Config - vim-which-key {{{
 
@@ -876,53 +829,71 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         let g:which_key_map['c'] = {
                     \ 'name' : '+code' ,
-                    \ 'a' : ['<Plug>(coc-codeaction-selected)' , 'codeAction']      ,
-                    \ 'c' : [':AsyncTask file-run'             , 'run-file']        ,
-                    \ 'C' : [':AsyncTask file-build'           , 'build-file']      ,
-                    \ 'f' : ['<Plug>(coc-fix-current)'         , 'fix-error']       ,
-                    \ 'F' : ['<Plug>(coc-format-selected)'     , 'format']          ,
-                    \ 'p' : [':AsyncTask project-run'          , 'run-project']     ,
-                    \ 'P' : [':AsyncTask project-build'        , 'builid-project']  ,
-                    \ 'R' : ['<Plug>(coc-refactor)'            , 'refactor']        ,
+                    \ 'C' : [':AsyncTask file-build'           , 'build-file']     ,
+                    \ 'F' : ['<Plug>(coc-format-selected)'     , 'format']         ,
+                    \ 'P' : [':AsyncTask project-build'        , 'builid-project'] ,
+                    \ 'R' : ['<Plug>(coc-refactor)'            , 'refactor']       ,
+                    \ 'a' : ['<Plug>(coc-codeaction-selected)' , 'codeAction']     ,
+                    \ 'c' : [':AsyncTask file-run'             , 'run-file']       ,
+                    \ 'f' : ['<Plug>(coc-fix-current)'         , 'fix-error']      ,
+                    \ 'p' : [':AsyncTask project-run'          , 'run-project']    ,
+                    \ 'r' : ['<Plug>(coc-rename)'              , 'symbol-rename']  ,
                     \ 'g' : {
                     \ 'name' : '+goto' ,
-                    \ 'd' : ['<Plug>(coc-definition)'          , 'definition']      ,
-                    \ 'r' : ['<Plug>(coc-references)'          , 'references']      ,
-                    \ 't' : ['<Plug>(coc-type-definition)'     , 'type-definition'] ,
-                    \ 'i' : ['<Plug>(coc-implementation)'      , 'implementation']  ,
-                    \ '[' : ['<Plug>(coc-diagnostic-prev)'     , 'prev error']      ,
-                    \ ']' : ['<Plug>(coc-diagnostic-next)'     , 'next error']      ,
+                    \ 'd' : ['<Plug>(coc-definition)'      , 'definition']      ,
+                    \ 'r' : ['<Plug>(coc-references)'      , 'references']      ,
+                    \ 't' : ['<Plug>(coc-type-definition)' , 'type-definition'] ,
+                    \ 'i' : ['<Plug>(coc-implementation)'  , 'implementation']  ,
+                    \ '[' : ['<Plug>(coc-diagnostic-prev)' , 'prev error']      ,
+                    \ ']' : ['<Plug>(coc-diagnostic-next)' , 'next error']      ,
                     \ } ,
                     \ }
 
         let g:which_key_map['C'] = {
-                    \ 'name' : '+coc-list'               ,
-                    \ 'a' : [':CocList diagnostics'      , 'show-diagnostics']         ,
-                    \ 'e' : [':CocList extensions'       , 'show-extensions']          ,
-                    \ 'c' : [':CocList commands'         , 'show-commands']            ,
-                    \ 'C' : [':CocConfig'                , 'edit-CocConfig']           ,
-                    \ 'D' : [':CocDisable'               , 'coc-disable']              ,
-                    \ 'E' : [':CocEnable'                , 'coc-enable']               ,
-                    \ 'o' : [':CocList outline'          , 'find-current-symbol']      ,
-                    \ 'R' : [':CocRestart'               , 'restart-coc']              ,
-                    \ 's' : [':CocList -I symbols'       , 'search-workspace-symbols'] ,
-                    \ 'j' : [':CocNext'                  , 'action-for-next-item']     ,
-                    \ 'k' : [':CocPrev'                  , 'action-for-prev-item']     ,
-                    \ 'p' : [':CocListResume'            , 'resume-latest-coc-list']   ,
-                    \    }
+                    \ 'name' : '+coc-list' ,
+                    \ 'C' : [':CocConfig'           , 'edit-CocConfig']           ,
+                    \ 'D' : [':CocDisable'          , 'coc-disable']              ,
+                    \ 'E' : [':CocEnable'           , 'coc-enable']               ,
+                    \ 'R' : [':CocRestart'          , 'restart-coc']              ,
+                    \ 'a' : [':CocList diagnostics' , 'show-diagnostics']         ,
+                    \ 'c' : [':CocList commands'    , 'show-commands']            ,
+                    \ 'e' : [':CocList extensions'  , 'show-extensions']          ,
+                    \ 'j' : [':CocNext'             , 'action-for-next-item']     ,
+                    \ 'k' : [':CocPrev'             , 'action-for-prev-item']     ,
+                    \ 'o' : [':CocList outline'     , 'find-current-symbol']      ,
+                    \ 'p' : [':CocListResume'       , 'resume-latest-coc-list']   ,
+                    \ 's' : [':CocList -I symbols'  , 'search-workspace-symbols'] ,
+                    \ 'b' : {
+                    \ 'name' : '+bookmark' ,
+                    \ 'b' : [':CocList bookmark'             , 'open-bookmark']     ,
+                    \ 'n' : ['<Plug>(coc-bookmark-next)'     , 'next-bookmark']     ,
+                    \ 'p' : ['<Plug>(coc-bookmark-prev)'     , 'prev-bookmark']     ,
+                    \ 't' : ['<Plug>(coc-bookmark-toggle)'   , 'toggle-bookmark']   ,
+                    \ 'a' : ['<Plug>(coc-bookmark-annotate)' , 'annotate-bookmark'] ,
+                    \ } ,
+                    \ }
 
         let g:which_key_map['f'] = {
                     \ 'name' : '+file' ,
-                    \ 'c' : [':e ~/.vim/config'     , 'edit-config']     ,
-                    \ 'e' : [':CocCommand explorer' , 'coc-explorer']    ,
-                    \ 's' : ['update'               , 'save-file']       ,
-                    \ 'S' : ['Files'                , 'find-file']       ,
-                    \ 'g' : [':Goyo'                , 'Goyo']            ,
-                    \ 'l' : [':call LoadSession()'  , 'restore-session'] ,
-                    \ 'o' : ['<Plug>(coc-openlink)' , 'open-link']       ,
-                    \ 'p' : [':e ~/.vim/snippets'   , 'edit-snippets']   ,
-                    \ 'r' : [':source ~/.vimrc'     , 'reload-config']   ,
-                    \ 'u' : ['UndotreeToggle'       , 'undo-tree']       ,
+                    \ 'R' : [':Revert'              , 'revert-fileencoding'] ,
+                    \ 'c' : [':e ~/.vim/config'     , 'edit-config']         ,
+                    \ 'e' : [':CocCommand explorer' , 'coc-explorer']        ,
+                    \ 's' : ['update'               , 'save-file']           ,
+                    \ 'S' : ['Files'                , 'search-file']         ,
+                    \ 'g' : [':Goyo'                , 'Goyo']                ,
+                    \ 'o' : ['<Plug>(coc-openlink)' , 'open-link']           ,
+                    \ 'p' : [':e ~/.vim/snippets'   , 'edit-snippets']       ,
+                    \ 'r' : [':source ~/.vimrc'     , 'reload-config']       ,
+                    \ 'u' : ['UndotreeToggle'       , 'undo-tree']           ,
+                    \ }
+
+        let g:which_key_map['q'] = {
+                    \ 'name' : '+quit/session' ,
+                    \ 'q' : [':Obsession | qa!'    , 'quit-vim-without-saving'] ,
+                    \ 'Q' : [':qa!'                , 'quit-vim-without-saving'] ,
+                    \ 'l' : [':call LoadSession()' , 'restore-last-session']    ,
+                    \ 'L' : [':Obsession!'         , 'toggle-session']          ,
+                    \ 's' : ['Obsession'           , 'save-current-session']    ,
                     \ }
 
         let g:which_key_map['s'] = {
@@ -949,29 +920,29 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
         let g:which_key_map['w'] = {
                     \ 'name' : '+windows' ,
-                    \ '1' : ['<C-W>v'             , 'layout-double-columns'] ,
-                    \ '=' : ['<C-W>='             , 'balance-window']        ,
-                    \ '?' : [':CocList windows'   , 'window']                ,
-                    \ 'H' : ['<C-W>5<'            , 'expand-window-left']    ,
-                    \ 'J' : ['resize +5'          , 'expand-window-below']   ,
-                    \ 'K' : ['resize -5'          , 'expand-window-up']      ,
-                    \ 'L' : ['<C-W>5>'            , 'expand-window-right']   ,
-                    \ 'c' : ['ClearBackground'    , 'clear-bg']              ,
-                    \ 'd' : ['<C-W>c'             , 'delete-window']         ,
-                    \ 'h' : ['<C-W>h'             , 'window-left']           ,
-                    \ 'j' : ['<C-W>j'             , 'window-below']          ,
-                    \ 'k' : ['<C-W>k'             , 'window-up']             ,
-                    \ 'l' : ['<C-W>l'             , 'window-right']          ,
-                    \ 's' : ['<C-W>s'             , 'split-window-below']    ,
-                    \ 't' : ['TransparentToggle'  , 'toggle-background']     ,
-                    \ 'v' : ['<C-W>v'             , 'split-window-right']    ,
-                    \ 'w' : ['<C-W>w'             , 'other-window']          ,
+                    \ '=' : ['<C-W>='            , 'balance-window']      ,
+                    \ '?' : [':CocList windows'  , 'window']              ,
+                    \ 'H' : ['<C-W>5<'           , 'expand-window-left']  ,
+                    \ 'J' : ['resize +5'         , 'expand-window-below'] ,
+                    \ 'K' : ['resize -5'         , 'expand-window-up']    ,
+                    \ 'L' : ['<C-W>5>'           , 'expand-window-right'] ,
+                    \ 'c' : ['ClearBackground'   , 'clear-bg']            ,
+                    \ 'd' : ['<C-W>c'            , 'delete-window']       ,
+                    \ 'h' : ['<C-W>h'            , 'window-left']         ,
+                    \ 'j' : ['<C-W>j'            , 'window-below']        ,
+                    \ 'k' : ['<C-W>k'            , 'window-up']           ,
+                    \ 'l' : ['<C-W>l'            , 'window-right']        ,
+                    \ 's' : ['<C-W>s'            , 'split-window-below']  ,
+                    \ 'o' : ['<C-W>o'            , 'one-window-only']     ,
+                    \ 't' : ['TransparentToggle' , 'toggle-background']   ,
+                    \ 'v' : ['<C-W>v'            , 'split-window-right']  ,
+                    \ 'w' : ['<C-W>w'            , 'other-window']        ,
                     \ 'q' : [':call asyncrun#quickfix_toggle(6)' , 'toggle-quickfix'] ,
                     \ }
 
         " Remind other key
-        nnoremap <silent> ] :<c-u>WhichKey ']'<CR>
-        nnoremap <silent> [ :<c-u>WhichKey '['<CR>
+        nnoremap <silent> ] :<C-U>WhichKey ']'<CR>
+        nnoremap <silent> [ :<C-U>WhichKey '['<CR>
 
         " Register key-value dict
         call which_key#register(',' , "g:which_key_map")

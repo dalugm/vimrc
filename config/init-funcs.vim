@@ -14,7 +14,7 @@ function s:FloatingTransparen()
     highlight CocFloating ctermbg=None
 endfunction
 
-augroup coc
+augroup my-plugin
     autocmd!
     command! -bar -nargs=0 TransCoc call s:FloatingTransparen()
 augroup END
@@ -100,3 +100,15 @@ augroup transparent
 augroup END
 
 " }}} ToggleTransparent
+
+" RevertFileEncoding {{{
+
+function! s:revert_file_encoding()
+endfunction
+
+augroup fileencoding
+	autocmd!
+    command -bar -nargs=0 Revert call s:revert_file_encoding()
+augroup END
+
+" }}} RevertFileEncoding
