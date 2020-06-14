@@ -623,7 +623,14 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " Always show the signcolumn, otherwise it would shift the text each time
     " diagnostics appear/become resolved.
-    set signcolumn=yes
+    if has("patch-8.1.1564")
+      " Recently vim can merge signcolumn and number column into one
+      set signcolumn=number
+    elseif has('nvim')
+      set signcolumn=auto
+    else
+      set signcolumn=yes
+    endif
 
     " Use tab for trigger completion with characters ahead and navigate.
     " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -638,6 +645,9 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
       let col = col('.') - 1
       return !col || getline('.')[col - 1]  =~# '\s'
     endfunction
+
+    " Use <C-l> to trigger completion.
+    inoremap <silent><expr> <C-l> coc#refresh()
 
     " Use <CR> to confirm completion, `<C-g>u` means break undo chain at current
     " position. Coc only does snippet and additional edit on confirm.
@@ -674,6 +684,14 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
       autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
     augroup end
 
+    " Applying codeAction to the selected region.
+    " Example: `<leader>aap` for current paragraph
+    xmap <leader>a  <Plug>(coc-codeaction-selected)
+    nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+    " Formatting selected code.
+    xmap <leader>f  <Plug>(coc-format-selected)
+
     " Add `:Format` command to format current buffer.
     command! -nargs=0 Format :call CocAction('format')
 
@@ -681,7 +699,24 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
     " Add `:OR` command for organize imports of the current buffer.
-    command! -nargs=0 OR   :call CocAction('runCommand', 'editor.action.organizeImport')
+    command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+
+    " Map function and class text objects
+    " NOTE: Requires textDocument.documentSymbol' support from the language
+    " server.
+    xmap if <Plug>(coc-funcobj-i)
+    omap if <Plug>(coc-funcobj-i)
+    xmap af <Plug>(coc-funcobj-a)
+    omap af <Plug>(coc-funcobj-a)
+    xmap ic <Plug>(coc-classobj-i)
+    omap ic <Plug>(coc-classobj-i)
+    xmap ac <Plug>(coc-classobj-a)
+    omap ac <Plug>(coc-classobj-a)
+
+    " Use <CTRL-S> for selections ranges.
+    " Requires 'textDocument/selectionRange support of LS, ex: coc-tsserver
+    nmap <silent> <C-s> <Plug>(coc-range-select)
+    xmap <silent> <C-s> <Plug>(coc-range-select)
 
     " Add (Neo)Vim's native statusline support.
     " NOTE: Please see `:h coc-status` for integrations with external plugins that
@@ -829,15 +864,15 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     let g:which_key_map['c'] = {
           \ 'name' : '+code' ,
-          \ 'C' : [':AsyncTask file-build'           , 'build-file']     ,
-          \ 'F' : ['<Plug>(coc-format-selected)'     , 'format']         ,
-          \ 'P' : [':AsyncTask project-build'        , 'builid-project'] ,
-          \ 'R' : ['<Plug>(coc-refactor)'            , 'refactor']       ,
-          \ 'a' : ['<Plug>(coc-codeaction-selected)' , 'codeAction']     ,
-          \ 'c' : [':AsyncTask file-run'             , 'run-file']       ,
-          \ 'f' : ['<Plug>(coc-fix-current)'         , 'fix-error']      ,
-          \ 'p' : [':AsyncTask project-run'          , 'run-project']    ,
-          \ 'r' : ['<Plug>(coc-rename)'              , 'symbol-rename']  ,
+          \ 'A' : ['<Plug>(coc-codeaction)'   , 'apply-codeAction-buffer'] ,
+          \ 'C' : [':AsyncTask file-build'    , 'build-current-file']      ,
+          \ 'F' : [':Format'                  , 'format-current-buffer']   ,
+          \ 'P' : [':AsyncTask project-build' , 'builid-current-project']  ,
+          \ 'R' : ['<Plug>(coc-refactor)'     , 'refactor']                ,
+          \ 'c' : [':AsyncTask file-run'      , 'run-current-file']        ,
+          \ 'f' : ['<Plug>(coc-fix-current)'  , 'autofix-current-buffer']  ,
+          \ 'p' : [':AsyncTask project-run'   , 'run-current-project']     ,
+          \ 'r' : ['<Plug>(coc-rename)'       , 'symbol-rename']           ,
           \ 'g' : {
           \ 'name' : '+goto' ,
           \ 'd' : ['<Plug>(coc-definition)'      , 'definition']      ,
@@ -979,6 +1014,7 @@ if has('packages')
           \ 'path_html': '~/.vim/vimwiki_html/'}]
 
     call minpac#add('tpope/vim-repeat', {'type': 'opt'})
+    call minpac#add('tpope/vim-flagship', {'type': 'opt'})
     call minpac#add('tpope/vim-surround', {'type': 'opt'})
     call minpac#add('tpope/vim-unimpaired', {'type': 'opt'})
     call minpac#add('tpope/vim-commentary', {'type': 'opt'})
