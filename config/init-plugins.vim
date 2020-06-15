@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-06-10 18:46
+" # Last Modified : 2020-06-15 11:05
 " # By            : Mou Tong
 " # Description   : plugins config for vim
 " ###########################################################
@@ -79,6 +79,7 @@ if g:dalu_use_plug_manager
     Plug 'dracula/vim'
     Plug 'rakr/vim-one'
     Plug 'morhetz/gruvbox'
+    Plug 'jnurmine/zenburn'
     Plug 'ayu-theme/ayu-vim'
     Plug 'cocopon/iceberg.vim'
     Plug 'joshdick/onedark.vim'
@@ -113,24 +114,25 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
   " Plugin Config - colorscheme {{{
 
   set background=dark
-  colorscheme onedark
+  colorscheme gruvbox
 
   " colorscheme names that use to set color
   let g:mycolors = [
-        \ 'PaperColor' ,
-        \ 'ayu'        ,
-        \ 'default'    ,
-        \ 'dracula'    ,
-        \ 'gruvbox'    ,
-        \ 'iceberg'    ,
-        \ 'jellybeans' ,
-        \ 'monokai'    ,
-        \ 'nord'       ,
-        \ 'one'        ,
-        \ 'onedark'    ,
-        \ 'seoul256'   ,
-        \ 'solarized'  ,
-        \ 'tomorrow-night',
+        \ 'PaperColor'     ,
+        \ 'ayu'            ,
+        \ 'default'        ,
+        \ 'dracula'        ,
+        \ 'gruvbox'        ,
+        \ 'iceberg'        ,
+        \ 'jellybeans'     ,
+        \ 'monokai'        ,
+        \ 'nord'           ,
+        \ 'one'            ,
+        \ 'onedark'        ,
+        \ 'seoul256'       ,
+        \ 'solarized'      ,
+        \ 'tomorrow-night' ,
+        \ 'zenburn'
         \ ]
 
   " SetColors {{{
@@ -485,9 +487,11 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
   " Plugin Config - vim-easy-align {{{
 
   if filereadable(expand("~/.vim/plugged/vim-easy-align/plugin/easy_align.vim"))
+
     map <Leader>g :EasyAlign<Space>
-    xmap ga <Plug>(EasyAlign)
     nmap ga <Plug>(EasyAlign)
+    xmap ga <Plug>(EasyAlign)
+
   endif
 
   " }}} Plugin Config - vim-easy-align
@@ -613,10 +617,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
   if filereadable(expand("~/.vim/plugged/coc.nvim/plugin/coc.vim"))
 
-    " Disable coc in specific filetype
-    augroup my-plugin
-      autocmd FileType text,markdown let b:coc_enabled = 0
-    augroup END
+    " Basic {{{
 
     " Don't pass messages to |ins-completion-menu|.
     set shortmess+=c
@@ -632,98 +633,25 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
       set signcolumn=yes
     endif
 
-    " Use tab for trigger completion with characters ahead and navigate.
-    " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-    " other plugin before putting this into your config.
-    inoremap <silent><expr> <TAB>
-          \ pumvisible() ? "\<C-n>" :
-          \ <SID>check_back_space() ? "\<TAB>" :
-          \ coc#refresh()
-    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-    function! s:check_back_space() abort
-      let col = col('.') - 1
-      return !col || getline('.')[col - 1]  =~# '\s'
-    endfunction
-
-    " Use <C-l> to trigger completion.
-    inoremap <silent><expr> <C-l> coc#refresh()
-
-    " Use <CR> to confirm completion, `<C-g>u` means break undo chain at current
-    " position. Coc only does snippet and additional edit on confirm.
-    if has('patch8.1.1068')
-      " Use `complete_info` if your (Neo)Vim version supports it.
-      inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-    else
-      imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-    endif
-
-    " Use `[w` and `]w` to navigate diagnostics
-    nmap <silent> [w <Plug>(coc-diagnostic-prev)
-    nmap <silent> ]w <Plug>(coc-diagnostic-next)
-
-    " Use K to show documentation in preview window.
-    nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-    function! s:show_documentation()
-      if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-      else
-        call CocAction('doHover')
-      endif
-    endfunction
-
-    " Highlight the symbol and its references when holding the cursor.
-    " autocmd CursorHold * silent call CocActionAsync('highlight')
-
     augroup mygroup
       autocmd!
+      " Disable coc in specific filetype
+      autocmd FileType text,markdown let b:coc_enabled = 0
       " Setup formatexpr specified filetype(s).
       autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
       " Update signature help on jump placeholder.
       autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
     augroup end
 
-    " Applying codeAction to the selected region.
-    " Example: `<leader>aap` for current paragraph
-    xmap <leader>a  <Plug>(coc-codeaction-selected)
-    nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-    " Formatting selected code.
-    xmap <leader>f  <Plug>(coc-format-selected)
-
-    " Add `:Format` command to format current buffer.
-    command! -nargs=0 Format :call CocAction('format')
-
-    " Add `:Fold` command to fold current buffer.
-    command! -nargs=? Fold :call CocAction('fold', <f-args>)
-
-    " Add `:OR` command for organize imports of the current buffer.
-    command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
-
-    " Map function and class text objects
-    " NOTE: Requires textDocument.documentSymbol' support from the language
-    " server.
-    xmap if <Plug>(coc-funcobj-i)
-    omap if <Plug>(coc-funcobj-i)
-    xmap af <Plug>(coc-funcobj-a)
-    omap af <Plug>(coc-funcobj-a)
-    xmap ic <Plug>(coc-classobj-i)
-    omap ic <Plug>(coc-classobj-i)
-    xmap ac <Plug>(coc-classobj-a)
-    omap ac <Plug>(coc-classobj-a)
-
-    " Use <CTRL-S> for selections ranges.
-    " Requires 'textDocument/selectionRange support of LS, ex: coc-tsserver
-    nmap <silent> <C-s> <Plug>(coc-range-select)
-    xmap <silent> <C-s> <Plug>(coc-range-select)
-
     " Add (Neo)Vim's native statusline support.
     " NOTE: Please see `:h coc-status` for integrations with external plugins that
     " provide custom statusline: lightline.vim, vim-airline.
     set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
-    " install coc extensions
+    " }}} Basic
+
+    " cocExtensions {{{
+
     let g:coc_global_extensions = [
           \ 'coc-bookmark'  ,
           \ 'coc-clangd'    ,
@@ -801,6 +729,119 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " }}} coc config - snippets
 
+    " }}} cocExtensions
+
+    " Command {{{
+
+    " Add `:Format` command to format current buffer.
+    command! -nargs=0 Format :call CocAction('format')
+    " Add `:Fold` command to fold current buffer.
+    command! -nargs=? Fold :call CocAction('fold', <f-args>)
+    " Add `:OR` command for organize imports of the current buffer.
+    command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+
+    " }}} Command
+
+    " Keybindings {{{
+
+    " multipleCursor {{{
+
+    " Highlight the symbol and its references when holding the cursor.
+    " autocmd CursorHold * silent call CocActionAsync('highlight')
+
+    nmap <silent> gmp <Plug>(coc-cursors-position)
+    nmap <silent> gmw <Plug>(coc-cursors-word)
+    xmap <silent> gmw <Plug>(coc-cursors-range)
+    nmap <silent> gmo <Plug>(coc-cursors-operator)
+    nmap <silent> gmn <Plug>(coc-cursors-word)*
+    xmap <silent> gmn <CR><CR>gN<Plug>(coc-cursors-range)gn
+
+    " }}} multipleCursor
+
+    " codeAction {{{
+
+    " Applying codeAction to the selected region.
+    " Example: `<leader>aap` for current paragraph
+    xmap <leader>a  <Plug>(coc-codeaction-selected)
+    nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+    " }}} codeAction
+
+    " Completion {{{
+
+    " Use tab for trigger completion with characters ahead and navigate.
+    " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+    " other plugin before putting this into your config.
+    inoremap <silent><expr> <TAB>
+          \ pumvisible() ? "\<C-n>" :
+          \ <SID>check_back_space() ? "\<TAB>" :
+          \ coc#refresh()
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
+
+    " Use <C-l> to trigger completion.
+    inoremap <silent><expr> <C-l> coc#refresh()
+
+    " Use <CR> to confirm completion, `<C-g>u` means break undo chain at current
+    " position. Coc only does snippet and additional edit on confirm.
+    if has('patch8.1.1068')
+      " Use `complete_info` if your (Neo)Vim version supports it.
+      inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+    else
+      imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+    endif
+
+    " }}} Completion
+
+    " Documentation {{{
+
+    " Use K to show documentation in preview window.
+    nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+    function! s:show_documentation()
+      if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+      else
+        call CocAction('doHover')
+      endif
+    endfunction
+
+    " }}} Documentation
+
+    " textobj {{{
+
+    " Map function and class text objects
+    " NOTE: Requires textDocument.documentSymbol' support from the language
+    " server.
+    xmap if <Plug>(coc-funcobj-i)
+    omap if <Plug>(coc-funcobj-i)
+    xmap af <Plug>(coc-funcobj-a)
+    omap af <Plug>(coc-funcobj-a)
+    xmap ic <Plug>(coc-classobj-i)
+    omap ic <Plug>(coc-classobj-i)
+    xmap ac <Plug>(coc-classobj-a)
+    omap ac <Plug>(coc-classobj-a)
+
+    " Use <CTRL-S> for selections ranges.
+    " Requires 'textDocument/selectionRange support of LS, ex: coc-tsserver
+    nmap <silent> <C-s> <Plug>(coc-range-select)
+    xmap <silent> <C-s> <Plug>(coc-range-select)
+
+    " }}} textobj
+
+    " Use `[w` and `]w` to navigate diagnostics
+    nmap <silent> [w <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]w <Plug>(coc-diagnostic-next)
+
+    " Formatting selected code.
+    xmap <leader>ef  <Plug>(coc-format-selected)
+
+    " }}} Keybindings
+
   endif
 
   " }}} Plugin Config - coc.nvim
@@ -842,6 +883,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     let g:which_key_map['e'] = {
           \ 'name' : '+edit' ,
           \ 'c' : 'edit-config'   ,
+          \ 'f' : 'format-selected-region' ,
           \ 'r' : 'reload-config' ,
           \ 'm' : 'edit-macros'
           \ }
