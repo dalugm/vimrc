@@ -18,7 +18,7 @@ Inspired by [ashfinal](https://github.com/ashfinal/vimrc-config)
 
     git clone --depth 1 https://github.com/dalu98/vimrc.git $HOME\vimfiles && cd .vim
     chmod +x install.sh && install.sh
-    ln -s -f $HOME\vimfiles\init.vim $HOME\_vimrc
+    mklinks -s -f $HOME\vimfiles\init.vim $HOME\_vimrc
 
 ### neovim
 

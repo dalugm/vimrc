@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-05-24 12:55
+" # Last Modified : 2020-06-16 08:20
 " # By            : Mou Tong
 " # Description   : basic config for vim
 " ###########################################################
@@ -323,7 +323,7 @@ command! Bd :bp | :sp | :bn | :bd
 " Keybindings {{{
 
 " Map jk to enter normal mode
-imap jk <Esc>
+inoremap jk <Esc>
 
 " Split management
 nnoremap <silent> <M-J> :exe "resize " . (winheight(0) * 3/2)<CR>
