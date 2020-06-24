@@ -322,8 +322,7 @@ command! Bd :bp | :sp | :bn | :bd
 
 " Keybindings {{{
 
-" Map jk to enter normal mode
-inoremap jk <Esc>
+" normal mode {{{
 
 " Split management
 nnoremap <silent> <M-J> :exe "resize " . (winheight(0) * 3/2)<CR>
@@ -337,6 +336,16 @@ nnoremap <silent> <M-k> <C-W>k
 nnoremap <silent> <M-h> <C-W>h
 nnoremap <silent> <M-l> <C-W>l
 
+" Enhance <C-l>
+nnoremap <silent> <C-l> :<C-u>nohlsearch<C-R>=has('diff')?'<BAR>diffupdate':''<CR><CR>:syntax sync fromstart<CR><C-l>
+
+" }}} normal mode
+
+" insert mode {{{
+
+" Map jk to enter normal mode
+inoremap jk <Esc>
+
 " Emacs-like keybindings
 inoremap <C-a> <Home>
 inoremap <C-e> <End>
@@ -345,8 +354,21 @@ inoremap <C-p> <Up>
 inoremap <C-f> <Right>
 inoremap <C-b> <Left>
 
-" Enhance <C-l>
-nnoremap <silent> <C-l> :<C-u>nohlsearch<C-R>=has('diff')?'<BAR>diffupdate':''<CR><CR>:syntax sync fromstart<CR><C-l>
+" }}} insert mode
+
+" cmdline mode {{{
+
+" Emacs-like keybindings
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+cnoremap <C-n> <Down>
+cnoremap <C-p> <Up>
+cnoremap <C-f> <Right>
+cnoremap <C-b> <Left>
+
+" }}} cmdline mode
+
+" enhance {{{
 
 " Make `&' keep the flags in substitute
 nnoremap & :&&<CR>
@@ -355,7 +377,7 @@ xnoremap & :&&<CR>
 " Use `%%' to expand current file's dir
 cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 
-" Enhace `*' {{{
+" Enhance `*' {{{
 
 " makes * and # work on visual mode too.
 function! s:VSetSearch(cmdtype)
@@ -376,7 +398,9 @@ if maparg('<leader>*', 'v') == ''
   vmap <leader>* :<C-u>call <SID>VSetSearch()<CR>:execute 'noautocmd vimgrep /' . @/ . '/ **'<CR>
 endif
 
-" }}} Enhace `*'
+" }}} Enhance `*'
+
+" }}} enhance
 
 " LeaderKey {{{
 
