@@ -361,9 +361,6 @@ inoremap <C-b> <Left>
 " Emacs-like keybindings
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
-cnoremap <C-n> <Down>
-cnoremap <C-p> <Up>
-cnoremap <C-f> <Right>
 cnoremap <C-b> <Left>
 
 " }}} cmdline mode
