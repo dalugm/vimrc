@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-06-15 11:05
+" # Last Modified : 2020-07-08 22:36
 " # By            : Mou Tong
 " # Description   : plugins config for vim
 " ###########################################################
@@ -748,6 +748,9 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     " Highlight the symbol and its references when holding the cursor.
     " autocmd CursorHold * silent call CocActionAsync('highlight')
+
+    " see @ https://medium.com/@schtoeffel/you-don-t-need-more-than-one-cursor-in-vim-2c44117d51db
+    " translate @ https://macplay.github.io/posts/vim-bu-xu-yao-duo-guang-biao-bian-ji-gong-neng/
 
     nmap <silent> gmp <Plug>(coc-cursors-position)
     nmap <silent> gmw <Plug>(coc-cursors-word)

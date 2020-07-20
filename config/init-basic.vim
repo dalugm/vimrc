@@ -183,7 +183,7 @@ set matchtime=2
 
 " Specify the behavior when switching between buffers
 set switchbuf=useopen
-set showtabline=2
+set showtabline=1
 set tabpagemax=50
 
 " 0 means never show, 1 means show only if there are at least two windows
@@ -311,10 +311,6 @@ set complete-=t   " disable searching tags
 " Define how to use the CTRL-A and CTRL-X commands for adding to and subtracting from a number respectively
 set nrformats-=octal
 
-" Set focus window when split
-set splitbelow
-set splitright
-
 " Close buffer not window
 command! Bd :bp | :sp | :bn | :bd
 
@@ -338,6 +334,9 @@ nnoremap <silent> <M-l> <C-W>l
 
 " Enhance <C-l>
 nnoremap <silent> <C-l> :<C-u>nohlsearch<C-R>=has('diff')?'<BAR>diffupdate':''<CR><CR>:syntax sync fromstart<CR><C-l>
+
+" Misc keybindings
+nnoremap Y y$
 
 " }}} normal mode
 
