@@ -967,6 +967,11 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
           \ 'u' : ['UndotreeToggle'       , 'undo-tree']           ,
           \ }
 
+    let g:which_key_map['l'] = {
+          \ 'name' : '+load' ,
+          \ 't' : [':Colors' , 'load-theme'],
+          \ }
+
     let g:which_key_map['q'] = {
           \ 'name' : '+quit/session' ,
           \ 'q' : [':Obsession | qa!'    , 'quit-vim-without-saving'] ,

@@ -129,13 +129,15 @@ ${0:content}
 endsnippet
 
 snippet fortune-motto "the default snippet to format motto"
-${0:content}
-        [32m-  ${1:author}[m
+${1:content}
+
+        [32m《${2:name}》[m [33m—— ${3:author}[m
+%
 endsnippet
 
 snippet srt "subtitle snippet" b
-${1:start time} --> ${2: end time}
-$0
+${1:start hour}:${2:start minute}:${3:start second},${4:start msecond} --> ${5:end hour}:${6:end minute}:${7:end second},${8:end msecond}
+${0:subtitle}
 endsnippet
 
 # vim:ft=snippets:
