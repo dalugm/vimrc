@@ -84,6 +84,7 @@ if g:dalu_use_plug_manager
     Plug 'cocopon/iceberg.vim'
     Plug 'joshdick/onedark.vim'
     Plug 'junegunn/seoul256.vim'
+    Plug 'overcache/NeoSolarized'
     Plug 'nanotech/jellybeans.vim'
     Plug 'arcticicestudio/nord-vim'
     Plug 'NLKNguyen/papercolor-theme'
@@ -113,11 +114,12 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
   " Plugin Config - colorscheme {{{
 
-  set background=dark
-  colorscheme gruvbox
+  " set background=dark
+  " colorscheme NeoSolarized
 
   " colorscheme names that use to set color
   let g:mycolors = [
+        \ 'NeoSolarized'   ,
         \ 'PaperColor'     ,
         \ 'ayu'            ,
         \ 'default'        ,
@@ -220,6 +222,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
   if filereadable(expand("~/.vim/plugged/vimtex/autoload/vimtex.vim"))
 
+    let g:tex_flavor = 'xelatex'
     let g:vimtex_compiler_latexmk = {
           \ 'options' : [
           \   '-xelatex',
