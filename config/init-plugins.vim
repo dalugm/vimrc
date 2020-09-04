@@ -663,7 +663,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
           \ 'coc-json'      ,
           \ 'coc-lists'     ,
           \ 'coc-pairs'     ,
-          \ 'coc-python'    ,
+          \ 'coc-pyright'   ,
           \ 'coc-snippets'  ,
           \ ]
 
