@@ -22,23 +22,23 @@ if g:dalu_use_plug_manager
     call plug#begin('~/.vim/plugged')
 
     " better operation
-    Plug 'vim-test/vim-test'
-    Plug 'honza/vim-snippets'
-    Plug 'Yggdroot/indentLine'
-    Plug 'simnalamburt/vim-mundo'
-    Plug 'liuchengxu/vim-which-key'
-    Plug 'editorconfig/editorconfig-vim'
     Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+    Plug 'Yggdroot/indentLine'
+    Plug 'editorconfig/editorconfig-vim'
+    Plug 'honza/vim-snippets'
+    Plug 'liuchengxu/vim-which-key'
+    Plug 'simnalamburt/vim-mundo'
+    Plug 'vim-test/vim-test'
 
+    Plug 'tpope/vim-abolish'
+    Plug 'tpope/vim-commentary'
+    Plug 'tpope/vim-dispatch'
+    Plug 'tpope/vim-obsession'
+    Plug 'tpope/vim-projectionist'
     Plug 'tpope/vim-rails'
     Plug 'tpope/vim-repeat'
-    Plug 'tpope/vim-abolish'
-    Plug 'tpope/vim-dispatch'
     Plug 'tpope/vim-surround'
-    Plug 'tpope/vim-obsession'
-    Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-unimpaired'
-    Plug 'tpope/vim-projectionist'
 
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } | Plug 'junegunn/fzf.vim'
 
@@ -46,14 +46,14 @@ if g:dalu_use_plug_manager
     Plug 'skywind3000/asynctasks.vim'
 
     " textobj
-    Plug 'wellle/targets.vim'
-    Plug 'kana/vim-textobj-user'
-    Plug 'junegunn/vim-easy-align'
     Plug 'easymotion/vim-easymotion'
+    Plug 'junegunn/vim-easy-align'
+    Plug 'kana/vim-textobj-user'
+    Plug 'wellle/targets.vim'
 
     " git
-    Plug 'tpope/vim-fugitive'
     Plug 'airblade/vim-gitgutter'
+    Plug 'tpope/vim-fugitive'
 
     " language
     Plug 'mattn/emmet-vim'
@@ -67,8 +67,8 @@ if g:dalu_use_plug_manager
     Plug 'junegunn/limelight.vim'
 
     Plug 'luochen1990/rainbow'
-    Plug 'ryanoasis/vim-devicons'
     Plug 'octol/vim-cpp-enhanced-highlight'
+    Plug 'ryanoasis/vim-devicons'
     if version >= 800 || has('nvim')
       Plug 'itchyny/lightline.vim'
     else
@@ -76,18 +76,19 @@ if g:dalu_use_plug_manager
     endif
 
     " ColorScheme
-    Plug 'dracula/vim'
-    Plug 'rakr/vim-one'
-    Plug 'morhetz/gruvbox'
-    Plug 'jnurmine/zenburn'
+    Plug 'NLKNguyen/papercolor-theme'
+    Plug 'arcticicestudio/nord-vim'
     Plug 'ayu-theme/ayu-vim'
     Plug 'cocopon/iceberg.vim'
+    Plug 'dracula/vim'
+    Plug 'jnurmine/zenburn'
     Plug 'joshdick/onedark.vim'
     Plug 'junegunn/seoul256.vim'
-    Plug 'overcache/NeoSolarized'
+    Plug 'morhetz/gruvbox'
     Plug 'nanotech/jellybeans.vim'
-    Plug 'arcticicestudio/nord-vim'
-    Plug 'NLKNguyen/papercolor-theme'
+    Plug 'overcache/NeoSolarized'
+    Plug 'rakr/vim-one'
+    Plug 'whatyouhide/vim-gotham'
 
     " Lsp Support
     if version >= 800 || has('nvim')
@@ -124,6 +125,8 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         \ 'ayu'            ,
         \ 'default'        ,
         \ 'dracula'        ,
+        \ 'gotham'         ,
+        \ 'gotham256'      ,
         \ 'gruvbox'        ,
         \ 'iceberg'        ,
         \ 'jellybeans'     ,
