@@ -104,9 +104,7 @@ set mouse=a
 set fillchars=vert:│,fold:·
 
 " Use these symbols for invisible chars
-if &listchars ==# 'eol:$'
-  set listchars=tab:>\ ,eol:¬,trail:⋅,extends:»,precedes:«,nbsp:+
-endif
+set listchars=tab:>\ ,eol:¬,trail:⋅,extends:»,precedes:«,nbsp:+
 
 " Fold code config
 set foldenable

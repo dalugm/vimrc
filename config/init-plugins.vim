@@ -1053,7 +1053,7 @@ if has('packages')
 
   packadd minpac
 
-  if !exists('*minpac#init')
+  if !exists('g:loaded_minpac')
     echo "WARNING: minpac undetected, now downloading...\n"
     silent !git clone --depth 1 -- https://github.com/k-takata/minpac.git
           \ ~/.vim/pack/minpac/opt/minpac
