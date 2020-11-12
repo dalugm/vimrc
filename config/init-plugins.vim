@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-07-08 22:36
+" # Last Modified : 2020-10-29 10:30
 " # By            : Mou Tong
 " # Description   : plugins config for vim
 " ###########################################################
@@ -971,6 +971,11 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
           \ 'p' : [':e ~/.vim/snippets'   , 'edit-snippets']       ,
           \ 'r' : [':source ~/.vimrc'     , 'reload-config']       ,
           \ 'u' : ['UndotreeToggle'       , 'undo-tree']           ,
+          \ }
+
+    let g:which_key_map['g'] = {
+          \ 'name' : '+git' ,
+          \ 'g' : [':Gstatus' , 'git-status'],
           \ }
 
     let g:which_key_map['l'] = {
