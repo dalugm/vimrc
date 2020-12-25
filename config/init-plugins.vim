@@ -76,6 +76,7 @@ if g:dalu_use_plug_manager
     endif
 
     " ColorScheme
+    Plug 'AlessandroYorba/Sierra'
     Plug 'NLKNguyen/papercolor-theme'
     Plug 'arcticicestudio/nord-vim'
     Plug 'ayu-theme/ayu-vim'
@@ -131,6 +132,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
         \ 'iceberg'        ,
         \ 'jellybeans'     ,
         \ 'monokai'        ,
+        \ 'sierra'         ,
         \ 'nord'           ,
         \ 'one'            ,
         \ 'onedark'        ,
