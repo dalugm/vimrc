@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2020-10-29 10:30
+" # Last Modified : 2021-01-04 12:13
 " # By            : Mou Tong
 " # Description   : plugins config for vim
 " ###########################################################
@@ -200,7 +200,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " }}} split
 
     " Use autocmd to update lightline when using coc.nvim
-    augroup my-plugin
+    augroup myplugin
       autocmd!
       autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
     augroup END
@@ -214,7 +214,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
   if filereadable(expand("~/.vim/plugged/emmet-vim/plugin/emmet.vim"))
 
     let g:user_emmet_install_global = 0
-    augroup my-plugin
+    augroup myplugin
       autocmd FileType html,xhtml,xml,css,scss,sass,less EmmetInstall
     augroup END
     let g:user_emmet_leader_key = ','
@@ -297,7 +297,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
       Limelight!
     endfunction
 
-    augroup my-plugin
+    augroup myplugin
       autocmd! User GoyoEnter nested call <SID>goyo_enter()
       autocmd! User GoyoLeave nested call <SID>goyo_leave()
     augroup END
@@ -520,7 +520,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
   if filereadable(expand("~/.vim/plugged/vim-commentary/plugin/commentary.vim"))
 
     " add comment support for specific file type
-    augroup my-plugin
+    augroup myplugin
       autocmd FileType apache setlocal commentstring=#\ %s
     augroup END
 
@@ -640,6 +640,19 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     else
       set signcolumn=yes
     endif
+
+    " Coc function {{{
+    
+    function s:FloatingTransparen()
+      highlight CocFloating ctermbg=None
+    endfunction
+    
+    augroup myplugin
+      autocmd!
+      command! -bar -nargs=0 TransCoc call s:FloatingTransparen()
+    augroup END
+    
+    " }}} CocFunction
 
     augroup mygroup
       autocmd!
@@ -1053,41 +1066,3 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 endif
 
 " }}} Plugin Config
-
-" minpac config {{{
-
-if has('packages')
-
-  packadd minpac
-
-  if !exists('g:loaded_minpac')
-    echo "WARNING: minpac undetected, now downloading...\n"
-    silent !git clone --depth 1 -- https://github.com/k-takata/minpac.git
-          \ ~/.vim/pack/minpac/opt/minpac
-  else
-    " minpac is available.
-    call minpac#init()
-    call minpac#add('k-takata/minpac', {'type': 'opt'})
-
-    " Additional plugins here.
-    call minpac#add('vim/killersheep', {'type': 'opt'})
-
-    call minpac#add('vimwiki/vimwiki')
-    let g:vimwiki_list = [{'path': '~/.vim/vimwiki/',
-          \ 'path_html': '~/.vim/vimwiki_html/'}]
-
-    call minpac#add('tpope/vim-repeat', {'type': 'opt'})
-    call minpac#add('tpope/vim-flagship', {'type': 'opt'})
-    call minpac#add('tpope/vim-surround', {'type': 'opt'})
-    call minpac#add('tpope/vim-unimpaired', {'type': 'opt'})
-    call minpac#add('tpope/vim-commentary', {'type': 'opt'})
-
-  endif
-
-  command! PackUpdate call minpac#update()
-  command! PackStatus call minpac#status()
-  command! PackClean  call minpac#clean()
-
-endif
-
-" }}} minpac config

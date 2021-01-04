@@ -8,7 +8,6 @@ My vim plugins and configuration
 
     git clone --depth 1 https://github.com/dalu98/vimrc.git $HOME/.vim && cd .vim
     chmod +x install.sh && ./install.sh
-    ln -s -f $HOME/.vim/init.vim $HOME/.vimrc
 
 * Do NOT support Windows, please install it **manually**.
 
