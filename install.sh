@@ -11,53 +11,31 @@
 set -e
 
 if [ "$1" = "extend" ]; then
-    printf 'set runtimepath^=$HOME/.vim runtimepath+=$HOME/.vim/after
+    printf 'set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 
-source $HOME/.vim/config/init-basic.vim
-source $HOME/.vim/config/init-extend.vim
-
-" Private config {{{ "
-if filereadable(expand("$HOME/.vim/vimrc_private.vim"))
-    source $HOME/.vim/vimrc_private.vim
-endif
-" }}} "
-' > $HOME/.vim/init.vim
-
-    echo "Install vim configuration successfully."
+source ~/.vim/config/init-basic.vim
+source ~/.vim/config/init-extend.vim
+' > ~/.vim/init.vim
 elif [ "$1" = "basic" ]; then
-    printf 'set runtimepath^=$HOME/.vim runtimepath+=$HOME/.vim/after
+    printf 'set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 
-source $HOME/.vim/config/init-basic.vim
-
-" Private config {{{ "
-if filereadable(expand("$HOME/.vim/vimrc_private.vim"))
-    source $HOME/.vim/vimrc_private.vim
-endif
-" }}} "
-' > $HOME/.vim/init.vim
-
-    echo "Install basic vim configuration successfully."
+source ~/.vim/config/init-basic.vim
+' > ~/.vim/init.vim
 else
-    printf 'set runtimepath^=$HOME/.vim runtimepath+=$HOME/.vim/after
+    printf 'set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 
-source $HOME/.vim/config/init-basic.vim
-source $HOME/.vim/config/init-extend.vim
-
-" Private config {{{ "
-if filereadable(expand("$HOME/.vim/vimrc_private.vim"))
-    source $HOME/.vim/vimrc_private.vim
-endif
-" }}} "
-' > $HOME/.vim/init.vim
-
-    echo "Install vim configuration successfully."
+source ~/.vim/config/init-basic.vim
+source ~/.vim/config/init-extend.vim
+' > ~/.vim/init.vim
 fi
 
-if [ "$OSTYPE" = windows* ]; then
-    ln -s -f $HOME/.vim/init.vim $HOME/_vimrc
+if [ "$OSTYPE" = msys* ]; then
+    ln -s -f ~/.vim/init.vim ~/_vimrc
 else
-    ln -s -f $HOME/.vim/init.vim $HOME/.vimrc
+    ln -s -f ~/.vim/init.vim ~/.vimrc
 fi
+
+echo "Install vim configuration successfully."

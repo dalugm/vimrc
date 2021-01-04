@@ -267,16 +267,18 @@ endif
 " Will get bad experience for diagnostics when it's default 4000
 set updatetime=300
 
-" Sets how many lines of history VIM has to remember
-set history=1000 " command line history
+" Sets how many lines of cmd history VIM has to remember
+set history=1000
 
 " Turn backup off, since most stuff is in git et.c anyway...
 " And plugins demand such as `coc`...
 set nobackup
 set nowritebackup
 
-" Swap files are necessary when crash recovery
-set directory=$HOME/.vim/swapfiles//
+" " Swap files are necessary when crash recovery
+" " But I prefer to use DVCS to manange it
+" " Or just backup manually out of secure problem
+" set directory=$HOME/.vim/swapfiles//
 
 " Turn persistent undo on,
 " means that you can undo even when you close a buffer/VIM
@@ -467,15 +469,6 @@ if has('packages')
   if !has('nvim')
     packadd! editexisting
   endif
-else
-  runtime macros/matchit.vim
-  autocmd FileType python let b:match_words = '\<if\>:\<elif\>:\<else\>,'
-        \ . '\<try\>:\<except\>'
-  let b:match_ignorecase=0
-
-  if !has('nvim')
-    runtime macros/editexisting.vim
-  endif
 
   " minpac config {{{
 
@@ -510,6 +503,16 @@ else
   command! PackClean  call minpac#clean()
 
   " }}} minpac config
+
+else
+  runtime macros/matchit.vim
+  autocmd FileType python let b:match_words = '\<if\>:\<elif\>:\<else\>,'
+        \ . '\<try\>:\<except\>'
+  let b:match_ignorecase=0
+
+  if !has('nvim')
+    runtime macros/editexisting.vim
+  endif
 
 endif
 

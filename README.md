@@ -7,9 +7,9 @@ My vim plugins and configuration
 ## INSTALL
 
     git clone --depth 1 https://github.com/dalu98/vimrc.git $HOME/.vim && cd .vim
-    chmod +x install.sh && ./install.sh
+    bash install.sh [basic|extend]
 
-* Do NOT support Windows, please install it **manually**.
+* Do NOT support Windows, please install it **manually** when encountering problems.
 
 ### neovim
 
