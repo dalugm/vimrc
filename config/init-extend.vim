@@ -729,7 +729,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     let g:snips_author = "dalu"
     let g:snips_email  = "mou.tong@qq.com"
     let g:snips_about  = "dalu <mou.tong@qq.com>"
-    let g:snips_github = "dalu98"
+    let g:snips_github = "dalugm"
 
     " Use <M-l> for trigger snippet expand.
     imap <M-l> <Plug>(coc-snippets-expand)
