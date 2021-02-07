@@ -80,8 +80,9 @@ if g:dalu_use_plug_manager
     Plug 'NLKNguyen/papercolor-theme'
     Plug 'arcticicestudio/nord-vim'
     Plug 'ayu-theme/ayu-vim'
+    Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
     Plug 'cocopon/iceberg.vim'
-    Plug 'dracula/vim'
+    Plug 'dracula/vim', { 'as': 'dracula' }
     Plug 'jnurmine/zenburn'
     Plug 'joshdick/onedark.vim'
     Plug 'junegunn/seoul256.vim'
@@ -121,24 +122,25 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
   " colorscheme names that use to set color
   let g:mycolors = [
-        \ 'NeoSolarized'   ,
-        \ 'PaperColor'     ,
-        \ 'ayu'            ,
-        \ 'default'        ,
-        \ 'dracula'        ,
-        \ 'gotham'         ,
-        \ 'gotham256'      ,
-        \ 'gruvbox'        ,
-        \ 'iceberg'        ,
-        \ 'jellybeans'     ,
-        \ 'monokai'        ,
-        \ 'sierra'         ,
-        \ 'nord'           ,
-        \ 'one'            ,
-        \ 'onedark'        ,
-        \ 'seoul256'       ,
-        \ 'solarized'      ,
-        \ 'tomorrow-night' ,
+        \ 'NeoSolarized'    ,
+        \ 'PaperColor'      ,
+        \ 'ayu'             ,
+        \ 'challenger_deep' ,
+        \ 'default'         ,
+        \ 'dracula'         ,
+        \ 'gotham'          ,
+        \ 'gotham256'       ,
+        \ 'gruvbox'         ,
+        \ 'iceberg'         ,
+        \ 'jellybeans'      ,
+        \ 'monokai'         ,
+        \ 'sierra'          ,
+        \ 'nord'            ,
+        \ 'one'             ,
+        \ 'onedark'         ,
+        \ 'seoul256'        ,
+        \ 'solarized'       ,
+        \ 'tomorrow-night'  ,
         \ 'zenburn'
         \ ]
 
@@ -674,7 +676,6 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " cocExtensions {{{
 
     let g:coc_global_extensions = [
-          \ 'coc-bookmark'  ,
           \ 'coc-clangd'    ,
           \ 'coc-explorer'  ,
           \ 'coc-highlight' ,

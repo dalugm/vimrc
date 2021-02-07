@@ -2,19 +2,19 @@
 #  File  #
 ##########
 
-.DS_Store
-*/.DS_Store
-.netrwhist
-viminfo
+/.DS_Store
+/*/.DS_Store
+/.netrwhist
+/viminfo
 
 ##########
 # Folder #
 ##########
 
-plugged/
-pack/minpac/
+/plugged/
+/pack/minpac/
 
-undotree/
-swapfiles/
-sessions/
-vimwiki_html/
+/undotree/
+/swapfiles/
+/sessions/
+/vimwiki_html/

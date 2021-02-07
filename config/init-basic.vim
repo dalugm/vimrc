@@ -314,6 +314,9 @@ set nrformats-=octal
 " Close buffer not window
 command! Bd :bp | :sp | :bn | :bd
 
+" For a better commit message
+autocmd Filetype gitcommit setlocal spell textwidth=72
+
 " }}} Edit
 
 " Keybindings {{{
