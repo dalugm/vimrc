@@ -1,4 +1,0 @@
-= vim wiki =
-
-== moe pedia ==
-    * [[About me]]

@@ -348,24 +348,7 @@ nnoremap Y y$
 " Map jk to enter normal mode
 inoremap jk <Esc>
 
-" Emacs-like keybindings
-inoremap <C-a> <Home>
-inoremap <C-e> <End>
-inoremap <C-n> <Down>
-inoremap <C-p> <Up>
-inoremap <C-f> <Right>
-inoremap <C-b> <Left>
-
 " }}} insert mode
-
-" cmdline mode {{{
-
-" Emacs-like keybindings
-cnoremap <C-a> <Home>
-cnoremap <C-e> <End>
-cnoremap <C-b> <Left>
-
-" }}} cmdline mode
 
 " enhance {{{
 
@@ -490,9 +473,10 @@ if has('packages')
     call minpac#add('vim/killersheep', {'type': 'opt'})
 
     call minpac#add('vimwiki/vimwiki')
-    let g:vimwiki_list = [{'path': '~/.vim/vimwiki/',
-          \ 'path_html': '~/.vim/vimwiki_html/'}]
+    let g:vimwiki_list = [{'path': '~/wiki/',
+                         \ 'path_html': '~/wiki/vimwiki_html/'}]
 
+    call minpac#add('tpope/vim-rsi', {'type': 'opt'})
     call minpac#add('tpope/vim-repeat', {'type': 'opt'})
     call minpac#add('tpope/vim-flagship', {'type': 'opt'})
     call minpac#add('tpope/vim-surround', {'type': 'opt'})
