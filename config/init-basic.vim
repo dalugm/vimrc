@@ -395,6 +395,9 @@ noremap \ ,
 " Fast saving
 nnoremap <silent> <Leader>w :update<CR>
 
+" Fast quiting
+nnoremap <silent> <Leader>Q :qa!<CR>
+
 " Fast editing and reloading of vim config
 nnoremap <Leader>ec :e! ~/.vim/config<CR>
 nnoremap <Leader>ev :e! ~/.vim<CR>

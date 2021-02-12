@@ -1002,11 +1002,11 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
 
     let g:which_key_map['q'] = {
           \ 'name' : '+quit/session' ,
-          \ 'q' : [':Obsession | qa!'    , 'quit-vim-without-saving'] ,
-          \ 'Q' : [':qa!'                , 'quit-vim-without-saving'] ,
-          \ 'l' : [':call LoadSession()' , 'restore-last-session']    ,
-          \ 'L' : [':Obsession!'         , 'toggle-session']          ,
-          \ 's' : ['Obsession'           , 'save-current-session']    ,
+          \ 'q' : [':Obsession | qa!'    , 'quit-vim-with-saving-session'] ,
+          \ 'Q' : [':qa!'                , 'quit-vim-without-asking']      ,
+          \ 'l' : [':call LoadSession()' , 'restore-last-session']         ,
+          \ 'L' : [':Obsession!'         , 'toggle-session']               ,
+          \ 's' : ['Obsession'           , 'save-current-session']         ,
           \ }
 
     let g:which_key_map['s'] = {
