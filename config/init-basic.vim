@@ -3,9 +3,9 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2021-01-04 12:13
+" # Last Modified : 2021-02-14 19:00
 " # By            : Mou Tong
-" # Description   : basic config for vim
+" # Description   : Basic Configuration
 " ###########################################################
 
 " Environment {{{
@@ -120,8 +120,8 @@ syntax on
 
 " set vim colors
 " use true colors in vim under tmux
-" @ https://github.com/tmux/tmux/issues/1246
-" @ https://github.com/vim/vim/issues/993#issuecomment-255651605
+" https://github.com/tmux/tmux/issues/1246
+" https://github.com/vim/vim/issues/993#issuecomment-255651605
 if has("termguicolors") && !has('nvim')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
@@ -416,10 +416,6 @@ map <Leader>bd :bdelete<CR>
 
 " Close all the buffers
 map <Leader>ba :bufdo bd<CR>
-
-" Change buffers
-map <Leader>l :bnext<CR>
-map <Leader>h :bprevious<CR>
 
 " }}} Key Mappings - Buffer
 

@@ -3,9 +3,9 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2021-01-04 12:13
+" # Last Modified : 2021-02-14 19:00
 " # By            : Mou Tong
-" # Description   : plugins config for vim
+" # Description   : Plugins Configuration
 " ###########################################################
 
 " Plugin List {{{
@@ -83,6 +83,7 @@ if g:dalu_use_plug_manager
     Plug 'ayu-theme/ayu-vim'
     Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
     Plug 'cocopon/iceberg.vim'
+    Plug 'dalugm/vim-colors-solarized'
     Plug 'dracula/vim', { 'as': 'dracula' }
     Plug 'jnurmine/zenburn'
     Plug 'joshdick/onedark.vim'
@@ -536,7 +537,7 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
   if filereadable(expand("~/.vim/plugged/vim-dispatch/plugin/dispatch.vim"))
 
     let test#strategy = "dispatch"
-    " @see https://github.com/tpope/vim-dispatch/issues/222#issuecomment-493273080
+    " https://github.com/tpope/vim-dispatch/issues/222#issuecomment-493273080
     if !empty($TMUX)
       set shellpipe=2>&1\|tee
     endif
@@ -772,8 +773,8 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
     " Highlight the symbol and its references when holding the cursor.
     " autocmd CursorHold * silent call CocActionAsync('highlight')
 
-    " see @ https://medium.com/@schtoeffel/you-don-t-need-more-than-one-cursor-in-vim-2c44117d51db
-    " translate @ https://macplay.github.io/posts/vim-bu-xu-yao-duo-guang-biao-bian-ji-gong-neng/
+    " https://medium.com/@schtoeffel/you-don-t-need-more-than-one-cursor-in-vim-2c44117d51db
+    " translate: https://macplay.github.io/posts/vim-bu-xu-yao-duo-guang-biao-bian-ji-gong-neng/
 
     nmap <silent> gmp <Plug>(coc-cursors-position)
     nmap <silent> gmw <Plug>(coc-cursors-word)

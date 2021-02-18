@@ -1,4 +1,4 @@
-" Filename: minimal.vim
+" Filename: dont-panic.vim
 " Author: dalu <mou.tong@qq.com>
 " Maintainer: dalu <mou.tong@qq.com>
 " Created: 2020-05-12 10:04
@@ -8,12 +8,12 @@
 " Version: 0.1
 " Changelog:
 "     0.1 - initial version
+
 " Commentary:
-
-" minimal configuration
-
+"
+" Don't panic, use this minimal configuration for troubleshooting.
+"
 " Code:
-
 
 if exists('g:loaded_sensible') || &compatible
   finish

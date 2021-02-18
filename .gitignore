@@ -6,6 +6,8 @@
 /*/.DS_Store
 /.netrwhist
 /viminfo
+!/pack/mine/start/README.md
+!/pack/mine/opt/README.md
 
 ##########
 # Folder #
@@ -13,6 +15,7 @@
 
 /plugged/
 /pack/minpac/
+/pack/mine/
 
 /undotree/
 /swapfiles/
