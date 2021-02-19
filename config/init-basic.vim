@@ -475,6 +475,8 @@ if has('packages')
     let g:vimwiki_list = [{'path': '~/wiki/',
                          \ 'path_html': '~/wiki/vimwiki_html/'}]
 
+    call minpac#add('dalugm/vim-colors-solarized', {'type': 'opt'})
+
     call minpac#add('tpope/vim-rsi', {'type': 'opt'})
     call minpac#add('tpope/vim-repeat', {'type': 'opt'})
     call minpac#add('tpope/vim-flagship', {'type': 'opt'})
