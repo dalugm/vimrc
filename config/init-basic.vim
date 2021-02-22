@@ -440,7 +440,7 @@ map <Leader>te :tabedit <c-r>=expand("%:p:h")<CR>/
 
 " }}} Keybindings
 
-" Package opt {{{
+" Package {{{
 
 if has('packages')
   " Enhance `%' command
@@ -475,14 +475,15 @@ if has('packages')
     let g:vimwiki_list = [{'path': '~/wiki/',
                          \ 'path_html': '~/wiki/vimwiki_html/'}]
 
-    call minpac#add('dalugm/vim-colors-solarized', {'type': 'opt'})
+    call minpac#add('dalugm/vim-colors-solarized')
 
-    call minpac#add('tpope/vim-rsi', {'type': 'opt'})
-    call minpac#add('tpope/vim-repeat', {'type': 'opt'})
+    call minpac#add('tpope/vim-commentary')
+    call minpac#add('tpope/vim-repeat')
+    call minpac#add('tpope/vim-rsi')
+    call minpac#add('tpope/vim-surround')
+    call minpac#add('tpope/vim-unimpaired')
+
     call minpac#add('tpope/vim-flagship', {'type': 'opt'})
-    call minpac#add('tpope/vim-surround', {'type': 'opt'})
-    call minpac#add('tpope/vim-unimpaired', {'type': 'opt'})
-    call minpac#add('tpope/vim-commentary', {'type': 'opt'})
 
   endif
 
@@ -507,7 +508,7 @@ endif
 " Load help doc
 silent! helptags ALL
 
-" }}} Package opt
+" }}} Package
 
 " GUI Related {{{
 

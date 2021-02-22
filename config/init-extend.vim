@@ -31,15 +31,10 @@ if g:dalu_use_plug_manager
     Plug 'vim-test/vim-test'
 
     Plug 'tpope/vim-abolish'
-    Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-dispatch'
     Plug 'tpope/vim-obsession'
     Plug 'tpope/vim-projectionist'
     Plug 'tpope/vim-rails'
-    Plug 'tpope/vim-repeat'
-    Plug 'tpope/vim-rsi'
-    Plug 'tpope/vim-surround'
-    Plug 'tpope/vim-unimpaired'
 
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } | Plug 'junegunn/fzf.vim'
 
@@ -83,7 +78,6 @@ if g:dalu_use_plug_manager
     Plug 'ayu-theme/ayu-vim'
     Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
     Plug 'cocopon/iceberg.vim'
-    Plug 'dalugm/vim-colors-solarized'
     Plug 'dracula/vim', { 'as': 'dracula' }
     Plug 'jnurmine/zenburn'
     Plug 'joshdick/onedark.vim'
@@ -116,45 +110,6 @@ endif
 " Plugin Config {{{
 
 if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
-
-  " Plugin Config - colorscheme {{{
-
-  " set background=dark
-  " colorscheme NeoSolarized
-
-  " colorscheme names that use to set color
-  let g:mycolors = [
-        \ 'NeoSolarized'    ,
-        \ 'PaperColor'      ,
-        \ 'ayu'             ,
-        \ 'challenger_deep' ,
-        \ 'default'         ,
-        \ 'dracula'         ,
-        \ 'gotham'          ,
-        \ 'gotham256'       ,
-        \ 'gruvbox'         ,
-        \ 'iceberg'         ,
-        \ 'jellybeans'      ,
-        \ 'monokai'         ,
-        \ 'sierra'          ,
-        \ 'nord'            ,
-        \ 'one'             ,
-        \ 'onedark'         ,
-        \ 'seoul256'        ,
-        \ 'solarized'       ,
-        \ 'tomorrow-night'  ,
-        \ 'zenburn'
-        \ ]
-
-  " SetColors {{{
-
-  nnoremap <F8>   :call NextColor(1)<CR>
-  nnoremap <S-F8> :call NextColor(-1)<CR>
-  nnoremap <M-F8> :call NextColor(0)<CR>
-
-  " }}} SetColors
-
-  " }}} Plugin Config - colorscheme
 
   " Plugin Config - lightline.vim {{{
 
@@ -507,30 +462,6 @@ if g:dalu_use_plug_manager && filereadable(expand("~/.vim/autoload/plug.vim"))
   endif
 
   " }}} Plugin Config - vim-easy-align
-
-  " " {{{ Plugin Config - vim-repeat
-
-  " if filereadable(expand("~/.vim/plugged/vim-repeat/autoload/repeat.vim"))
-
-  "   " add support to different plugins
-  "   " silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
-
-  " endif
-
-  " " }}} Plugin Config - vim-repeat
-
-  " Plugin Config - commentary {{{
-
-  if filereadable(expand("~/.vim/plugged/vim-commentary/plugin/commentary.vim"))
-
-    " add comment support for specific file type
-    augroup myplugin
-      autocmd FileType apache setlocal commentstring=#\ %s
-    augroup END
-
-  endif
-
-  " }}} Plugin Config - commentary
 
   " Plugin Config - vim-dispatch {{{
 
