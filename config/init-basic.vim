@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2021-02-14 19:00
+" # Last Modified : 2021-02-24 18:00
 " # By            : Mou Tong
 " # Description   : Basic Configuration
 " ###########################################################
@@ -407,7 +407,7 @@ nnoremap <Leader>er :source ~/.vimrc<CR>
 nnoremap <Leader>em :<C-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
 " Switch CWD to the directory of the open buffer
-nnoremap <Leader>cd :lcd %:p:h<CR>:pwd<CR>
+nnoremap <Leader>dd :lcd %:p:h<CR>:pwd<CR>
 
 " Key Mappings - Buffer {{{
 
@@ -455,44 +455,6 @@ if has('packages')
     packadd! editexisting
   endif
 
-  " minpac config {{{
-
-  packadd minpac
-
-  if !exists('g:loaded_minpac')
-    echo "WARNING: minpac undetected, now downloading...\n"
-    silent !git clone --depth 1 -- https://github.com/k-takata/minpac.git
-          \ ~/.vim/pack/minpac/opt/minpac
-  else
-    " minpac is available.
-    call minpac#init()
-    call minpac#add('k-takata/minpac', {'type': 'opt'})
-
-    " Additional plugins here.
-    call minpac#add('vim/killersheep', {'type': 'opt'})
-
-    call minpac#add('vimwiki/vimwiki')
-    let g:vimwiki_list = [{'path': '~/wiki/',
-                         \ 'path_html': '~/wiki/vimwiki_html/'}]
-
-    call minpac#add('dalugm/vim-colors-solarized')
-
-    call minpac#add('tpope/vim-commentary')
-    call minpac#add('tpope/vim-repeat')
-    call minpac#add('tpope/vim-rsi')
-    call minpac#add('tpope/vim-surround')
-    call minpac#add('tpope/vim-unimpaired')
-
-    call minpac#add('tpope/vim-flagship', {'type': 'opt'})
-
-  endif
-
-  command! PackUpdate call minpac#update()
-  command! PackStatus call minpac#status()
-  command! PackClean  call minpac#clean()
-
-  " }}} minpac config
-
 else
   runtime macros/matchit.vim
   autocmd FileType python let b:match_words = '\<if\>:\<elif\>:\<else\>,'
@@ -509,6 +471,32 @@ endif
 silent! helptags ALL
 
 " }}} Package
+
+" Plugin {{{
+
+if plug#begin('~/.vim/plugged')
+
+  " Specify a directory for plugins
+  " - Avoid using standard Vim directory names like 'plugin'
+  " Make sure you use single quotes
+
+  Plug 'dalugm/vim-colors-solarized'
+
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-rsi'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-unimpaired'
+
+  call plug#end()
+
+else
+  echo "WARNING: plug.vim undetected, now downloading...\n"
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
+" }}} Plugin
 
 " GUI Related {{{
 
@@ -586,7 +574,7 @@ endif
 
 " Misc {{{
 
-augroup dalu_color_warning
+augroup my_color_warning
   autocmd!
   " ColorScheme means to match keywords after loading a color scheme
   " Syntax means to match keywords when the `syntax` option has been set
