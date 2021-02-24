@@ -481,6 +481,7 @@ if plug#begin('~/.vim/plugged')
   " Make sure you use single quotes
 
   Plug 'dalugm/vim-colors-solarized'
+  Plug 'morhetz/gruvbox'
 
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-repeat'

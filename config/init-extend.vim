@@ -14,90 +14,90 @@
 " - Avoid using standard Vim directory names like 'plugin'
 " Make sure you use single quotes
 
-" rewrite plug.vim
+" reuse plug.vim
 if plug#begin('~/.vim/plugged')
 
-" better operation
-Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-Plug 'Yggdroot/indentLine'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'honza/vim-snippets'
-Plug 'liuchengxu/vim-which-key'
-Plug 'simnalamburt/vim-mundo'
-Plug 'vim-test/vim-test'
+  " better operation
+  Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+  Plug 'Yggdroot/indentLine'
+  Plug 'editorconfig/editorconfig-vim'
+  Plug 'honza/vim-snippets'
+  Plug 'liuchengxu/vim-which-key'
+  Plug 'simnalamburt/vim-mundo'
+  Plug 'vim-test/vim-test'
 
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-obsession'
-Plug 'tpope/vim-projectionist'
-Plug 'tpope/vim-rails'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
+  Plug 'tpope/vim-abolish'
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-dispatch'
+  Plug 'tpope/vim-obsession'
+  Plug 'tpope/vim-projectionist'
+  Plug 'tpope/vim-rails'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-rsi'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-unimpaired'
 
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } | Plug 'junegunn/fzf.vim'
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } | Plug 'junegunn/fzf.vim'
 
-Plug 'skywind3000/asyncrun.vim'
-Plug 'skywind3000/asynctasks.vim'
+  Plug 'skywind3000/asyncrun.vim'
+  Plug 'skywind3000/asynctasks.vim'
 
-" textobj
-Plug 'easymotion/vim-easymotion'
-Plug 'junegunn/vim-easy-align'
-Plug 'kana/vim-textobj-user'
-Plug 'wellle/targets.vim'
+  " textobj
+  Plug 'easymotion/vim-easymotion'
+  Plug 'junegunn/vim-easy-align'
+  Plug 'kana/vim-textobj-user'
+  Plug 'wellle/targets.vim'
 
-" git
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
+  " git
+  Plug 'airblade/vim-gitgutter'
+  Plug 'tpope/vim-fugitive'
 
-" language
-Plug 'mattn/emmet-vim'
-Plug 'mzlogin/vim-markdown-toc'
-if executable('latexmk')
-  Plug 'lervag/vimtex'
-endif
+  " language
+  Plug 'mattn/emmet-vim'
+  Plug 'mzlogin/vim-markdown-toc'
+  if executable('latexmk')
+    Plug 'lervag/vimtex'
+  endif
 
-" Appearance
-Plug 'junegunn/goyo.vim'
-Plug 'junegunn/limelight.vim'
+  " Appearance
+  Plug 'junegunn/goyo.vim'
+  Plug 'junegunn/limelight.vim'
 
-Plug 'luochen1990/rainbow'
-Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'ryanoasis/vim-devicons'
-Plug 'itchyny/lightline.vim'
+  Plug 'luochen1990/rainbow'
+  Plug 'octol/vim-cpp-enhanced-highlight'
+  Plug 'ryanoasis/vim-devicons'
+  Plug 'itchyny/lightline.vim'
 
-" ColorScheme
-Plug 'AlessandroYorba/Sierra'
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'arcticicestudio/nord-vim'
-Plug 'ayu-theme/ayu-vim'
-Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-Plug 'cocopon/iceberg.vim'
-Plug 'dalugm/vim-colors-solarized'
-Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'jnurmine/zenburn'
-Plug 'joshdick/onedark.vim'
-Plug 'junegunn/seoul256.vim'
-Plug 'morhetz/gruvbox'
-Plug 'nanotech/jellybeans.vim'
-Plug 'overcache/NeoSolarized'
-Plug 'rakr/vim-one'
-Plug 'whatyouhide/vim-gotham'
+  " ColorScheme
+  Plug 'AlessandroYorba/Sierra'
+  Plug 'NLKNguyen/papercolor-theme'
+  Plug 'arcticicestudio/nord-vim'
+  Plug 'ayu-theme/ayu-vim'
+  Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+  Plug 'cocopon/iceberg.vim'
+  Plug 'dalugm/vim-colors-solarized'
+  Plug 'dracula/vim', { 'as': 'dracula' }
+  Plug 'jnurmine/zenburn'
+  Plug 'joshdick/onedark.vim'
+  Plug 'junegunn/seoul256.vim'
+  Plug 'morhetz/gruvbox'
+  Plug 'nanotech/jellybeans.vim'
+  Plug 'overcache/NeoSolarized'
+  Plug 'rakr/vim-one'
+  Plug 'whatyouhide/vim-gotham'
 
-" misc
-Plug 'vimwiki/vimwiki'
-Plug 'vim/killersheep', { 'dir': '~/.vim/pack/mine/opt/killersheep' }
+  " misc
+  Plug 'vimwiki/vimwiki'
+  Plug 'vim/killersheep', { 'dir': '~/.vim/pack/mine/opt/killersheep' }
 
-" Lsp Support
-if version >= 800 || has('nvim')
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-elseif version >= 703 && has('lua')
-  Plug 'Shougo/deoplete.vim'
-endif
+  " Lsp Support
+  if version >= 800 || has('nvim')
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  elseif version >= 703 && has('lua')
+    Plug 'Shougo/deoplete.vim'
+  endif
 
-call plug#end()
+  call plug#end()
 else
   echo "WARNING: plug.vim undetected, now downloading...\n"
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
