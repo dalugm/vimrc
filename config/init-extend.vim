@@ -75,7 +75,7 @@ if plug#begin('~/.vim/plugged')
   Plug 'ayu-theme/ayu-vim'
   Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
   Plug 'cocopon/iceberg.vim'
-  Plug 'dalugm/vim-colors-solarized'
+  Plug 'dalugm/solarized.vim'
   Plug 'dracula/vim', { 'as': 'dracula' }
   Plug 'jnurmine/zenburn'
   Plug 'joshdick/onedark.vim'

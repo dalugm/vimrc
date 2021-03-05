@@ -42,9 +42,15 @@ set backspace=indent,eol,start
 
 " file {{{
 
-" Set utf8 as standard encoding
+" Inner character encoding, including buffer, menu, message, etc.
 set encoding=utf-8
+
+" File encodings, set fileencoding based on detection
 set fileencodings=utf-8,gb18030,default,cp936,big5,latin1
+
+" Solve the unreadable problem on Windows
+source $VIMRUNTIME/delmenu.vim
+source $VIMRUNTIME/menu.vim
 
 " Use Unix as the standard file type
 set fileformats=unix,mac,dos
@@ -480,7 +486,7 @@ if plug#begin('~/.vim/plugged')
   " - Avoid using standard Vim directory names like 'plugin'
   " Make sure you use single quotes
 
-  Plug 'dalugm/vim-colors-solarized'
+  Plug 'dalugm/solarized.vim'
   Plug 'morhetz/gruvbox'
 
   Plug 'tpope/vim-commentary'

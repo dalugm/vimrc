@@ -16,7 +16,7 @@ My vim plugins and configuration
 1. Install gVim to anywhere you like. Here I'll assume you install gvim82 to `D:\Apps\Vim`.
 2. Add `D:\Apps\Vim\vim82` to PATH.
 3. Download ZIP file and copy vimrc to HOME directory.
-4. Copy (or move, whatever, since copy won't pollute git repo) current repo's `init.vim` to `~\_vimrc`.
+4. Run `bash install.sh` to generate current repo's `init.vim` and move it to `~\_vimrc`.
 5. Change the content in `_vimrc`.
 
    ```vimscript
