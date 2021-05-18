@@ -298,9 +298,9 @@ if has('persistent_undo')
   augroup END
 endif
 
-" Ctags config
+" Tags config
 if has('path_extra')
-  setglobal tags-=./tags tags-=./tags; tags^=./tags;
+  set tags=./.tags;,.tags,./tags;
 endif
 
 " Netrw config

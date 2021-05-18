@@ -18,7 +18,7 @@
 if plug#begin('~/.vim/plugged')
 
   " better operation
-  Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+  Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
   Plug 'Yggdroot/indentLine'
   Plug 'editorconfig/editorconfig-vim'
   Plug 'honza/vim-snippets'
@@ -108,7 +108,7 @@ endif
 
 " Plugin Config {{{
 
-" Plugin Config - lightline.vim {{{
+" lightline.vim {{{
 
 " -- INSERT -- is unnecessary anymore
 set noshowmode
@@ -160,9 +160,9 @@ augroup myplugin
   autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 augroup END
 
-" }}} Plugin Config - lightline.vim
+" }}} lightline.vim
 
-" Plugin Config - emmet-vim {{{
+" emmet-vim {{{
 
 let g:user_emmet_install_global = 0
 augroup myplugin
@@ -170,9 +170,9 @@ augroup myplugin
 augroup END
 let g:user_emmet_leader_key = ','
 
-" }}} Plugin Config - emmet-vim
+" }}} emmet-vim
 
-" Plugin Config - vimtex {{{
+" vimtex {{{
 
 let g:tex_flavor = 'xelatex'
 let g:vimtex_compiler_latexmk = {
@@ -200,9 +200,9 @@ if exists('g:loaded_neocomplete')
         \ g:vimtex#re#neocomplete
 endif
 
-" }}} Plugin Config - vimtex
+" }}} vimtex
 
-" Plugin Config - vim-cpp-enhanced-highlight {{{
+" vim-cpp-enhanced-highlight {{{
 
 " 高亮类，成员函数，标准库和模板
 let g:cpp_class_scope_highlight = 1
@@ -210,9 +210,9 @@ let g:cpp_member_variable_highlight = 1
 let g:cpp_concepts_highlight = 1
 let g:cpp_experimental_simple_template_highlight = 1
 
-" }}} Plugin Config - vim-cpp-enhanced-highlight
+" }}} vim-cpp-enhanced-highlight
 
-" Plugin Config - Limelight && Goyo {{{
+" Limelight && Goyo {{{
 
 nmap <silent> <C-w><Enter> :Limelight!!<CR>
 let g:limelight_conceal_ctermfg     = 250
@@ -240,25 +240,36 @@ augroup myplugin
   autocmd! User GoyoLeave nested call <SID>goyo_leave()
 augroup END
 
-" }}} Plugin Config - Limelight && Goyo
+" }}} Limelight && Goyo
 
-" Plugin Config - LeaderF {{{
+" LeaderF {{{
 
-" don't show the help in normal mode
-let g:Lf_HideHelp = 1
-let g:Lf_UseCache = 0
-let g:Lf_UseVersionControlTool = 0
-let g:Lf_IgnoreCurrentBufferName = 1
-" Show icons, icons are shown by default
-let g:Lf_ShowDevIcons = 1
 " popup mode
-let g:Lf_WindowPosition = 'popup'
-let g:Lf_PreviewInPopup = 1
-let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
+if (version >= 801 && has('popupwin')) || (has('nvim') && has('float'))
+  let g:Lf_WindowPosition = 'popup'
+  let g:Lf_PreviewInPopup = 1
+endif
 
-" }}} Plugin Config - LeaderF
+let g:Lf_ShortcutF = "<leader>ff"
+noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
+noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
+noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
+noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
 
-" Plugin Config - fzf {{{
+" TAGS
+let g:Lf_GtagsAutoGenerate = 1
+let g:Lf_Gtagslabel = 'native-pygments'
+noremap <leader>fc :<C-U><C-R>=printf("Leaderf! gtags --by-context --auto-jump")<CR><CR>
+noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+noremap <leader>fT :<C-U><C-R>=printf("Leaderf gtags %s", "")<CR><CR>
+noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+
+" }}} LeaderF
+
+" fzf {{{
 
 nnoremap <Leader>p :<C-u>FZF<CR>
 
@@ -316,16 +327,16 @@ let g:fzf_colors = {
 "   'previous-history' instead of 'down' and 'up'.
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 
-" }}} Plugin Config - fzf
+" }}} fzf
 
-" Plugin Config - undotree {{{
+" undotree {{{
 
 let g:undotree_SplitWidth         = 40
 let g:undotree_SetFocusWhenToggle = 1
 
-" }}} Plugin Config - undotree
+" }}} undotree
 
-" Plugin Config - vim-textobj-user {{{
+" vim-textobj-user {{{
 
 call textobj#user#plugin('braces', {
       \   'angle': {
@@ -410,17 +421,17 @@ augroup tex_textobjs
           \ })
 augroup END
 
-" }}} Plugin Config - vim-textobj-user
+" }}} vim-textobj-user
 
-" Plugin Config - vim-easy-align {{{
+" vim-easy-align {{{
 
 map <Leader>g :EasyAlign<Space>
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
-" }}} Plugin Config - vim-easy-align
+" }}} vim-easy-align
 
-" Plugin Config - vim-dispatch {{{
+" vim-dispatch {{{
 
 let test#strategy = "dispatch"
 " https://github.com/tpope/vim-dispatch/issues/222#issuecomment-493273080
@@ -428,9 +439,9 @@ if !empty($TMUX)
   set shellpipe=2>&1\|tee
 endif
 
-" }}} Plugin Config - vim-dispatch
+" }}} vim-dispatch
 
-" Plugin Config - rainbow {{{
+" rainbow {{{
 
 let g:rainbow_active = 1 " 0 if you want to enable it later via :RainbowToggle
 let g:rainbow_conf = {
@@ -456,9 +467,9 @@ let g:rainbow_conf = {
                 \ }
                 \}
 
-" }}} Plugin Config - rainbow
+" }}} rainbow
 
-" Plugin Config - indentline {{{
+" indentline {{{
 
 " WARNING
 " do not use non-mono char, or cursor will be in wrong position
@@ -470,16 +481,16 @@ let g:indentLine_fileTypeExclude = ['text', 'help', 'json', 'terminal', 'coc-exp
 " Make exclude work in neovim
 let g:indentLine_bufNameExclude = ['term:.*']
 
-" }}} Plugin Config - indentline
+" }}} indentline
 
-" Plugin Config - editorconfig {{{
+" editorconfig {{{
 
 " Excluded patterns
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
-" }}} Plugin Config - editorconfig
+" }}} editorconfig
 
-" Plugin Config - async {{{
+" async {{{
 
 " Set the height of window when run AsyncRun
 let g:asyncrun_open = 6
@@ -491,16 +502,16 @@ let g:asynctasks_term_pos = 'bottom'
 " Set default global name of AsyncTask config
 let g:asynctasks_rtp_config = "tasks.toml"
 
-" }}} Plugin Config - async
+" }}} async
 
-" Plugin Config - vimwiki {{{
+" vimwiki {{{
 
 let g:vimwiki_list = [{'path': '~/wiki/',
       \ 'path_html': '~/wiki/vimwiki_html/'}]
 
-" }}} Plugin Config - vimwiki
+" }}} vimwiki
 
-" Plugin Config - coc.nvim {{{
+" coc.nvim {{{
 
 " Basic {{{
 
@@ -742,13 +753,13 @@ xmap <leader>ef  <Plug>(coc-format-selected)
 
 " }}} Keybindings
 
-" }}} Plugin Config - coc.nvim
+" }}} coc.nvim
 
-" Plugin Config - deoplete {{{
+" deoplete {{{
 
-" }}} Plugin Config - deoplete
+" }}} deoplete
 
-" Plugin Config - vim-which-key {{{
+" vim-which-key {{{
 
 " By default timeoutlen is 1000 ms
 " Use default leader key bindings when not popup
@@ -846,7 +857,6 @@ let g:which_key_map['C'] = {
 let g:which_key_map['f'] = {
       \ 'name' : '+file' ,
       \ 'R' : [':Revert'              , 'revert-fileencoding'] ,
-      \ 'c' : [':e ~/.vim/config'     , 'edit-config']         ,
       \ 'e' : [':CocCommand explorer' , 'coc-explorer']        ,
       \ 's' : ['update'               , 'save-file']           ,
       \ 'S' : ['Files'                , 'search-file']         ,
@@ -928,6 +938,6 @@ nnoremap <silent> [ :<C-U>WhichKey '['<CR>
 call which_key#register(',' , "g:which_key_map")
 call which_key#register(' ' , "g:which_key_map")
 
-" }}} Plugin Config - vim-which-key
+" }}} vim-which-key
 
 " }}} Plugin Config
