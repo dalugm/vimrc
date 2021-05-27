@@ -13,10 +13,12 @@ My vim plugins and configuration
 
 #### gVim on Windows
 
-1. Install gVim to anywhere you like. Here I'll assume you install gvim82 to `D:\Apps\Vim`.
+1. Install gVim to anywhere you like. Here I'll assume you install gvim82 to
+   `D:\Apps\Vim`.
 2. Add `D:\Apps\Vim\vim82` to PATH.
 3. Download ZIP file and copy vimrc to HOME directory.
-4. Run `bash install.sh` to generate current repo's `init.vim` and move it to `~\_vimrc`.
+4. Run `bash install.sh` to generate current repo's `init.vim` and move it to
+   `~\_vimrc`.
 5. Change the content in `_vimrc`.
 
    ```vimscript
@@ -27,8 +29,7 @@ My vim plugins and configuration
    source ~\vimrc\config\init-extend.vim
    ```
 
-5. (NOT necessary) Install latest [ctags](http://ctags.sourceforge.net/), and copy `ctags.exe` to `D:\Apps\Vim\vim82`.
-6. Enjoy!
+5. Enjoy!
 
 ### neovim
 

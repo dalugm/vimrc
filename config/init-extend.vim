@@ -3,7 +3,7 @@
 " # Author        : Mou Tong
 " # Email         : mou.tong@qq.com
 " # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2021-02-24 18:00
+" # Last Modified : 2021-05-25 10:40
 " # By            : Mou Tong
 " # Description   : Extend Plugins Configuration
 " ###########################################################
@@ -25,6 +25,7 @@ if plug#begin('~/.vim/plugged')
   Plug 'liuchengxu/vim-which-key'
   Plug 'simnalamburt/vim-mundo'
   Plug 'vim-test/vim-test'
+  Plug 'LunarWatcher/auto-pairs'
 
   Plug 'tpope/vim-abolish'
   Plug 'tpope/vim-commentary'
@@ -567,8 +568,6 @@ let g:coc_global_extensions = [
       \ 'coc-highlight' ,
       \ 'coc-json'      ,
       \ 'coc-lists'     ,
-      \ 'coc-pairs'     ,
-      \ 'coc-pyright'   ,
       \ 'coc-snippets'  ,
       \ ]
 
@@ -603,13 +602,6 @@ augroup CocExplorerCustom
 augroup END
 
 " }}} coc config - explorer
-
-" coc config - pairs {{{
-
-" disable characters for a specified filetype
-autocmd FileType vim let b:coc_pairs_disabled = ['"']
-
-" }}} coc config - pairs
 
 " coc config - snippets {{{
 
