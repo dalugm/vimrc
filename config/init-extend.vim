@@ -260,6 +260,8 @@ noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
 " TAGS
 let g:Lf_GtagsAutoGenerate = 1
 let g:Lf_Gtagslabel = 'native-pygments'
+let g:Lf_RootMarkers = ['.git', '.hg', '.svn', '.projectile', '.project']
+noremap <leader>fg :<C-U><C-R>=printf("Leaderf! gtags --update")<CR><CR>
 noremap <leader>fc :<C-U><C-R>=printf("Leaderf! gtags --by-context --auto-jump")<CR><CR>
 noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
 noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
@@ -568,6 +570,7 @@ let g:coc_global_extensions = [
       \ 'coc-highlight' ,
       \ 'coc-json'      ,
       \ 'coc-lists'     ,
+      \ 'coc-pyright'   ,
       \ 'coc-snippets'  ,
       \ ]
 
@@ -803,13 +806,14 @@ let g:which_key_map['b'] = {
 let g:which_key_map['c'] = {
       \ 'name' : '+code' ,
       \ 'A' : ['<Plug>(coc-codeaction)'   , 'apply-codeAction-buffer'] ,
-      \ 'C' : [':AsyncTask file-build'    , 'build-current-file']      ,
+      \ 'B' : [':AsyncTask project-build' , 'build-current-project']   ,
+      \ 'C' : [':AsyncTask project-run'   , 'run-current-project']     ,
       \ 'F' : [':Format'                  , 'format-current-buffer']   ,
-      \ 'P' : [':AsyncTask project-build' , 'builid-current-project']  ,
+      \ 'P' : [':AsyncTask project-build' , 'build-current-project']   ,
       \ 'R' : ['<Plug>(coc-refactor)'     , 'refactor']                ,
+      \ 'b' : [':AsyncTask file-build'    , 'build-current-file']      ,
       \ 'c' : [':AsyncTask file-run'      , 'run-current-file']        ,
       \ 'f' : ['<Plug>(coc-fix-current)'  , 'autofix-current-buffer']  ,
-      \ 'p' : [':AsyncTask project-run'   , 'run-current-project']     ,
       \ 'r' : ['<Plug>(coc-rename)'       , 'symbol-rename']           ,
       \ 'g' : {
         \ 'name' : '+goto' ,
