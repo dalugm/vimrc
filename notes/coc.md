@@ -4,7 +4,7 @@ take `coc-explorer` as an example:
 
 put this coc-settings.json into differnt vim config files.
 
-```vim script
+```vimscript
 " common.vim
 let g:coc_common = {
     \   "coc.preferences.currentFunctionSymbolAutoUpdate": v:true,
@@ -22,4 +22,35 @@ let g:coc_explorer = {
     \ }
 
 let g:coc_user_config = extend(g:coc_common, g:coc_explorer)
+```
+
+# lsp
+
+## C/C++/Obj-C
+
+using clangd, just install [coc-clangd](https://github.com/clangd/coc-clangd) or:
+
+``` json
+"languageserver": {
+  "clangd": {
+    "command": "clangd",
+    "rootPatterns": ["compile_flags.txt", "compile_commands.json"],
+    "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"]
+  }
+}
+```
+
+When using [ccls](https://github.com/MaskRay/ccls):
+
+``` json
+"ccls": {
+  "command": "ccls",
+  "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"],
+  "rootPatterns": [".ccls", "compile_commands.json", ".git/", ".hg/"],
+  "initializationOptions": {
+    "cache": {
+      "directory": "/tmp/ccls"
+    }
+  }
+}
 ```

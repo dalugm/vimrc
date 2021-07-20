@@ -17,7 +17,7 @@
   "python.pythonPath": "~/.pyenv/versions/neovim3/bin/python",
 
   "explorer.icon.enableNerdfont": true,
-  "explorer.icon.enableVimDevicons": true,
+  "explorer.icon.source": "vim-devicons",
   "explorer.sources": [
     {
       "name": "buffer",

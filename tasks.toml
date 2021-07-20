@@ -2,6 +2,7 @@
 # 文件名可能包含空格，所以用双引号
 command:c=gcc -Wall "$(VIM_FILEPATH)" -o "$(VIM_PATHNOEXT)"
 command:cpp=g++ -Wall "$(VIM_FILEPATH)" -o "$(VIM_PATHNOEXT)"
+command:java=javac "$(VIM_FILENAME)"
 command:go=go build -o "$(VIM_PATHNOEXT)" "$(VIM_FILEPATH)"
 command:make=make -f "$(VIM_FILEPATH)"
 errorformat=%+A\ %#%f\ %#(%l\\\,%c):\ %m,%C%m
@@ -13,6 +14,7 @@ save=2
 [file-run]
 command="$(VIM_FILEPATH)"
 command:c,cpp="$(VIM_PATHNOEXT)"
+command:java=java "$(VIM_FILENOEXT)"
 command:go="$(VIM_PATHNOEXT)"
 command:python=python "$(VIM_FILEPATH)"
 command:javascript=node "$(VIM_FILEPATH)"
