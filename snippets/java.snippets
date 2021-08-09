@@ -1,3 +1,28 @@
-snippet al
+snippet al "ArrayList"
 ArrayList<$1>${0:}
 endsnippet
+
+snippet pcls "public class format"
+public class ${1:`!v expand('%:r')`} ${2:extends ${3:Parent}} ${4:implements ${5:Interface}} {
+    $0
+}
+endsnippet
+
+snippet pclei "public class extends implements"
+public class ${1:`!v expand('%:r')`} extends ${2:Parent} implements ${3:Interface} {
+    $0
+}
+endsnippet
+
+snippet pcle "public class extends"
+public class ${1:`!v expand('%:r')`} ${2:extends ${3:Parent}} {
+    $0
+}
+endsnippet
+
+snippet pcli "public class implements"
+public class ${1:`!v expand('%:r')`} ${2:implements ${3:Interface}} {
+    $0
+}
+endsnippet
+# vim:ft=snippets:

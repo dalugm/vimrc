@@ -1,13 +1,3 @@
-" ###########################################################
-" # File Name     : init-basic.vim
-" # Author        : Mou Tong
-" # Email         : mou.tong@qq.com
-" # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2021-02-24 18:00
-" # By            : Mou Tong
-" # Description   : Basic Configuration
-" ###########################################################
-
 " Environment {{{
 
 if version >= 800 && !has('nvim')

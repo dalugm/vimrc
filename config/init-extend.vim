@@ -1,13 +1,3 @@
-" ###########################################################
-" # File Name     : init-extend.vim
-" # Author        : Mou Tong
-" # Email         : mou.tong@qq.com
-" # Created Time  : 2018-01-26 08:00
-" # Last Modified : 2021-05-25 10:40
-" # By            : Mou Tong
-" # Description   : Extend Plugins Configuration
-" ###########################################################
-
 " Plugin List {{{
 
 " Specify a directory for plugins
@@ -70,7 +60,6 @@ if plug#begin('~/.vim/plugged')
   Plug 'itchyny/lightline.vim'
 
   " ColorScheme
-  Plug 'AlessandroYorba/Sierra'
   Plug 'NLKNguyen/papercolor-theme'
   Plug 'arcticicestudio/nord-vim'
   Plug 'ayu-theme/ayu-vim'
@@ -78,14 +67,14 @@ if plug#begin('~/.vim/plugged')
   Plug 'cocopon/iceberg.vim'
   Plug 'dalugm/solarized.vim'
   Plug 'dracula/vim', { 'as': 'dracula' }
+  Plug 'jacoborus/tender.vim'
   Plug 'jnurmine/zenburn'
   Plug 'joshdick/onedark.vim'
-  Plug 'junegunn/seoul256.vim'
   Plug 'morhetz/gruvbox'
   Plug 'nanotech/jellybeans.vim'
   Plug 'overcache/NeoSolarized'
   Plug 'rakr/vim-one'
-  Plug 'whatyouhide/vim-gotham'
+  Plug 'srcery-colors/srcery-vim'
 
   " misc
   Plug 'vimwiki/vimwiki'
