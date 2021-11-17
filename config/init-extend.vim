@@ -56,7 +56,6 @@ if plug#begin('~/.vim/plugged')
 
   Plug 'luochen1990/rainbow'
   Plug 'octol/vim-cpp-enhanced-highlight'
-  Plug 'ryanoasis/vim-devicons'
   Plug 'itchyny/lightline.vim'
 
   " ColorScheme

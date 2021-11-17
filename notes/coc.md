@@ -30,7 +30,7 @@ let g:coc_user_config = extend(g:coc_common, g:coc_explorer)
 
 using clangd, just install [coc-clangd](https://github.com/clangd/coc-clangd) or:
 
-``` json
+``` js
 "languageserver": {
   "clangd": {
     "command": "clangd",
@@ -42,7 +42,7 @@ using clangd, just install [coc-clangd](https://github.com/clangd/coc-clangd) or
 
 When using [ccls](https://github.com/MaskRay/ccls):
 
-``` json
+``` js
 "ccls": {
   "command": "ccls",
   "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"],
