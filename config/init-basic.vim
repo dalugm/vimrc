@@ -15,6 +15,11 @@ endif
 set title
 set ttyfast " Improves smoothness of redrawing
 
+" set message language
+let $LANG='en_US.UTF-8'
+" set menu's language
+set langmenu=en
+
 " Avoid local vimrc's problem
 set secure
 
@@ -220,7 +225,7 @@ set sessionoptions+=tabpages " store all tabpages
 " function - restore last session {{{
 
 function! MakeSession(overwrite)
-  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  let b:sessiondir = $HOME . "/.vim/sessions"
   if (filewritable(b:sessiondir) != 2)
     exe 'silent !mkdir -p ' b:sessiondir
     redraw!
@@ -507,7 +512,7 @@ endif
 
 if has('gui_running')
   " set gui font
-  set guifont=SauceCodePro\ Nerd\ Font:h16
+  set guifont=Sarasa\ Mono\ SC:h14
 
   " change GUI relatives
   command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
