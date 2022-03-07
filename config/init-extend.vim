@@ -13,6 +13,7 @@ if plug#begin('~/.vim/plugged')
   Plug 'editorconfig/editorconfig-vim'
   Plug 'honza/vim-snippets'
   Plug 'liuchengxu/vim-which-key'
+  Plug 'neoclide/jsonc.vim'
   Plug 'simnalamburt/vim-mundo'
   Plug 'vim-test/vim-test'
   Plug 'LunarWatcher/auto-pairs'
@@ -67,6 +68,7 @@ if plug#begin('~/.vim/plugged')
   Plug 'dalugm/solarized.vim'
   Plug 'dracula/vim', { 'as': 'dracula' }
   Plug 'jacoborus/tender.vim'
+  Plug 'jaredgorski/spacecamp'
   Plug 'jnurmine/zenburn'
   Plug 'joshdick/onedark.vim'
   Plug 'morhetz/gruvbox'
@@ -190,6 +192,14 @@ if exists('g:loaded_neocomplete')
 endif
 
 " }}} vimtex
+
+" jsonc.vim {{{
+
+augroup JsonToJsonc
+  autocmd! FileType json set filetype=jsonc
+augroup END
+
+" }}} jsonc.vim
 
 " vim-cpp-enhanced-highlight {{{
 
