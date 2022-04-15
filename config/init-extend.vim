@@ -13,7 +13,6 @@ if plug#begin('~/.vim/plugged')
   Plug 'editorconfig/editorconfig-vim'
   Plug 'honza/vim-snippets'
   Plug 'liuchengxu/vim-which-key'
-  Plug 'neoclide/jsonc.vim'
   Plug 'simnalamburt/vim-mundo'
   Plug 'vim-test/vim-test'
   Plug 'LunarWatcher/auto-pairs'
@@ -46,6 +45,7 @@ if plug#begin('~/.vim/plugged')
 
   " language
   Plug 'mattn/emmet-vim'
+  Plug 'pangloss/vim-javascript'
   Plug 'mzlogin/vim-markdown-toc'
   if executable('latexmk')
     Plug 'lervag/vimtex'
@@ -107,23 +107,24 @@ set noshowmode
 let g:lightline = {
       \ 'colorscheme': 'minimal',
       \ 'active': {
-        \ 'left': [ [ 'mode', 'paste' ],
-                  \ [ 'cocstatus', 'readonly', 'file_name' ] ],
-        \ },
+        \ 'left': [
+          \ [ 'mode', 'paste' ],
+          \ [ 'cocstatus', 'readonly', 'file_name' ] ],
+      \ },
       \ 'inactive': {
-        \   'left': [ [ 'filename' ], ['split'] ],
-        \ },
+        \ 'left': [ [ 'filename' ], ['split'] ],
+      \ },
       \ 'tabline': {
         \ 'left': [ [ 'tabs' ] ],
         \ 'right': [ [ 'git' ] ],
-        \ },
+      \ },
       \ 'component_function': {
-        \   'cocstatus' : 'coc#status',
-        \   'file_name' : 'LightlineFilename',
-        \   'git'       : 'FugitiveHead',
-        \   'split'     : 'LightlineSplitline',
-        \ },
-              \ }
+        \ 'cocstatus' : 'coc#status',
+        \ 'file_name' : 'LightlineFilename',
+        \ 'git'       : 'FugitiveHead',
+        \ 'split'     : 'LightlineSplitline',
+      \ },
+    \ }
 
 " file_name {{{
 
@@ -156,10 +157,8 @@ augroup END
 " emmet-vim {{{
 
 let g:user_emmet_install_global = 0
-augroup myplugin
-  autocmd FileType html,xhtml,xml,css,scss,sass,less EmmetInstall
-augroup END
-let g:user_emmet_leader_key = ','
+autocmd FileType html,xhtml,xml,css,scss,sass,less,vue,javascript,javascriptreact EmmetInstall
+let g:user_emmet_leader_key = '<C-y>'
 
 " }}} emmet-vim
 
@@ -192,14 +191,6 @@ if exists('g:loaded_neocomplete')
 endif
 
 " }}} vimtex
-
-" jsonc.vim {{{
-
-augroup JsonToJsonc
-  autocmd! FileType json set filetype=jsonc
-augroup END
-
-" }}} jsonc.vim
 
 " vim-cpp-enhanced-highlight {{{
 
@@ -267,6 +258,9 @@ noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
 noremap <leader>fT :<C-U><C-R>=printf("Leaderf gtags %s", "")<CR><CR>
 noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
 noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+
+" misc
+let g:Lf_ShowDevIcons = 0
 
 " }}} LeaderF
 
@@ -494,7 +488,7 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
 " }}} editorconfig
 
-" async {{{
+" async{run,task} {{{
 
 " Set the height of window when run AsyncRun
 let g:asyncrun_open = 6
@@ -506,7 +500,7 @@ let g:asynctasks_term_pos = 'bottom'
 " Set default global name of AsyncTask config
 let g:asynctasks_rtp_config = "tasks.toml"
 
-" }}} async
+" }}} async{run,task}
 
 " vimwiki {{{
 

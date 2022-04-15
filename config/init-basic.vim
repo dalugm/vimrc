@@ -271,7 +271,7 @@ set updatetime=300
 " Sets how many lines of cmd history VIM has to remember
 set history=1000
 
-" Turn backup off, since most stuff is in git et.c anyway...
+" Turn backup off, since we use git to manage it in most cases
 " And plugins demand such as `coc`...
 set nobackup
 set nowritebackup
@@ -399,9 +399,12 @@ nnoremap <silent> <Leader>w :update<CR>
 " Fast quiting
 nnoremap <silent> <Leader>Q :qa!<CR>
 
-" Fast editing and reloading of vim config
+" Fast editing
 nnoremap <Leader>ec :e! ~/.vim/config<CR>
+nnoremap <Leader>ee :e! .<CR>
 nnoremap <Leader>ev :e! ~/.vim<CR>
+
+" Fast reload
 nnoremap <Leader>er :source ~/.vimrc<CR>
 
 " Edit macros
@@ -512,7 +515,7 @@ endif
 
 if has('gui_running')
   " set gui font
-  set guifont=Sarasa\ Mono\ SC:h14
+  set guifont=LXGW\ WenKai\ Mono:h14
 
   " change GUI relatives
   command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
