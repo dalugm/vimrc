@@ -13,7 +13,6 @@ if plug#begin('~/.vim/plugged')
   Plug 'editorconfig/editorconfig-vim'
   Plug 'honza/vim-snippets'
   Plug 'liuchengxu/vim-which-key'
-  Plug 'neoclide/jsonc.vim'
   Plug 'simnalamburt/vim-mundo'
   Plug 'vim-test/vim-test'
   Plug 'LunarWatcher/auto-pairs'
@@ -46,6 +45,7 @@ if plug#begin('~/.vim/plugged')
 
   " language
   Plug 'mattn/emmet-vim'
+  Plug 'pangloss/vim-javascript'
   Plug 'mzlogin/vim-markdown-toc'
   if executable('latexmk')
     Plug 'lervag/vimtex'
@@ -156,10 +156,8 @@ augroup END
 " emmet-vim {{{
 
 let g:user_emmet_install_global = 0
-augroup myplugin
-  autocmd FileType html,xhtml,xml,css,scss,sass,less EmmetInstall
-augroup END
-let g:user_emmet_leader_key = ','
+autocmd FileType html,xhtml,xml,css,scss,sass,less,vue,javascript,javascriptreact EmmetInstall
+let g:user_emmet_leader_key = '<C-y>'
 
 " }}} emmet-vim
 
@@ -192,14 +190,6 @@ if exists('g:loaded_neocomplete')
 endif
 
 " }}} vimtex
-
-" jsonc.vim {{{
-
-augroup JsonToJsonc
-  autocmd! FileType json set filetype=jsonc
-augroup END
-
-" }}} jsonc.vim
 
 " vim-cpp-enhanced-highlight {{{
 
@@ -494,7 +484,7 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
 " }}} editorconfig
 
-" async {{{
+" async{run,task} {{{
 
 " Set the height of window when run AsyncRun
 let g:asyncrun_open = 6
@@ -506,7 +496,7 @@ let g:asynctasks_term_pos = 'bottom'
 " Set default global name of AsyncTask config
 let g:asynctasks_rtp_config = "tasks.toml"
 
-" }}} async
+" }}} async{run,task}
 
 " vimwiki {{{
 
