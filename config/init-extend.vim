@@ -81,13 +81,6 @@ if plug#begin('~/.vim/plugged')
   Plug 'vimwiki/vimwiki'
   Plug 'vim/killersheep', { 'dir': '~/.vim/pack/mine/opt/killersheep' }
 
-  " Lsp Support
-  if version >= 800 || has('nvim')
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  elseif version >= 703 && has('lua')
-    Plug 'Shougo/deoplete.vim'
-  endif
-
   call plug#end()
 else
   echo "WARNING: plug.vim undetected, now downloading...\n"
@@ -107,23 +100,24 @@ set noshowmode
 let g:lightline = {
       \ 'colorscheme': 'minimal',
       \ 'active': {
-        \ 'left': [ [ 'mode', 'paste' ],
-                  \ [ 'cocstatus', 'readonly', 'file_name' ] ],
-        \ },
+        \ 'left': [
+          \ [ 'mode', 'paste' ],
+          \ [ 'readonly', 'file_name' ]
+        \ ],
+      \ },
       \ 'inactive': {
-        \   'left': [ [ 'filename' ], ['split'] ],
-        \ },
+        \ 'left': [ [ 'filename' ], ['split'] ],
+      \ },
       \ 'tabline': {
         \ 'left': [ [ 'tabs' ] ],
         \ 'right': [ [ 'git' ] ],
-        \ },
+      \ },
       \ 'component_function': {
-        \   'cocstatus' : 'coc#status',
-        \   'file_name' : 'LightlineFilename',
-        \   'git'       : 'FugitiveHead',
-        \   'split'     : 'LightlineSplitline',
-        \ },
-              \ }
+        \ 'file_name' : 'LightlineFilename',
+        \ 'git'       : 'FugitiveHead',
+        \ 'split'     : 'LightlineSplitline',
+      \ },
+    \ }
 
 " file_name {{{
 
@@ -144,12 +138,6 @@ function! LightlineSplitline()
 endfunction
 
 " }}} split
-
-" Use autocmd to update lightline when using coc.nvim
-augroup myplugin
-  autocmd!
-  autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
-augroup END
 
 " }}} lightline.vim
 
@@ -257,6 +245,9 @@ noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
 noremap <leader>fT :<C-U><C-R>=printf("Leaderf gtags %s", "")<CR><CR>
 noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
 noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+
+" misc
+let g:Lf_ShowDevIcons = 0
 
 " }}} LeaderF
 
@@ -471,7 +462,7 @@ let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 " Set indent level
 let g:indentLine_indentLevel = 5
 " Disable when open specific file types
-let g:indentLine_fileTypeExclude = ['text', 'help', 'json', 'terminal', 'coc-explorer']
+let g:indentLine_fileTypeExclude = ['text', 'help', 'json', 'terminal']
 " Make exclude work in neovim
 let g:indentLine_bufNameExclude = ['term:.*']
 
@@ -504,246 +495,6 @@ let g:vimwiki_list = [{'path': '~/wiki/',
       \ 'path_html': '~/wiki/vimwiki_html/'}]
 
 " }}} vimwiki
-
-" coc.nvim {{{
-
-" Basic {{{
-
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
-
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-if has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-elseif has('nvim')
-  set signcolumn=auto
-else
-  set signcolumn=yes
-endif
-
-" Coc function {{{
-
-function s:FloatingTransparen()
-  highlight CocFloating ctermbg=None
-endfunction
-
-augroup myplugin
-  autocmd!
-  command! -bar -nargs=0 TransCoc call s:FloatingTransparen()
-augroup END
-
-" }}} CocFunction
-
-augroup mygroup
-  autocmd!
-  " Disable coc in specific filetype
-  autocmd FileType text,markdown let b:coc_enabled = 0
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
-
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" }}} Basic
-
-" cocExtensions {{{
-
-let g:coc_global_extensions = [
-      \ 'coc-clangd'    ,
-      \ 'coc-explorer'  ,
-      \ 'coc-highlight' ,
-      \ 'coc-json'      ,
-      \ 'coc-lists'     ,
-      \ 'coc-pyright'   ,
-      \ 'coc-snippets'  ,
-      \ ]
-
-" coc config - explorer {{{
-
-let g:coc_explorer_global_presets = {
-      \   '.vim': {
-        \      'root-uri': '~/.vim',
-        \   },
-        \   'floating': {
-          \      'position': 'floating',
-          \   },
-          \   'floatingLeftside': {
-            \      'position': 'floating',
-            \      'floating-position': 'left-center',
-            \      'floating-width': 50,
-            \   },
-            \   'floatingRightside': {
-              \      'position': 'floating',
-              \      'floating-position': 'left-center',
-              \      'floating-width': 50,
-              \   },
-              \   'simplify': {
-                \     'file.child.template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
-                \   }
-                \ }
-
-" Hide the statusline when open coc-explorer
-augroup CocExplorerCustom
-  autocmd!
-  autocmd User CocExplorerOpenPost setlocal statusline=%#NonText#
-augroup END
-
-" }}} coc config - explorer
-
-" coc config - snippets {{{
-
-let g:snips_author = "dalu"
-let g:snips_email  = "mou.tong@qq.com"
-let g:snips_about  = "dalu <mou.tong@qq.com>"
-let g:snips_github = "dalugm"
-
-" Use <M-l> for trigger snippet expand.
-imap <M-l> <Plug>(coc-snippets-expand)
-
-" Make <tab> for trigger completion
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-let g:coc_snippet_next = '<tab>'
-
-" }}} coc config - snippets
-
-" }}} cocExtensions
-
-" Command {{{
-
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocAction('format')
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call CocAction('fold', <f-args>)
-" Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
-
-" }}} Command
-
-" Keybindings {{{
-
-" multipleCursor {{{
-
-" Highlight the symbol and its references when holding the cursor.
-" autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" https://medium.com/@schtoeffel/you-don-t-need-more-than-one-cursor-in-vim-2c44117d51db
-" translate: https://macplay.github.io/posts/vim-bu-xu-yao-duo-guang-biao-bian-ji-gong-neng/
-
-nmap <silent> gmp <Plug>(coc-cursors-position)
-nmap <silent> gmw <Plug>(coc-cursors-word)
-xmap <silent> gmw <Plug>(coc-cursors-range)
-nmap <silent> gmo <Plug>(coc-cursors-operator)
-nmap <silent> gmn <Plug>(coc-cursors-word)*
-xmap <silent> gmn <CR><CR>gN<Plug>(coc-cursors-range)gn
-
-" }}} multipleCursor
-
-" codeAction {{{
-
-" Applying codeAction to the selected region.
-" Example: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" }}} codeAction
-
-" Completion {{{
-
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <C-l> to trigger completion.
-inoremap <silent><expr> <C-l> coc#refresh()
-
-" Use <CR> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-if has('patch8.1.1068')
-  " Use `complete_info` if your (Neo)Vim version supports it.
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
-
-" }}} Completion
-
-" Documentation {{{
-
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" }}} Documentation
-
-" textobj {{{
-
-" Map function and class text objects
-" NOTE: Requires textDocument.documentSymbol' support from the language
-" server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-
-" Use <CTRL-S> for selections ranges.
-" Requires 'textDocument/selectionRange support of LS, ex: coc-tsserver
-nmap <silent> <C-s> <Plug>(coc-range-select)
-xmap <silent> <C-s> <Plug>(coc-range-select)
-
-" }}} textobj
-
-" Use `[w` and `]w` to navigate diagnostics
-nmap <silent> [w <Plug>(coc-diagnostic-prev)
-nmap <silent> ]w <Plug>(coc-diagnostic-next)
-
-" Formatting selected code.
-xmap <leader>ef  <Plug>(coc-format-selected)
-
-" }}} Keybindings
-
-" }}} coc.nvim
-
-" deoplete {{{
-
-" }}} deoplete
 
 " vim-which-key {{{
 
@@ -791,64 +542,24 @@ let g:which_key_map['b'] = {
       \ 'l' : ['blast'            , 'last-buffer']     ,
       \ 'n' : ['bnext'            , 'next-buffer']     ,
       \ 'p' : ['bprevious'        , 'previous-buffer'] ,
-      \ '?' : [':CocList buffers' , 'list-buffers']    ,
       \ }
 
 let g:which_key_map['c'] = {
       \ 'name' : '+code' ,
-      \ 'A' : ['<Plug>(coc-codeaction)'   , 'apply-codeAction-buffer'] ,
       \ 'B' : [':AsyncTask project-build' , 'build-current-project']   ,
       \ 'C' : [':AsyncTask project-run'   , 'run-current-project']     ,
       \ 'F' : [':Format'                  , 'format-current-buffer']   ,
       \ 'P' : [':AsyncTask project-build' , 'build-current-project']   ,
-      \ 'R' : ['<Plug>(coc-refactor)'     , 'refactor']                ,
       \ 'b' : [':AsyncTask file-build'    , 'build-current-file']      ,
       \ 'c' : [':AsyncTask file-run'      , 'run-current-file']        ,
-      \ 'f' : ['<Plug>(coc-fix-current)'  , 'autofix-current-buffer']  ,
-      \ 'r' : ['<Plug>(coc-rename)'       , 'symbol-rename']           ,
-      \ 'g' : {
-        \ 'name' : '+goto' ,
-        \ 'd' : ['<Plug>(coc-definition)'      , 'definition']      ,
-        \ 'r' : ['<Plug>(coc-references)'      , 'references']      ,
-        \ 't' : ['<Plug>(coc-type-definition)' , 'type-definition'] ,
-        \ 'i' : ['<Plug>(coc-implementation)'  , 'implementation']  ,
-        \ '[' : ['<Plug>(coc-diagnostic-prev)' , 'prev error']      ,
-        \ ']' : ['<Plug>(coc-diagnostic-next)' , 'next error']      ,
-        \ } ,
-        \ }
-
-let g:which_key_map['C'] = {
-      \ 'name' : '+coc-list' ,
-      \ 'C' : [':CocConfig'           , 'edit-CocConfig']           ,
-      \ 'D' : [':CocDisable'          , 'coc-disable']              ,
-      \ 'E' : [':CocEnable'           , 'coc-enable']               ,
-      \ 'R' : [':CocRestart'          , 'restart-coc']              ,
-      \ 'a' : [':CocList diagnostics' , 'show-diagnostics']         ,
-      \ 'c' : [':CocList commands'    , 'show-commands']            ,
-      \ 'e' : [':CocList extensions'  , 'show-extensions']          ,
-      \ 'j' : [':CocNext'             , 'action-for-next-item']     ,
-      \ 'k' : [':CocPrev'             , 'action-for-prev-item']     ,
-      \ 'o' : [':CocList outline'     , 'find-current-symbol']      ,
-      \ 'p' : [':CocListResume'       , 'resume-latest-coc-list']   ,
-      \ 's' : [':CocList -I symbols'  , 'search-workspace-symbols'] ,
-      \ 'b' : {
-        \ 'name' : '+bookmark' ,
-        \ 'b' : [':CocList bookmark'             , 'open-bookmark']     ,
-        \ 'n' : ['<Plug>(coc-bookmark-next)'     , 'next-bookmark']     ,
-        \ 'p' : ['<Plug>(coc-bookmark-prev)'     , 'prev-bookmark']     ,
-        \ 't' : ['<Plug>(coc-bookmark-toggle)'   , 'toggle-bookmark']   ,
-        \ 'a' : ['<Plug>(coc-bookmark-annotate)' , 'annotate-bookmark'] ,
-        \ } ,
-        \ }
+      \ }
 
 let g:which_key_map['f'] = {
       \ 'name' : '+file' ,
       \ 'R' : [':Revert'              , 'revert-fileencoding'] ,
-      \ 'e' : [':CocCommand explorer' , 'coc-explorer']        ,
       \ 's' : ['update'               , 'save-file']           ,
       \ 'S' : ['Files'                , 'search-file']         ,
       \ 'g' : [':Goyo'                , 'Goyo']                ,
-      \ 'o' : ['<Plug>(coc-openlink)' , 'open-link']           ,
       \ 'p' : [':e ~/.vim/snippets'   , 'edit-snippets']       ,
       \ 'r' : [':source ~/.vimrc'     , 'reload-config']       ,
       \ 'u' : ['UndotreeToggle'       , 'undo-tree']           ,
@@ -878,9 +589,7 @@ let g:which_key_map['s'] = {
       \ 'b' : ['LeaderfBuffer'          , 'search-buffer']        ,
       \ 'f' : ['LeaderfFile'            , 'search-file']          ,
       \ 'F' : [':FZF'                   , 'search-file-fzf']      ,
-      \ 'h' : [':CocList searchhistory' , 'search-history']       ,
       \ 'd' : [':Leaderf rg'            , 'search-cwd']           ,
-      \ 's' : [':CocList lines'         , 'search-buffer']        ,
       \ 'm' : ['LeaderfMru'             , 'search-rencent-files'] ,
       \ }
 
@@ -898,7 +607,6 @@ let g:which_key_map['t'] = {
 let g:which_key_map['w'] = {
       \ 'name' : '+windows' ,
       \ '=' : ['<C-W>='            , 'balance-window']      ,
-      \ '?' : [':CocList windows'  , 'window']              ,
       \ 'H' : ['<C-W>5<'           , 'expand-window-left']  ,
       \ 'J' : ['resize +5'         , 'expand-window-below'] ,
       \ 'K' : ['resize -5'         , 'expand-window-up']    ,

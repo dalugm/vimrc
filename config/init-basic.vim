@@ -271,8 +271,7 @@ set updatetime=300
 " Sets how many lines of cmd history VIM has to remember
 set history=1000
 
-" Turn backup off, since most stuff is in git et.c anyway...
-" And plugins demand such as `coc`...
+" Turn backup off, since we use git to manage it in most cases
 set nobackup
 set nowritebackup
 
