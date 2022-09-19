@@ -4,8 +4,9 @@ if version >= 800 && !has('nvim')
   unlet! skip_defaults_vim
   source $VIMRUNTIME/defaults.vim
 elseif !has('nvim')
-  set nocompatible " Vi IMproved
-  filetype plugin indent on " Enable filetype plugins
+  " Vi IMproved
+  set nocompatible
+  filetype plugin indent on
 endif
 
 if !isdirectory(expand("~/.vim/"))
@@ -13,7 +14,8 @@ if !isdirectory(expand("~/.vim/"))
 endif
 
 set title
-set ttyfast " Improves smoothness of redrawing
+" Improves smoothness of redrawing
+set ttyfast
 
 " set message language
 let $LANG='en_US.UTF-8'
@@ -63,8 +65,11 @@ set formatoptions+=n
 
 " indent {{{
 
-set autoindent " Auto indent
-set smartindent " Smart indent
+" Auto indent
+set autoindent
+
+" Smart indent
+set smartindent
 
 " N spaces for every indent
 set shiftwidth=4
@@ -88,9 +93,11 @@ set confirm
 
 " Enable clipboard if possible
 if has('clipboard')
-  if has('unnameplus') " When possible use + register for copy-paste
+  " When possible use + register for copy-paste
+  if has('unnameplus')
     set clipboard=unnamed,unnamedplus
-  else " On macOS and Windows, use * register for copy-paste
+    " On macOS and Windows, use * register for copy-paste
+  else
     set clipboard=unnamed
   endif
 endif
@@ -105,7 +112,7 @@ set mouse=a
 set fillchars=vert:│,fold:·
 
 " Use these symbols for invisible chars
-set listchars=tab:>\ ,eol:¬,trail:⋅,extends:»,precedes:«,nbsp:+
+set listchars=tab:>\ ,eol:$,trail:⋅,extends:>,precedes:<,nbsp:+
 
 " Fold code config
 set foldenable
@@ -142,10 +149,14 @@ set mousehide
 " Always show current position
 set ruler
 
+" Always show the sign column
+" otherwise it would shift the text each time
+set signcolumn="yes"
+
 " Highlight chars when over 80 rows
 " augroup vimrc_autocmds
-"     autocmd BufEnter * highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
-"     autocmd BufEnter * match OverLength /\%81v.*/
+"   autocmd BufEnter * highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
+"   autocmd BufEnter * match OverLength /\%81v.*/
 " augroup END
 
 " show command in the last line of screen
@@ -194,6 +205,13 @@ set statusline+=\ [%{&ff}]/%y " fileformat/filetype
 set statusline+=\ [%{getcwd()}] " current dir
 set statusline+=\ [%{&encoding}] " encoding
 set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
+
+autocmd!
+" ColorScheme means to match keywords after loading a color scheme
+" Syntax means to match keywords when the `syntax` option has been set
+" More details can be checked by `:help autocmd`
+autocmd ColorScheme * call matchadd('Todo', '\W\zs\(TODO\|FIXME\|CHANGED\|BUG\|HACK\|XXX\|NOTICE\|WARNING\|DANGER\|DEPRECATED\|REVIEW\)')
+autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
 
 " }}} Appearance
 
@@ -399,9 +417,8 @@ nnoremap <silent> <Leader>w :update<CR>
 nnoremap <silent> <Leader>Q :qa!<CR>
 
 " Fast editing
-nnoremap <Leader>ec :e! ~/.vim/config<CR>
+nnoremap <Leader>ec :e! ~/.vim/init.vim<CR>
 nnoremap <Leader>ee :e! .<CR>
-nnoremap <Leader>ev :e! ~/.vim<CR>
 
 " Fast reload
 nnoremap <Leader>er :source ~/.vimrc<CR>
@@ -475,33 +492,6 @@ silent! helptags ALL
 
 " }}} Package
 
-" Plugin {{{
-
-if plug#begin('~/.vim/plugged')
-
-  " Specify a directory for plugins
-  " - Avoid using standard Vim directory names like 'plugin'
-  " Make sure you use single quotes
-
-  Plug 'dalugm/solarized.vim'
-  Plug 'morhetz/gruvbox'
-
-  Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-repeat'
-  Plug 'tpope/vim-rsi'
-  Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-unimpaired'
-
-  call plug#end()
-
-else
-  echo "WARNING: plug.vim undetected, now downloading...\n"
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-endif
-
-" }}} Plugin
-
 " GUI Related {{{
 
 " set cursor shape
@@ -555,14 +545,6 @@ if has('nvim')
   tnoremap <M-l> <C-\><C-n><C-w>l
 endif
 
-" Set provider to avoid installing relative package in every env
-if has('nvim')
-  let g:node_host_prog    = "/usr/local/bin/neovim-node-host"
-  let g:ruby_host_prog    = $HOME . "/.rbenv/versions/2.7.1/bin/neovim-ruby-host"
-  let g:python_host_prog  = $HOME . "/.pyenv/versions/neovim2/bin/python"
-  let g:python3_host_prog = $HOME . "/.pyenv/versions/neovim3/bin/python"
-endif
-
 " Show TermCursor always
 if has('nvim')
   highlight! link TermCursor Cursor
@@ -576,95 +558,122 @@ endif
 
 " }}} Neovim Related
 
-" Misc {{{
+" Plugin {{{
 
-augroup my_color_warning
-  autocmd!
-  " ColorScheme means to match keywords after loading a color scheme
-  " Syntax means to match keywords when the `syntax` option has been set
-  " More details can be checked by `:help autocmd`
-  autocmd ColorScheme * call matchadd('Todo', '\W\zs\(TODO\|FIXME\|CHANGED\|BUG\|HACK\|XXX\|NOTICE\|WARNING\|DANGER\|DEPRECATED\|REVIEW\)')
-  autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
-augroup END
+if plug#begin('~/.vim/plugged')
 
-" ToggleTransparent {{{
+  " Specify a directory for plugins
+  " - Avoid using standard Vim directory names like 'plugin'
+  " Make sure you use single quotes
 
-function! s:get_highlight_colors(group)
-  redir => highlight
-  silent execute 'silent highlight ' . a:group
-  redir END
+  " better operation
+  Plug 'editorconfig/editorconfig-vim'
+  Plug 'easymotion/vim-easymotion'
+  Plug 'LunarWatcher/auto-pairs'
 
-  let link_matches = matchlist(highlight, 'links to \(\S\+\)')
-  if len(link_matches) > 0
-    return 'LINKED'
-  endif
+  Plug 'sirver/ultisnips' | Plug 'honza/vim-snippets'
+    let g:UltiSnipsExpandTrigger = "<tab>"
+    let g:UltiSnipsJumpForwardTrigger = "<tab>"
+    let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+    " If you want :UltiSnipsEdit to split your window.
+    let g:UltiSnipsEditSplit = "vertical"
+    let g:UltiSnipsSnippetDirectories = ["UltiSnips", "mysnippets"]
+    let g:snips_author = "dalu"
+    let g:snips_email = "mou.tong@outlook.com"
+    let g:snips_github = "https://github.com/dalugm"
+    let g:snips_about = "dalu <mou.tong@outlook.com>"
 
-  let term_attr = s:match_highlight(highlight, 'term=\(\S\+\)')
-  let gui_attr  = s:match_highlight(highlight, 'gui=\(\S\+\)')
-  let ctermfg   = s:match_highlight(highlight, 'ctermfg=\([0-9A-Za-z]\+\)')
-  let guifg     = s:match_highlight(highlight, 'guifg=\([#0-9A-Za-z]\+\)')
+  Plug 'tpope/vim-commentary'
+    nmap <leader>c <Plug>Commentary<CR>
+    xmap <leader>c <Plug>Commentary<CR>
+    omap <leader>c <Plug>Commentary<CR>
+    nmap <leader>cc <Plug>CommentaryLine
+    autocmd FileType apache setlocal commentstring=#\ %s
 
-  return [term_attr, gui_attr, ctermfg, guifg]
-endfunction
+  Plug 'tpope/vim-dispatch'
+    let test#strategy = "dispatch"
+    " https://github.com/tpope/vim-dispatch/issues/222#issuecomment-493273080
+    if !empty($TMUX)
+      set shellpipe=2>&1\|tee
+    endif
 
-function! s:match_highlight(highlight, pattern)
-  let matches = matchlist(a:highlight, a:pattern)
-  if len(matches) == 0
-    return 'NONE'
-  endif
-  return matches[1]
-endfunction
+  Plug 'tpope/vim-abolish'
+  Plug 'tpope/vim-obsession'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-rsi'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-unimpaired'
+  Plug 'wellle/targets.vim'
 
-function! s:clear_bg(group)
-  let highlights = s:get_highlight_colors(a:group)
-  if type(highlights) == v:t_string && highlights == 'LINKED'
-    return
-  endif
+  Plug 'junegunn/vim-easy-align'
+    map <Leader>g :EasyAlign<Space>
+    nmap ga <Plug>(EasyAlign)
+    xmap ga <Plug>(EasyAlign)
 
-  let [term_attr, gui_attr, ctermfg, guifg] = highlights
+  " git
+  Plug 'airblade/vim-gitgutter'
+  Plug 'tpope/vim-fugitive'
 
-  execute 'hi ' . a:group . ' term=' . term_attr . ' ctermfg=' . ctermfg .  ' guifg=' . guifg .' ctermbg=NONE guibg=NONE'
-endfunction
+  " program
+  Plug 'bfrg/vim-cpp-modern'
 
-let s:clear_background=1
+  Plug 'mattn/emmet-vim', { 'for': ['html', 'css', 'scss', 'sass', 'less', 'vue', 'javascriptreact'] }
+    let g:user_emmet_install_global = 0
+    let g:user_emmet_leader_key = '<C-y>'
 
-function! s:background_toggle()
-  if s:clear_background
-    for group in ['Normal', 'Comment', 'Constant', 'Special', 'Identifier',
-          \ 'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String',
-          \ 'Function', 'Conditional', 'Repeat', 'Operator', 'Structure',
-          \ 'LineNr', 'NonText']
-      call s:clear_bg(group)
-    endfor
-  else
-    execute 'colorscheme ' . g:colors_name
-  endif
-  let s:clear_background = !s:clear_background
-endfunction
+  Plug 'lervag/vimtex'
+    let g:tex_flavor = 'xelatex'
+    let g:vimtex_compiler_latexmk = {
+    \   'options' : [
+    \     '-xelatex',
+    \     '-shell-escape',
+    \     '-verbose',
+    \     '-file-line-error',
+    \     '-synctex=1',
+    \     '-interaction=nonstopmode',
+    \   ],
+    \ }
 
-function! s:background_disable()
-  let s:clear_background = 0
-  call s:background_toggle()
-endfunction
+  Plug 'skywind3000/asyncrun.vim'
+  Plug 'skywind3000/asynctasks.vim'
+    " Set the height of window when run AsyncRun
+    let g:asyncrun_open = 6
+    " Identify the project root directory
+    " If not in any these rootmarks put an empty .root in directory
+    let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '.project', '.hg', 'build.xml']
+    " Set terminal position and style when set output=terminal
+    let g:asynctasks_term_pos = 'bottom'
+    " Set default global name of AsyncTask config
+    let g:asynctasks_rtp_config = "tasks.toml"
 
-function! s:background_enable()
-  let s:clear_background = 1
-  call s:background_toggle()
-endfunction
+  " appearance
+  Plug 'NLKNguyen/papercolor-theme'
+  Plug 'arcticicestudio/nord-vim'
+  Plug 'ayu-theme/ayu-vim'
+  Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+  Plug 'cocopon/iceberg.vim'
+  Plug 'dalugm/solarized.vim'
+  Plug 'dracula/vim', { 'as': 'dracula' }
+  Plug 'jacoborus/tender.vim'
+  Plug 'jaredgorski/spacecamp'
+  Plug 'jnurmine/zenburn'
+  Plug 'joshdick/onedark.vim'
+  Plug 'morhetz/gruvbox'
+  Plug 'nanotech/jellybeans.vim'
+  Plug 'overcache/NeoSolarized'
+  Plug 'rakr/vim-one'
+  Plug 'srcery-colors/srcery-vim'
 
-if exists('loaded_transparent')
-  finish
+  Plug 'luochen1990/rainbow'
+    " 0 if you want to enable it later via :RainbowToggle
+    let g:rainbow_active = 1
+
+  " update &runtimepath and initialize plugin system
+  call plug#end()
+else
+  echo "WARNING: plug.vim undetected, now downloading...\n"
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 endif
-let loaded_transparent = 1
 
-augroup transparent
-  autocmd!
-  command -bar -nargs=0 ClearBackground    call s:background_clear_background()
-  command -bar -nargs=0 TransparentDisable call s:background_disable()
-  command -bar -nargs=0 TransparentEnable  call s:background_enable()
-  command -bar -nargs=0 TransparentToggle  call s:background_toggle()
-augroup END
-
-" }}} ToggleTransparent
-
-" }}} Misc
+" }}} Plugin

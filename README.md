@@ -1,15 +1,12 @@
 # vimrc
 
-My vim plugins and configuration
-
-* This configuration is light weight because I only use vim in terminal.
+My vim plugins and configuration.
 
 ## INSTALL
 
-    git clone --depth 1 https://github.com/dalugm/vimrc.git $HOME/.vim && cd .vim
-    bash install.sh [basic|extend]
-
-* Do NOT support Windows, please install it **manually**.
+    $ git clone --depth 1 https://github.com/dalugm/vimrc.git ~/.vim
+    $ cd ~/.vim
+    $ ln -s init.vim ~/.vimrc
 
 #### gVim on Windows
 
@@ -17,23 +14,13 @@ My vim plugins and configuration
    `D:\Apps\Vim`.
 2. Add `D:\Apps\Vim\vim82` to PATH.
 3. Download ZIP file and copy vimrc to HOME directory.
-4. Run `bash install.sh` to generate current repo's `init.vim` and move it to
-   `~\_vimrc`.
-5. Change the content in `_vimrc`.
-
-   ```vimscript
-   set runtimepath^=~\vimrc runtimepath+=~\vimrc\after
-   let &packpath = &runtimepath
-
-   source ~\vimrc\config\init-basic.vim
-   source ~\vimrc\config\init-extend.vim
-   ```
-
-5. Enjoy!
+4. Enjoy!
 
 ### neovim
 
     ln -s ~/.vim ~/.config/nvim
+
+NOTE: I've made a new [configuration](https://github.com/dalugm/nvimrc) for neovim.
 
 ### Documentation (NOT necessary)
 

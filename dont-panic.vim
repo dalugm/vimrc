@@ -15,12 +15,6 @@
 "
 " Code:
 
-if exists('g:loaded_sensible') || &compatible
-  finish
-else
-  let g:loaded_sensible = 'yes'
-endif
-
 if has('autocmd')
   filetype plugin indent on
 endif
@@ -30,7 +24,6 @@ endif
 
 " Use :help 'option' to see the documentation for the given option.
 
-set autoindent
 set backspace=indent,eol,start
 set complete-=i
 set smarttab
@@ -48,7 +41,9 @@ if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
 
-set laststatus=2
+if &laststatus < 2
+  set laststatus=2
+endif
 set ruler
 set wildmenu
 
@@ -110,3 +105,5 @@ endif
 if empty(mapcheck('<C-W>', 'i'))
   inoremap <C-W> <C-G>u<C-W>
 endif
+
+" vim:set ft=vim et sw=2:

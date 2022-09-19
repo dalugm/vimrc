@@ -1,0 +1,71 @@
+# Global snippets
+# This file contains snippets that are always defined. I personally
+# have snippets for signatures and often needed texts
+# NOTE: extends from vim-snippets
+
+# sligthly lower priority than everything else since specialized versions
+# should overwrite. The user needs to adjust her priority in her snippets to
+# ~-55 so that other filetypes will still overwrite.
+priority -60
+
+##########
+#  Misc  #
+##########
+snippet copy. "copyright"
+Copyright `!v &enc[:2] == "utf" ? "©" : "(c)"` `!v strftime("%Y")` ${1:`!v g:snips_author`}. All Rights Reserved.
+endsnippet
+
+snippet fh "File header, name author datetime description..."
+Filename: ${1:`!v expand('%:t')`}
+Author: ${2:`!v g:snips_about`}
+Maintainer: ${3:maintainer}
+Created: ${4:`!v strftime("%Y-%m-%d %H:%M")`}
+Last Upated:
+         By:
+Keywords: ${5:keywords}
+Version: 0.1
+Changelog:
+    0.1 - initial version
+Commentary:
+
+${6:description}
+
+Code:
+
+$0
+endsnippet
+
+snippet trump "nobody knows ... better than I do" b
+👐  Nobody
+🙌  Knows
+👌  $0
+☝️   better than I do
+endsnippet
+
+snippet trump-cn "cn nobody knows ... better than I do" b
+👐  没有人
+🙌  比我
+👌  更懂
+☝️   $0
+endsnippet
+
+snippet fp "the default snippet to format poem"
+[32m《${1:name}》[m
+[33m${2:author}[m
+${0:content}
+%
+endsnippet
+
+snippet fm "the default snippet to format motto"
+${1:content}
+
+        [32m《${2:name}》[m [33m—— ${3:author}[m
+%
+endsnippet
+
+snippet srt "subtitle snippet" b
+${1:start hour}:${2:start minute}:${3:start second},${4:start msecond} --> ${5:end hour}:${6:end minute}:${7:end second},${8:end msecond}
+${0:subtitle}
+endsnippet
+
+# vim:ft=snippets:
