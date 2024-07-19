@@ -300,7 +300,11 @@ nnoremap Y y$
 nnoremap <silent> <localleader>w :write<CR>
 
 " Fast quiting.
-nnoremap <silent> <localleader>Q :qa<CR>
+nnoremap <silent> <localleader>Q :qa!<CR>
+
+" Emacs style.
+nnoremap <C-X><C-Q> :qa<CR>
+nnoremap <C-X><C-S> :update<CR>
 
 " Fast editing.
 nnoremap <localleader>ee :e! .<CR>
