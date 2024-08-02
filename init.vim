@@ -106,7 +106,11 @@ if has("win16") || has("win32")
   source $VIMRUNTIME/delmenu.vim
   source $VIMRUNTIME/menu.vim
 
-  set shell=pwsh
+  if executable('pwsh')
+    set shell=pwsh
+  elseif executable('powershell')
+    set shell=powershell
+  endif
 endif
 
 " }}} Basic
@@ -191,10 +195,11 @@ set tabpagemax=50
 set laststatus=2
 set statusline=%<%f\ " filename
 set statusline+=%w%h%m%r " option
-set statusline+=\ [%{&ff}]/%y " fileformat/filetype
-set statusline+=\ [%{getcwd()}] " current dir
-set statusline+=\ [%{&encoding}] " encoding
-set statusline+=%=%-14.(%l/%L,%c%V%)\ %p%% " Right aligned file nav info
+set statusline+=%= " right-align
+set statusline+=\ %{&encoding} " encoding
+set statusline+=\ %{&ff} " fileformat
+set statusline+=\ %y " filetype
+set statusline+=\ %-10.(%l/%L,%c%V%)\ %p%% " file nav info
 
 " ColorScheme means to match keywords after loading a color scheme.
 " Syntax means to match keywords when the `syntax` option has been set.
@@ -292,32 +297,135 @@ autocmd Filetype gitcommit setlocal spell textwidth=72
 let mapleader = " "
 let maplocalleader = ","
 
-nnoremap <silent> <C-l> :<C-u>nohlsearch<C-R>=has('diff')?'<BAR>diffupdate':''<CR><CR>:syntax sync fromstart<CR><C-l>
+nnoremap <silent> <C-L> :<C-U>nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR>:syntax sync fromstart<CR><C-L>
 
 nnoremap Y y$
 
 " Fast saving.
-nnoremap <silent> <localleader>w :write<CR>
+nnoremap <silent> <LocalLeader>w :write<CR>
 
 " Fast quiting.
-nnoremap <silent> <localleader>Q :qa!<CR>
+nnoremap <silent> <LocalLeader>Q :qa!<CR>
 
 " Emacs style.
 nnoremap <C-X><C-Q> :qa<CR>
 nnoremap <C-X><C-S> :update<CR>
+inoremap <C-X><C-S> :update<CR>
+vnoremap <C-X><C-S> :update<CR>
 
-" Fast editing.
-nnoremap <localleader>ee :e! .<CR>
+function! ToggleReadOnly()
+  if &readonly
+    setlocal noreadonly
+    echo "Buffer is now writable"
+  else
+    setlocal readonly
+    echo "Buffer is now readonly"
+  endif
+endfunction
 
-" Edit macros.
-nnoremap <localleader>em :<C-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+nnoremap <C-X><C-R> :call ToggleReadOnly()<CR>
+
+" Readline like behavior.
+cnoremap <C-A> <Home>
+cnoremap <C-E> <End>
+cnoremap <C-D> <Delete>
+cnoremap <C-F> <Right>
+cnoremap <C-B> <Left>
+cnoremap <C-O> <C-F>
+
+inoremap <C-A> <Home>
+inoremap <C-E> <End>
+inoremap <C-D> <Delete>
+inoremap <C-F> <Right>
+inoremap <C-B> <Left>
+inoremap <C-N> <Down>
+inoremap <C-P> <Up>
 
 " Change CWD to current file.
-nnoremap <localleader>cd :tcd %:h<CR>
-nnoremap <localleader>dd :verbose pwd<CR>
+nnoremap <LocalLeader>cd :tcd %:h<CR>
+nnoremap <LocalLeader>dd :verbose pwd<CR>
 
 " Exit terminal INSERT mode.
 tnoremap jk <C-\><C-N>
+
+nnoremap <LocalLeader>xl :lopen<CR>
+nnoremap <LocalLeader>xq :copen<CR>
+nnoremap <LocalLeader>xx :cc<CR>
+nnoremap <LocalLeader>xg :edit<CR>
+nnoremap <LocalLeader>xG :checktime<CR>
+
+" Brackets {{{
+nnoremap [b :bprevious<CR>
+nnoremap ]b :bnext<CR>
+nnoremap [B :bfirst<CR>
+nnoremap ]B :blast<CR>
+nnoremap [q :cprev<CR>
+nnoremap ]q :cnext<CR>
+nnoremap [Q :cfirst<CR>
+nnoremap ]Q :clast<CR>
+nnoremap [l :lprev<CR>
+nnoremap ]l :lnext<CR>
+nnoremap [L :lfirst<CR>
+nnoremap ]L :llast<CR>
+nnoremap [t :tabprevious<CR>
+nnoremap ]t :tabnext<CR>
+nnoremap [T :tabfirst<CR>
+nnoremap ]T :tablast<CR>
+
+nnoremap [<Space> :call append(line('.') - 1, repeat([''], v:count1))<CR>
+nnoremap ]<Space> :call append(line('.'),     repeat([''], v:count1))<CR>
+
+" }}} Brackets
+
+" Buffer {{{
+
+" Close current buffer
+nnoremap <Leader>bd :bp<Bar>bd #<CR>
+
+" Switch to prev buffer.
+nnoremap <LocalLeader>bb :e #<CR>
+
+" }}} Buffer
+
+" Window {{{
+
+nnoremap <silent> <M-j> <C-W>j
+nnoremap <silent> <M-k> <C-W>k
+nnoremap <silent> <M-h> <C-W>h
+nnoremap <silent> <M-l> <C-W>l
+
+nnoremap <LocalLeader>sq <C-W>q
+nnoremap <LocalLeader>sa <C-W>s
+nnoremap <LocalLeader>sd <C-W>v
+nnoremap <LocalLeader>oo <C-W>o
+nnoremap <C-X>0 <C-W>q
+nnoremap <C-X>1 <C-W>o
+nnoremap <C-X>2 <C-W>s
+nnoremap <C-X>3 <C-W>v
+nnoremap <C-X>o <C-W><C-W>
+
+" }}} Window
+
+" Tab {{{
+
+nnoremap <Leader>tn :tabnew<CR>
+nnoremap <Leader>tx :tabclose<CR>
+nnoremap <Leader>tn :tabn<CR>
+nnoremap <Leader>tp :tabp<CR>
+nnoremap <Leader>tf :tabnew %<CR>
+nnoremap <Leader>tt :tab terminal<CR>
+
+nnoremap <Leader>th :tabmove -<CR>
+nnoremap <Leader>tl :tabmove +<CR>
+nnoremap <Leader>ta :tabmove 0<CR>
+nnoremap <Leader>te :tabmove $<CR>
+
+" }}} Tab
+
+" Enhance {{{
+
+" Edit macros.
+nnoremap <LocalLeader>em :<C-U><C-R><C-R>='let @'. v:register .' = '. string(getreg(v:register))<CR><C-F><Left>
 
 " Make `&' keep the flags in substitute.
 nnoremap & :&&<CR>
@@ -334,70 +442,18 @@ function! s:VSetSearch(cmdtype)
   let @s = temp
 endfunction
 
-xnoremap * :<C-u>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
-xnoremap # :<C-u>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
+xnoremap * :<C-U>call <SID>VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
+xnoremap # :<C-U>call <SID>VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
 
-" Recursively vimgrep for word under cursor or selection if you hit
-" leader-star.
-if maparg('<leader>*', 'n') == ''
-  nmap <leader>* :execute 'noautocmd vimgrep /\V' . substitute(escape(expand("<cword>"), '\'), '\n', '\\n', 'g') . '/ **'<CR>
+" Recursively vimgrep for word under cursor or selection.
+if maparg('<LocalLeader>*', 'n') == ''
+  nmap <LocalLeader>* :execute 'noautocmd vimgrep /\V' . substitute(escape(expand("<cword>"), '\'), '\n', '\\n', 'g') . '/ **'<CR>
 endif
-if maparg('<leader>*', 'v') == ''
-  vmap <leader>* :<C-u>call <SID>VSetSearch()<CR>:execute 'noautocmd vimgrep /' . @/ . '/ **'<CR>
+if maparg('<LocalLeader>*', 'v') == ''
+  vmap <LocalLeader>* :<C-U>call <SID>VSetSearch()<CR>:execute 'noautocmd vimgrep /' . @/ . '/ **'<CR>
 endif
 
-" Buffer {{{
-
-" Close current buffer
-nnoremap <leader>bd :bp<Bar>bd #<CR>
-
-" Close current buffer.
-nnoremap <localleader>xx :bp<Bar>bd #<CR>
-
-" Switch to prev buffer.
-nnoremap <localleader>bb :e #<CR>
-
-" Save buffer.
-inoremap <C-x><C-s> :update<CR>
-nnoremap <C-x><C-s> :update<CR>
-vnoremap <C-x><C-s> :update<CR>
-
-" }}} Buffer
-
-" Window {{{
-
-nnoremap <silent> <M-j> <C-W>j
-nnoremap <silent> <M-k> <C-W>k
-nnoremap <silent> <M-h> <C-W>h
-nnoremap <silent> <M-l> <C-W>l
-
-nnoremap <localleader>sq <C-w>q
-nnoremap <localleader>sa <C-w>s
-nnoremap <localleader>sd <C-w>v
-nnoremap <localleader>oo <C-w>o
-nnoremap <C-x>0 <C-w>q
-nnoremap <C-x>1 <C-w>o
-nnoremap <C-x>2 <C-w>s
-nnoremap <C-x>3 <C-w>v
-nnoremap <C-x>o <C-w><C-w>
-
-" }}} Window
-
-" Tab {{{
-
-nnoremap <leader>tn :tabnew<CR>
-nnoremap <leader>tx :tabclose<CR>
-nnoremap <leader>tn :tabn<CR>
-nnoremap <leader>tp :tabp<CR>
-nnoremap <leader>tf :tabnew %<CR>
-nnoremap <leader>tt :tab terminal<CR>
-
-nnoremap <leader>th :tabmove -<CR>
-nnoremap <leader>tl :tabmove +<CR>
-nnoremap <leader>ta :tabmove 0<CR>
-nnoremap <leader>te :tabmove $<CR>
-
-" }}} Tab
+" }}} Enhance
 
 " }}} Keybindings
 
@@ -461,42 +517,3 @@ if has('gui_running')
 endif
 
 " }}} GUI Releated
-
-" Plugin {{{
-
-" Install vim-plug if not found
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-endif
-
-" Run PlugInstall if there are missing plugins
-autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-      \| PlugInstall --sync | source $MYVIMRC
-      \| endif
-
-call plug#begin()
-
-" To specify a directory for plugins
-"     call plug#begin('~/.vim/plugged')
-" - Avoid using standard Vim directory names like 'plugin'
-" Make sure you use single quotes
-
-Plug 'LunarWatcher/auto-pairs'
-
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-obsession'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
-
-" git
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-
-" update &runtimepath and initialize plugin system
-call plug#end()
-
-" }}} Plugin
