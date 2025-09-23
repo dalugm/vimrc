@@ -6,7 +6,7 @@ set guicursor+=ve-r-cr-o:hor20
 set guicursor+=a:blinkon0
 
 " Font.
-set guifont=Maple\ Mono\ CN:h14
+set guifont=Maple_Mono_CN:h14
 
 " Change GUI relatives.
 command! FontBigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
