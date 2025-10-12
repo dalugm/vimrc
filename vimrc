@@ -421,15 +421,20 @@ if maparg('<LocalLeader>*', 'v') == ''
 endif
 
 if has('packages')
-  " Enhance `%' command
+  " Extend "%" matching.
   packadd! matchit
   autocmd FileType python let b:match_words = '\<if\>:\<elif\>:\<else\>,'
         \ . '\<try\>:\<except\>'
   let b:match_ignorecase=0
 
-  " when editing a file that is already edited with another Vim instance
-  " go to that Vim instance
+  " Edit the file with an existing Vim if possible.
   packadd! editexisting
+
+  " Highlight the yanked text during a |TextYankPost| event.
+  silent! packadd hlyank
+
+  " Commenting and un-commenting text.
+  silent! packadd comment
 else
   runtime macros/matchit.vim
   autocmd FileType python let b:match_words = '\<if\>:\<elif\>:\<else\>,'
